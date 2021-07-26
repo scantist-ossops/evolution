@@ -26,6 +26,7 @@ class WebUser extends Eloquent\Model
 	];
 
 	protected $fillable = [
+		'id',
 		'username',
 		'password',
 		'cachepwd'
