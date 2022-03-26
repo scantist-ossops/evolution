@@ -4833,9 +4833,9 @@ class DocumentParser
         }
 
         if (empty($mode)) {
-            $strTime = strftime($dateFormat . " %H:%M:%S", $timestamp);
+            $strTime = date_format(date_create('@' . $timestamp), $dateFormat . " %H:%M:%S");
         } elseif ($mode == 'dateOnly') {
-            $strTime = strftime($dateFormat, $timestamp);
+            $strTime = date_format(date_create('@' . $timestamp), $dateFormat);
         } elseif ($mode == 'formatOnly') {
             $strTime = $dateFormat;
         }
