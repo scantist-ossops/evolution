@@ -4817,13 +4817,13 @@ class DocumentParser
 
         switch ($this->config['datetime_format']) {
             case 'YYYY/mm/dd':
-                $dateFormat = '%Y/%m/%d';
+                $dateFormat = 'Y/m/d';
                 break;
             case 'dd-mm-YYYY':
-                $dateFormat = '%d-%m-%Y';
+                $dateFormat = 'd-m-Y';
                 break;
             case 'mm/dd/YYYY':
-                $dateFormat = '%m/%d/%Y';
+                $dateFormat = 'm/d/Y';
                 break;
             /*
             case 'dd-mmm-YYYY':
@@ -4833,9 +4833,9 @@ class DocumentParser
         }
 
         if (empty($mode)) {
-            $strTime = strftime($dateFormat . " %H:%M:%S", $timestamp);
+            $strTime = date_format(date_create('@' . $timestamp), $dateFormat . " H:i:s");
         } elseif ($mode == 'dateOnly') {
-            $strTime = strftime($dateFormat, $timestamp);
+            $strTime = date_format(date_create('@' . $timestamp), $dateFormat);
         } elseif ($mode == 'formatOnly') {
             $strTime = $dateFormat;
         }
