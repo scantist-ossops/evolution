@@ -309,7 +309,7 @@ class DocumentParser
      */
     public function getMicroTime()
     {
-        list ($usec, $sec) = explode(' ', microtime());
+        [$usec, $sec] = explode(' ', microtime());
         return ((float)$usec + (float)$sec);
     }
 
@@ -514,6 +514,7 @@ class DocumentParser
 
         // now merge user settings into evo-configuration
         $this->getUserSettings();
+        $this->invokeEvent('OnLoadSettings', ['config' => &$this->config]);
     }
 
     private function recoverySiteCache()
@@ -1124,7 +1125,7 @@ class DocumentParser
      */
     public function RecoveryEscapedTags($contents)
     {
-        list($sTags, $rTags) = $this->getTagsForEscape();
+        [$sTags, $rTags] = $this->getTagsForEscape();
         return str_replace($rTags, $sTags, $contents);
     }
 
@@ -1457,9 +1458,9 @@ class DocumentParser
                 $key = substr($key, 1);
             } // remove # for QuickEdit format
 
-            list($key, $modifiers) = $this->splitKeyAndFilter($key);
+            [$key, $modifiers] = $this->splitKeyAndFilter($key);
             if (strpos($key, '@') !== false) {
-                list($key, $context) = explode('@', $key, 2);
+                [$key, $context] = explode('@', $key, 2);
             } else {
                 $context = false;
             }
@@ -1502,12 +1503,12 @@ class DocumentParser
         if (preg_match('/@\d+\/u/', $key)) {
             $key = str_replace(array('@', '/u'), array('@u(', ')'), $key);
         }
-        list($key, $str) = explode('@', $key, 2);
+        [$key, $str] = explode('@', $key, 2);
 
         if (strpos($str, '(')) {
-            list($context, $option) = explode('(', $str, 2);
+            [$context, $option] = explode('(', $str, 2);
         } else {
-            list($context, $option) = array($str, false);
+            [$context, $option] = array($str, false);
         }
 
         if ($option) {
@@ -1548,7 +1549,7 @@ class DocumentParser
                 } elseif (strpos($option, ',') === false) {
                     $option .= ',ASC';
                 }
-                list($by, $dir) = explode(',', $option, 2);
+                [$by, $dir] = explode(',', $option, 2);
                 $children = $this->getActiveChildren($parent, $by, $dir);
                 $find = false;
                 $prev = false;
@@ -1574,7 +1575,7 @@ class DocumentParser
                 } elseif (strpos($option, ',') === false) {
                     $option .= ',ASC';
                 }
-                list($by, $dir) = explode(',', $option, 2);
+                [$by, $dir] = explode(',', $option, 2);
                 $children = $this->getActiveChildren($parent, $by, $dir);
                 $find = false;
                 $next = false;
@@ -1634,7 +1635,7 @@ class DocumentParser
         }
 
         foreach ($matches[1] as $i => $key) {
-            list($key, $modifiers) = $this->splitKeyAndFilter($key);
+            [$key, $modifiers] = $this->splitKeyAndFilter($key);
 
             if (!isset($ph[$key])) {
                 continue;
@@ -1689,7 +1690,7 @@ class DocumentParser
             $key = $snip_call['name'];
             $params = $this->getParamsFromString($snip_call['params']);
 
-            list($key, $modifiers) = $this->splitKeyAndFilter($key);
+            [$key, $modifiers] = $this->splitKeyAndFilter($key);
 
             if (!isset($ph[$key])) {
                 $ph[$key] = $this->getChunk($key);
@@ -1762,7 +1763,7 @@ class DocumentParser
         }
         foreach ($matches[1] as $i => $key) {
 
-            list($key, $modifiers) = $this->splitKeyAndFilter($key);
+            [$key, $modifiers] = $this->splitKeyAndFilter($key);
 
             if (isset($ph[$key])) {
                 $value = $ph[$key];
@@ -1813,7 +1814,7 @@ class DocumentParser
                 $content = $split;
                 continue;
             }
-            list($cmd, $text) = explode('>', $split, 2);
+            [$cmd, $text] = explode('>', $split, 2);
             $cmd = str_replace("'", "\'", $cmd);
             $content .= "<?php if(\$this->_parseCTagCMD('" . $cmd . "')): ?>";
             $content .= $text;
@@ -1824,7 +1825,7 @@ class DocumentParser
                 $content = $split;
                 continue;
             }
-            list($cmd, $text) = explode('>', $split, 2);
+            [$cmd, $text] = explode('>', $split, 2);
             $cmd = str_replace("'", "\'", $cmd);
             $content .= "<?php elseif(\$this->_parseCTagCMD('" . $cmd . "')): ?>";
             $content .= $text;
@@ -1987,7 +1988,7 @@ class DocumentParser
             return $content;
         }
 
-        list($sTags, $rTags) = $this->getTagsForEscape();
+        [$sTags, $rTags] = $this->getTagsForEscape();
         foreach ($matches[1] as $i => $v) {
             $v = str_ireplace($sTags, $rTags, $v);
             $s = &$matches[0][$i];
@@ -2181,7 +2182,7 @@ class DocumentParser
         $key = $value;
         $_ = $this->config['enable_filter'];
         $this->config['enable_filter'] = 1;
-        list($key, $modifiers) = $this->splitKeyAndFilter($key);
+        [$key, $modifiers] = $this->splitKeyAndFilter($key);
         $this->config['enable_filter'] = $_;
         $key = str_replace(array('(', ')'), array("['", "']"), $key);
         $key = rtrim($key, ';');
@@ -2223,7 +2224,7 @@ class DocumentParser
         $snip_call = $this->_split_snip_call($piece);
         $key = $snip_call['name'];
 
-        list($key, $modifiers) = $this->splitKeyAndFilter($key);
+        [$key, $modifiers] = $this->splitKeyAndFilter($key);
         $snip_call['name'] = $key;
         $snippetObject = $this->_getSnippetObject($key);
         if (is_null($snippetObject['content'])) {
@@ -2295,7 +2296,7 @@ class DocumentParser
                 if (in_array($delim, array('"', "'", '`'))) {
                     $null = null;
                     //list(, $value, $_tmp)
-                    list($null, $value, $_tmp) = explode($delim, $_tmp, 3);
+                    [$null, $value, $_tmp] = explode($delim, $_tmp, 3);
                     unset($null);
 
                     if (substr(trim($_tmp), 0, 2) === '//') {
@@ -2303,7 +2304,7 @@ class DocumentParser
                     }
                     $i = 0;
                     while ($delim === '`' && substr(trim($_tmp), 0, 1) !== '&' && 1 < substr_count($_tmp, '`')) {
-                        list($inner, $outer, $_tmp) = explode('`', $_tmp, 3);
+                        [$inner, $outer, $_tmp] = explode('`', $_tmp, 3);
                         $value .= "`{$inner}`{$outer}";
                         $i++;
                         if (200 < $i) {
@@ -2314,7 +2315,7 @@ class DocumentParser
                         $value = rtrim($value, '`');
                     }
                 } elseif (strpos($_tmp, '&') !== false) {
-                    list($value, $_tmp) = explode('&', $_tmp, 2);
+                    [$value, $_tmp] = explode('&', $_tmp, 2);
                     $value = trim($value);
                 } else {
                     $value = $_tmp;
@@ -2375,7 +2376,7 @@ class DocumentParser
                 $k = substr($k, 0, -2);
                 $params[$k][] = current($p);
             } elseif (strpos($k, '[') !== false && substr($k, -1) === ']') {
-                list($k, $subk) = explode('[', $k, 2);
+                [$k, $subk] = explode('[', $k, 2);
                 $subk = substr($subk, 0, -1);
                 $params[$k][$subk] = current($p);
             } else {
@@ -3801,25 +3802,25 @@ class DocumentParser
         $sendto = (!isset($p['to'])) ? $this->config['emailsender'] : $p['to'];
         $sendto = explode(',', $sendto);
         foreach ($sendto as $address) {
-            list($name, $address) = $this->mail->address_split($address);
+            [$name, $address] = $this->mail->address_split($address);
             $this->mail->AddAddress($address, $name);
         }
         if (isset($p['cc'])) {
             $p['cc'] = explode(',', $p['cc']);
             foreach ($p['cc'] as $address) {
-                list($name, $address) = $this->mail->address_split($address);
+                [$name, $address] = $this->mail->address_split($address);
                 $this->mail->AddCC($address, $name);
             }
         }
         if (isset($p['bcc'])) {
             $p['bcc'] = explode(',', $p['bcc']);
             foreach ($p['bcc'] as $address) {
-                list($name, $address) = $this->mail->address_split($address);
+                [$name, $address] = $this->mail->address_split($address);
                 $this->mail->AddBCC($address, $name);
             }
         }
         if (isset($p['from']) && strpos($p['from'], '<') !== false && substr($p['from'], -1) === '>') {
-            list($p['fromname'], $p['from']) = $this->mail->address_split($p['from']);
+            [$p['fromname'], $p['from']] = $this->mail->address_split($p['from']);
         }
         $this->mail->setFrom(
             isset($p['from']) ? $p['from'] : $this->config['emailsender'],
@@ -3892,12 +3893,11 @@ class DocumentParser
      * @param string $dir Sort direction, ASC and DESC is possible
      *                    Default: ASC
      * @param string $fields Default: id, pagetitle, description, parent, alias, menutitle
+     * @param bool $checkAccess
+     * - Check document access permissions. Default: true.
      * @return array
      */
-    public function getAllChildren($id = 0,
-                                   $sort = 'menuindex',
-                                   $dir = 'ASC',
-                                   $fields = 'id, pagetitle, description, parent, alias, menutitle')
+    public function getAllChildren($id = 0, $sort = 'menuindex', $dir = 'ASC', $fields = 'id, pagetitle, description, parent, alias, menutitle', $checkAccess = true)
     {
         static $cache = null;
 
@@ -3913,9 +3913,9 @@ class DocumentParser
                 sprintf('LEFT JOIN %s dg on dg.document=sc.id', $this->getFullTableName('document_groups'))
             ],
             sprintf(
-                "sc.parent='%s' AND (%s) GROUP BY sc.id",
+                "sc.parent='%s' %s GROUP BY sc.id",
                 $id,
-                $this->docAccessConditions()
+                $checkAccess ? 'AND (' . $this->docAccessConditions() . ')' : ''
             ),
             sprintf(
                 'sc.%s %s',
@@ -3941,12 +3941,11 @@ class DocumentParser
      * @param string $dir Sort direction, ASC and DESC is possible
      *                    Default: ASC
      * @param string $fields Default: id, pagetitle, description, parent, alias, menutitle
+     * @param bool $checkAccess
+     * - Check document access permissions. Default: true.
      * @return array
      */
-    public function getActiveChildren($id = 0,
-                                      $sort = 'menuindex',
-                                      $dir = 'ASC',
-                                      $fields = 'id, pagetitle, description, parent, alias, menutitle')
+    public function getActiveChildren($id = 0, $sort = 'menuindex', $dir = 'ASC', $fields = 'id, pagetitle, description, parent, alias, menutitle', $checkAccess = true)
     {
         static $cache = null;
         $cacheKey = md5(print_r(func_get_args(), true));
@@ -3994,17 +3993,11 @@ class DocumentParser
      * @param $sort {comma separated string} - Should be a comma-separated list of field names on which to sort. Default: 'menuindex'.
      * @param $dir {'ASC'; 'DESC'} - Sort direction, ASC and DESC is possible. Default: 'ASC'.
      * @param $limit {string} - Should be a valid SQL LIMIT clause without the 'LIMIT ' i.e. just include the numbers as a string. Default: Empty string (no limit).
-     *
+     * @param bool $checkAccess
+     * - Check document access permissions. Default: true.
      * @return {array; false} - Result array, or false.
      */
-    public function getDocumentChildren($parentid = 0,
-                                        $published = 1,
-                                        $deleted = 0,
-                                        $fields = '*',
-                                        $where = '',
-                                        $sort = 'menuindex',
-                                        $dir = 'ASC',
-                                        $limit = '')
+    public function getDocumentChildren($parentid = 0, $published = 1, $deleted = 0, $fields = '*', $where = '', $sort = 'menuindex', $dir = 'ASC', $limit = '', $checkAccess = true)
     {
         static $cache = null;
 
@@ -4027,12 +4020,12 @@ class DocumentParser
                 sprintf('LEFT JOIN %s dg on dg.document=sc.id', $this->getFullTableName('document_groups'))
             ],
             sprintf(
-                "sc.parent='%s' %s %s %s AND (%s) GROUP BY sc.id",
+                "sc.parent='%s' %s %s %s %s GROUP BY sc.id",
                 $parentid,
                 $published !== 'all' ? 'AND sc.published = ' . $published : '',
                 $deleted !== 'all' ? 'AND sc.deleted = ' . $deleted : '',
                 $where ? 'AND ' . $where : '',
-                $this->docAccessConditions()
+                $checkAccess ? 'AND (' . $this->docAccessConditions() . ')' : ''
             ),
             $sort
                 ? sprintf(
@@ -4066,17 +4059,12 @@ class DocumentParser
      * @param $sort {comma separated string} - A comma-separated list of field names to sort by. Default: 'menuindex'.
      * @param $dir {'ASC'; 'DESC'} - Sorting direction. Default: 'ASC'.
      * @param $limit {string} - SQL LIMIT (without 'LIMIT '). An empty string means no limit. Default: ''.
+     * @param bool $checkAccess
+     * - Check document access permissions. Default: true.
      *
      * @return {array; false} - Result array with documents, or false.
      */
-    public function getDocuments($ids = [],
-                                 $published = 1,
-                                 $deleted = 0,
-                                 $fields = '*',
-                                 $where = '',
-                                 $sort = 'menuindex',
-                                 $dir = 'ASC',
-                                 $limit = '')
+    public function getDocuments($ids = array(), $published = 1, $deleted = 0, $fields = '*', $where = '', $sort = 'menuindex', $dir = 'ASC', $limit = '', $checkAccess = true)
     {
         static $cache = null;
 
@@ -4104,12 +4092,12 @@ class DocumentParser
                 sprintf("LEFT JOIN %s dg on dg.document=sc.id", $this->getFullTableName('document_groups'))
             ],
             sprintf(
-                "(sc.id IN (%s) %s %s %s) AND (%s) GROUP BY sc.id",
+                "(sc.id IN (%s) %s %s %s) %s GROUP BY sc.id",
                 implode(',', $ids),
                 $published === 'all' ? '' : sprintf("AND sc.published='%s'", $published),
                 $deleted === 'all' ? '' : sprintf("AND sc.deleted='%s'", $deleted),
                 $where ? 'AND ' . $where : '',
-                $this->docAccessConditions()
+                $checkAccess ? 'AND (' . $this->docAccessConditions() . ')' : ''
             ),
             $sort
                 ? sprintf('sc.%s %s', implode(',sc.', array_filter(array_map('trim', explode(',', $sort)))), $dir)
@@ -4155,16 +4143,18 @@ class DocumentParser
      * - Document publication status. Once the parameter equals 'all', the result will be returned regardless of whether the documents are published or they are not. Default: false.
      * @param int $deleted {0; 1; 'all'}
      * - Document removal status. Once the parameter equals 'all', the result will be returned regardless of whether the documents are deleted or they are not. Default: 0.
+     * @param bool $checkAccess
+     * - Check document access permissions. Default: true.
      * @return bool {array; false} - Result array with fields or false.
      * - Result array with fields or false.
      */
-    public function getDocument($id = 0, $fields = '*', $published = 1, $deleted = 0)
+    public function getDocument($id = 0, $fields = '*', $published = 1, $deleted = 0, $checkAccess = true)
     {
         if (!$id) {
             return false;
         }
 
-        $docs = $this->getDocuments(array($id), $published, $deleted, $fields, '', '', '', 1);
+        $docs = $this->getDocuments(array($id), $published, $deleted, $fields, '', '', '', 1, $checkAccess);
 
         if (!$docs) {
             return false;
@@ -4221,7 +4211,7 @@ class DocumentParser
      *                       Default: id, pagetitle, description, alias
      * @return boolean|array
      */
-    public function getPageInfo($pageid = null, $active = 1, $fields = 'id, pagetitle, description, alias')
+    public function getPageInfo($pageid = -1, $active = 1, $fields = 'id, pagetitle, description, alias', $checkAccess = true)
     {
         static $cache = null;
 
@@ -4241,10 +4231,10 @@ class DocumentParser
                 sprintf('LEFT JOIN %s dg on dg.document = sc.id', $this->getFullTableName('document_groups'))
             ],
             sprintf(
-                "(sc.id='%s' %s) AND (%s)",
+                "(sc.id='%s' %s) %s",
                 $pageid,
                 $active == 1 ? "AND sc.published=1 AND sc.deleted=0" : '',
-                $this->docAccessConditions()
+                $checkAccess ? 'AND (' . $this->docAccessConditions() . ')' : ''
             ),
             '',
             1
@@ -4265,19 +4255,19 @@ class DocumentParser
      *                       Default: id, pagetitle, description, alias
      * @return boolean|array
      */
-    public function getParent($pid = -1, $active = 1, $fields = 'id, pagetitle, description, alias, parent')
+    public function getParent($pid = -1, $active = 1, $fields = 'id, pagetitle, description, alias, parent', $checkAccess = true)
     {
         if ($pid == -1) {
             $pid = $this->documentObject['parent'];
-            return ($pid == 0) ? false : $this->getPageInfo($pid, $active, $fields);
-        } elseif ($pid == 0) {
+            return ($pid == 0) ? false : $this->getPageInfo($pid, $active, $fields, $checkAccess);
+        } else if ($pid == 0) {
             return false;
         } else {
             // first get the child document
-            $child = $this->getPageInfo($pid, $active, "parent");
+            $child = $this->getPageInfo($pid, $active, "parent", $checkAccess);
             // now return the child's parent
             $pid = ($child['parent']) ? $child['parent'] : 0;
-            return ($pid == 0) ? false : $this->getPageInfo($pid, $active, $fields);
+            return ($pid == 0) ? false : $this->getPageInfo($pid, $active, $fields, $checkAccess);
         }
     }
 
@@ -4677,7 +4667,7 @@ class DocumentParser
         foreach ($matches[1] as $i => $key) {
 
             if (strpos($key, ':') !== false && $execModifier) {
-                list($key, $modifiers) = $this->splitKeyAndFilter($key);
+                [$key, $modifiers] = $this->splitKeyAndFilter($key);
             } else {
                 $modifiers = false;
             }
@@ -4860,19 +4850,19 @@ class DocumentParser
                 if (!preg_match('/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}[0-9 :]*$/', $str)) {
                     return '';
                 }
-                list ($Y, $m, $d, $H, $M, $S) = sscanf($str, '%4d/%2d/%2d %2d:%2d:%2d');
+                [$Y, $m, $d, $H, $M, $S] = sscanf($str, '%4d/%2d/%2d %2d:%2d:%2d');
                 break;
             case 'dd-mm-YYYY':
                 if (!preg_match('/^[0-9]{2}-[0-9]{2}-[0-9]{4}[0-9 :]*$/', $str)) {
                     return '';
                 }
-                list ($d, $m, $Y, $H, $M, $S) = sscanf($str, '%2d-%2d-%4d %2d:%2d:%2d');
+                [$d, $m, $Y, $H, $M, $S] = sscanf($str, '%2d-%2d-%4d %2d:%2d:%2d');
                 break;
             case 'mm/dd/YYYY':
                 if (!preg_match('/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}[0-9 :]*$/', $str)) {
                     return '';
                 }
-                list ($m, $d, $Y, $H, $M, $S) = sscanf($str, '%2d/%2d/%4d %2d:%2d:%2d');
+                [$m, $d, $Y, $H, $M, $S] = sscanf($str, '%2d/%2d/%4d %2d:%2d:%2d');
                 break;
             /*
             case 'dd-mmm-YYYY':
@@ -4916,13 +4906,13 @@ class DocumentParser
      * @return array|bool
      */
     public function getDocumentChildrenTVars($parentid = 0,
-                                             $tvidnames = [],
-                                             $published = 1,
-                                             $docsort = "menuindex",
-                                             $docsortdir = "ASC",
-                                             $tvfields = "*",
-                                             $tvsort = "rank",
-                                             $tvsortdir = "ASC")
+                                            $tvidnames = [],
+                                            $published = 1,
+                                            $docsort = "menuindex",
+                                            $docsortdir = "ASC",
+                                            $tvfields = "*",
+                                            $tvsort = "rank",
+                                            $tvsortdir = "ASC")
     {
         $docs = $this->getDocumentChildren($parentid, $published, 0, '*', '', $docsort, $docsortdir);
         if (!$docs) {
@@ -5060,13 +5050,13 @@ class DocumentParser
      *                        Default: 1
      * @return bool
      */
-    public function getTemplateVar($idname = "", $fields = "*", $docid = "", $published = 1)
+    public function getTemplateVar($idname = "", $fields = "*", $docid = "", $published = 1, $checkAccess = true)
     {
         if ($idname == "") {
             return false;
         }
 
-        $result = $this->getTemplateVars(array($idname), $fields, $docid, $published, "", ""); //remove sorting for speed
+        $result = $this->getTemplateVars(array($idname), $fields, $docid, $published, "", "", $checkAccess); //remove sorting for speed
         return ($result != false) ? $result[0] : false;
     }
 
@@ -5087,12 +5077,7 @@ class DocumentParser
      *
      * @return array|bool Result array, or false.
      */
-    public function getTemplateVars($idnames = [],
-                                    $fields = '*',
-                                    $docid = '',
-                                    $published = 1,
-                                    $sort = 'rank',
-                                    $dir = 'ASC')
+    public function getTemplateVars($idnames = array(), $fields = '*', $docid = '', $published = 1, $sort = 'rank', $dir = 'ASC', $checkAccess = true)
     {
         static $cache = null;
         $cacheKey = md5(print_r(func_get_args(), true));
@@ -5111,7 +5096,7 @@ class DocumentParser
             $docid = $this->documentIdentifier;
             $docRow = $this->documentObject;
         } else {
-            $docRow = $this->getDocument($docid, '*', $published);
+            $docRow = $this->getDocument($docid, '*', $published, 0, $checkAccess);
             if (!$docRow) {
                 $cache[$cacheKey] = false;
                 return false;
@@ -6270,7 +6255,7 @@ class DocumentParser
         $this->config['enable_filter'] = 1;
         $_ = array('[* *]', '[( )]', '{{ }}', '[[ ]]', '[+ +]');
         foreach ($_ as $brackets) {
-            list($left, $right) = explode(' ', $brackets);
+            [$left, $right] = explode(' ', $brackets);
             if (strpos($content, $left) !== false) {
                 if ($left === '[*') {
                     $content = $this->mergeDocumentContent($content);
@@ -6284,7 +6269,7 @@ class DocumentParser
             }
         }
         foreach ($_ as $brackets) {
-            list($left, $right) = explode(' ', $brackets);
+            [$left, $right] = explode(' ', $brackets);
             if (strpos($content, $left) !== false) {
                 $matches = $this->getTagsFromContent($content, $left, $right);
                 $content = isset($matches[0]) ? str_replace($matches[0], '', $content) : $content;
