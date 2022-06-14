@@ -20,8 +20,8 @@ $theme_modes = array('', 'lightness', 'light', 'dark', 'darkness');
 $theme_mode = $_COOKIE['MODX_themeMode'] ?? '';
 if ($theme_mode && !empty($theme_modes[$theme_mode])) {
     $body_class .= ' ' . $theme_modes[$theme_mode];
-} elseif (!empty($theme_modes[$modx->config['manager_theme_mode']])) {
-    $body_class .= ' ' . $theme_modes[$modx->config['manager_theme_mode']];
+} elseif (!empty($theme_modes[$modx->config['manager_theme_mode'] ?? 3])) {
+    $body_class .= ' ' . $theme_modes[$modx->config['manager_theme_mode'] ?? 3];
 }
 
 $css = 'media/style/' . $modx->config['manager_theme'] . '/style.css?v=' . $modx->recentUpdate;
