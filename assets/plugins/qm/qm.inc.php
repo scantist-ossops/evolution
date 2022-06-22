@@ -4,7 +4,7 @@
  *
  * @author      Mikko Lammi, www.maagit.fi, updated by Dmi3yy and Nicola1971
  * @license     GNU General Public License (GPL), http://www.gnu.org/copyleft/gpl.html
- * @version     1.5.11 updated 19/03/2020
+ * @version     1.5.12 updated 22/06/2022
  */
 
 if(!class_exists('Qm')) {
@@ -178,7 +178,7 @@ class Qm {
                 }
 
                 // QM+ TV edit
-                if((int)($_GET['quickmanagertv'] == 1) && $_GET['tvname'] != '' && $this->tvbuttons == 'true') {
+                if(isset($_GET['quickmanagertv']) && intval($_GET['quickmanagertv'] == 1) && $_GET['tvname'] != '' && $this->tvbuttons == 'true') {
 
                     $tvName = '';
                     $locked = FALSE;
@@ -365,7 +365,7 @@ class Qm {
                     } else {
                         $output = 'Error: Access denied.';
                     }
-                } elseif(isset($_SESSION['mgrValidated']) && $_REQUEST['z'] !== 'manprev') {
+                } elseif(isset($_SESSION['mgrValidated']) && (!(isset($_REQUEST['z']) && $_REQUEST['z'] == 'manprev')) ) {
                     // QM+ with toolbar
                     // Add ID
                     $controls = '<li class="qmId"><span class="textid">ID: </span>'.$docID.'</li>';
@@ -1012,7 +1012,7 @@ class Qm {
                     $mc->addLine('$("body").prepend(controls);');
 
                     // Hide fields to from front-end editors
-                    if ($this->hidefields != '') {
+                    if (!empty($this->hidefields)) {
                         $hideFields = explode(",", $this->hidefields);
 
                         foreach($hideFields as $key => $field) {
@@ -1021,7 +1021,7 @@ class Qm {
                     }
 
                     // Hide tabs to from front-end editors
-                    if ($this->hidetabs != '') {
+                    if (!empty($this->hidetabs)) {
                         $hideTabs = explode(",", $this->hidetabs);
 
                         foreach($hideTabs as $key => $field) {
@@ -1030,7 +1030,7 @@ class Qm {
                     }
 
                     // Hide sections from front-end editors
-                    if ($this->hidesections != '') {
+                    if (!empty($this->hidesections)) {
                         $hideSections = explode(",", $this->hidesections);
 
                         foreach($hideSections as $key => $field) {
