@@ -111,6 +111,15 @@ class modxRTEbridge
             $this->modxParams[$p] = $value;
         }
 
+        if(!empty($this->modxParams['custom_buttons_useglobal'])) {
+            foreach([1,2,3,4] as $i) {
+                $k = $editorKey . '_custom_buttons' . $i;
+                if(isset($modx->configGlobal[$k])) {
+                    $this->modxParams['custom_buttons' . $i] = $modx->configGlobal[$k];
+                }
+            }
+        }
+
         // Set TV-options
         $this->tvOptions = $tvOptions;
 
