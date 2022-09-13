@@ -4191,6 +4191,12 @@ class DocumentParser
         }
 
         $doc = $this->getDocumentObject('id', $docid);
+
+        if (!isset($doc[$field])) {
+            $cache[$field][$docid] = false;
+            return false;
+        }
+
         if (is_array($doc[$field])) {
             $tvs = $this->getTemplateVarOutput($field, $docid, 'all');
             $cache[$field][$docid] = $tvs[$field];
