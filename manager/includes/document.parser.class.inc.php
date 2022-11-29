@@ -4406,19 +4406,19 @@ class DocumentParser
                     if ($this->config['aliaslistingfolder'] == 1  || (isset($this->config['full_aliaslisting']) && $this->config['full_aliaslisting'] == 1)) {
                         $al = $this->getAliasListing($id);
                     } else {
-                        $al = $this->aliasListing[$id];
+                        $al = $this->aliasListing[$id] ?? [];
                     }
+                    if (!empty($al)) {
+                        if ($al['isfolder'] === 1 && $this->config['make_folders'] === '1') {
+                            $f_url_suffix = '/';
+                        }
 
-                    if ($al['isfolder'] === 1 && $this->config['make_folders'] === '1') {
-                        $f_url_suffix = '/';
+                        $alPath = !empty ($al['path']) ? $al['path'] . '/' : '';
+
+                        if ($al && $al['alias']) {
+                            $alias = $al['alias'];
+                        }
                     }
-
-                    $alPath = !empty ($al['path']) ? $al['path'] . '/' : '';
-
-                    if ($al && $al['alias']) {
-                        $alias = $al['alias'];
-                    }
-
                 }
 
                 $alias = $alPath . $f_url_prefix . $alias . $f_url_suffix;
@@ -4472,6 +4472,7 @@ class DocumentParser
      */
     public function getAliasListing($id)
     {
+        $out = [];
         if (isset($this->aliasListing[$id])) {
             $out = $this->aliasListing[$id];
         } else {
@@ -4499,6 +4500,7 @@ class DocumentParser
                 $out = $this->aliasListing[$id];
             }
         }
+        
         return $out;
     }
 
