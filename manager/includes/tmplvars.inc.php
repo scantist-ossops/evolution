@@ -138,7 +138,7 @@ function renderFormElement($field_type, $field_id, $default_text = '', $field_el
 					$checked = in_array($value, $values) ? ' checked="checked"' : '';
 					$param = array(
 						$modx->htmlspecialchars($value),
-						$i,
+						$field_id,
 						$field_id,
 						$checked,
 						$name
@@ -156,7 +156,7 @@ function renderFormElement($field_type, $field_id, $default_text = '', $field_el
 					if(strlen($itemvalue) == 0) {
 						$itemvalue = $item;
 					}
-					$field_html .= '<input type="radio" value="' . $modx->htmlspecialchars($itemvalue) . '" id="tv_' . $i . '" name="tv' . $field_id . '" ' . ($itemvalue == $field_value ? 'checked="checked"' : '') . ' onchange="documentDirty=true;" /><label for="tv_' . $i . '" class="radio">' . $item . '</label><br />';
+					$field_html .= '<input type="radio" value="' . $modx->htmlspecialchars($itemvalue) . '" id="tv_' . $field_id . '" name="tv' . $field_id . '" ' . ($itemvalue == $field_value ? 'checked="checked"' : '') . ' onchange="documentDirty=true;" /><label for="tv_' . $i . '" class="radio">' . $item . '</label><br />';
 					$i++;
 				}
 				break;
@@ -181,7 +181,7 @@ function renderFormElement($field_type, $field_id, $default_text = '', $field_el
 									sOptions += ',top=' + iTop ;
 
 									var oWindow = window.open( url, 'FCKBrowseWindow', sOptions ) ;
-								}			
+								}
 								function BrowseServer(ctrl) {
 									lastImageCtrl = ctrl;
 									var w = screen.width * 0.5;

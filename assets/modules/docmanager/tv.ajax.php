@@ -150,7 +150,7 @@ function renderFormElement($field_type, $field_id, $default_text, $field_element
                 if (strlen($itemvalue) == 0) {
                     $itemvalue = $item;
                 }
-                $field_html .= '<input type="checkbox" value="' . htmlspecialchars($itemvalue) . '" id="tv_' . $i . '" name="tv' . $field_id . '[]" ' . (in_array($itemvalue, $field_value) ? " checked='checked'" : "") . ' onchange="documentDirty=true;" /><label for="tv_' . $i . '">' . $item . '</label><br />';
+                $field_html .= '<input type="checkbox" value="' . htmlspecialchars($itemvalue) . '" id="tv_' . $field_id . '" name="tv' . $field_id . '[]" ' . (in_array($itemvalue, $field_value) ? " checked='checked'" : "") . ' onchange="documentDirty=true;" /><label for="tv_' . $i . '">' . $item . '</label><br />';
                 $i++;
             }
             break;
@@ -183,21 +183,21 @@ function renderFormElement($field_type, $field_id, $default_text, $field_element
 							sOptions += ',top=' + iTop ;
 
 							var oWindow = window.open( url, 'FCKBrowseWindow', sOptions ) ;
-						}			
+						}
 						function BrowseServer(ctrl) {
 							lastImageCtrl = ctrl;
 							var w = screen.width * 0.7;
 							var h = screen.height * 0.7;
 							OpenServerBrowser('media/browser/{$which_browser}/browser.php?Type=images', w, h);
 						}
-						
+
 						function BrowseFileServer(ctrl) {
 							lastFileCtrl = ctrl;
 							var w = screen.width * 0.7;
 							var h = screen.height * 0.7;
 							OpenServerBrowser('media/browser/{$which_browser}/browser.php?Type=files', w, h);
 						}
-						
+
 						function SetUrl(url, width, height, alt){
 							if(lastFileCtrl) {
 								var c = document.templatevariables[lastFileCtrl];
@@ -238,21 +238,21 @@ function renderFormElement($field_type, $field_id, $default_text, $field_element
 
 							var oWindow = window.open( url, 'FCKBrowseWindow', sOptions ) ;
 						}
-						
+
 							function BrowseServer(ctrl) {
 							lastImageCtrl = ctrl;
 							var w = screen.width * 0.7;
 							var h = screen.height * 0.7;
 							OpenServerBrowser('media/browser/{$which_browser}/browser.php?Type=images', w, h);
 						}
-									
+
 						function BrowseFileServer(ctrl) {
 							lastFileCtrl = ctrl;
 							var w = screen.width * 0.7;
 							var h = screen.height * 0.7;
 							OpenServerBrowser('media/browser/{$which_browser}/browser.php?Type=files', w, h);
 						}
-						
+
 						function SetUrl(url, width, height, alt){
 							if(lastFileCtrl) {
 								var c = document.templatevariables[lastFileCtrl];
