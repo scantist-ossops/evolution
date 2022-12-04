@@ -689,7 +689,7 @@ class DBAPI
      */
     public function truncate($table_name)
     {
-        return $this->query('TRUNCATE '.$table_name);
+        return $this->query('TRUNCATE '.$this->replaceFullTableName($table_name));
     }
 
     /**
