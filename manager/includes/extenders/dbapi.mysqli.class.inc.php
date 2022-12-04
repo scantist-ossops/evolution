@@ -731,7 +731,7 @@ class DBAPI
     {
         $_ = array();
         foreach ($tables as $k => $v) {
-            $_[] = $v;
+            $_[] = is_int($k) ? $v : $v . $v.' '.$k;
         }
 
         return implode(' ', $_);
