@@ -217,27 +217,29 @@ class DBAPI
     public function delete($from, $where = '', $orderBy = '', $limit = '')
     {
         $modx = evolutionCMS();
-        $out = false;
         if (!$from) {
             $modx->messageQuit("Empty \$from parameters in DBAPI::delete().");
-        } else {
-            $from = $this->replaceFullTableName($from);
-            $where = trim($where);
-            $orderBy = trim($orderBy);
-            $limit = trim($limit);
-            if ($where !== '' && stripos($where, 'WHERE') !== 0) {
-                $where = "WHERE {$where}";
-            }
-            if ($orderBy !== '' && stripos($orderBy, 'ORDER BY') !== 0) {
-                $orderBy = "ORDER BY {$orderBy}";
-            }
-            if ($limit !== '' && stripos($limit, 'LIMIT') !== 0) {
-                $limit = "LIMIT {$limit}";
-            }
-
-            $out = $this->query("DELETE FROM {$from} {$where} {$orderBy} {$limit}");
+            return false;
         }
-        return $out;
+
+        $where = trim($where);
+        if(!$where && !$limit) {
+            return $this->truncate($from);
+        }
+
+        $from = $this->replaceFullTableName($from);
+        $orderBy = trim($orderBy);
+        $limit = trim($limit);
+        if ($where !== '' && stripos($where, 'WHERE') !== 0) {
+            $where = "WHERE {$where}";
+        }
+        if ($orderBy !== '' && stripos($orderBy, 'ORDER BY') !== 0) {
+            $orderBy = "ORDER BY {$orderBy}";
+        }
+        if ($limit !== '' && stripos($limit, 'LIMIT') !== 0) {
+            $limit = "LIMIT {$limit}";
+        }
+        return $this->query("DELETE FROM {$from} {$where} {$orderBy} {$limit}");
     }
 
     /**
@@ -294,31 +296,27 @@ class DBAPI
     public function update($fields, $table, $where = "")
     {
         $modx = evolutionCMS();
-        $out = false;
         if (!$table) {
             $modx->messageQuit('Empty '.$table.' parameter in DBAPI::update().');
-        } else {
-            $table = $this->replaceFullTableName($table);
-            if (is_array($fields)) {
-                foreach ($fields as $key => $value) {
-                    if ($value === null || strtolower($value) === 'null') {
-                        $f = 'NULL';
-                    } else {
-                        $f = "'" . $value . "'";
-                    }
-                    $fields[$key] = "`{$key}` = " . $f;
-                }
-                $fields = implode(',', $fields);
-            }
-            $where = trim($where);
-            if ($where !== '' && stripos($where, 'WHERE') !== 0) {
-                $where = 'WHERE '.$where;
-            }
-
-            return $this->query('UPDATE '.$table.' SET '.$fields.' '.$where);
+            return;
         }
-        return $out;
-    }
+        $table = $this->replaceFullTableName($table);
+        if (is_array($fields)) {
+            foreach ($fields as $key => $value) {
+                if ($value === null || strtolower($value) === 'null') {
+                    $f = 'NULL';
+                } else {
+                    $f = "'" . $value . "'";
+                }
+                $fields[$key] = "`{$key}` = " . $f;
+            }
+            $fields = implode(',', $fields);
+        }
+        if ($where && stripos(trim($where), 'WHERE') !== 0) {
+            $where = 'WHERE '.$where;
+        }
+        return $this->query('UPDATE '.$table.' SET '.$fields.' '.$where);
+}
 
     /**
      * @param string|array $fields
@@ -689,7 +687,7 @@ class DBAPI
      */
     public function truncate($table_name)
     {
-        return $this->query('TRUNCATE '.$table_name);
+        return $this->query('TRUNCATE '.$this->replaceFullTableName($table_name));
     }
 
     /**
@@ -733,7 +731,7 @@ class DBAPI
     {
         $_ = array();
         foreach ($tables as $k => $v) {
-            $_[] = $v;
+            $_[] = is_int($k) ? $v : $v . $v.' '.$k;
         }
 
         return implode(' ', $_);
