@@ -141,12 +141,9 @@ class Qm {
                     }
 
                     // Redirect to clearer page which refreshes parent window and closes modal box frame
-                    if ($this->modx->config['friendly_urls'] == 1){
-                        $this->modx->sendRedirect($this->modx->makeUrl($id).'?quickmanagerclose=1', 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently'); 
-                    }else{
-                        $this->modx->sendRedirect($this->modx->makeUrl($id).'&quickmanagerclose=1', 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently');    
-                    }
-                    
+                    $this->modx->sendRedirect(
+                        $this->modx->makeUrl($id,null,'quickmanagerclose=1'), null, 'REDIRECT_JS'
+                    );
                 }
 
                 break;
@@ -198,19 +195,31 @@ class Qm {
                     if (isset($_POST['save'])) $save = (int)$_POST['save'];
 
                     // Get TV name
-                    if (preg_match('/^([^\\"\'\(\)<>!?]+)/i', $_GET['tvname'])) $tvName = $_GET['tvname'];
+                    if (preg_match('/^([^"\'()<>!?]+)/i', $_GET['tvname'])) $tvName = $_GET['tvname'];
 
                     // Get TV array
                     $tv = $this->modx->getTemplateVar($tvName, '*', $docID);
 
                     // Handle default TVs
                     switch ($tvName) {
-                        case 'pagetitle'    : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'longtitle'    : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'description'  : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'content'      : $tv['type'] = 'richtext'; $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'menutitle'    : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'introtext'    : $tv['type'] = 'textarea'; $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
+                        case 'longtitle':
+                        case 'description':
+                        case 'menutitle':
+                        case 'pagetitle'    :
+                            $tv['type'] = 'text';
+                            $tv['caption'] = $this->getDefaultTvCaption($tvName);
+                            $access = TRUE;
+                            break;
+                        case 'content'      :
+                            $tv['type'] = 'richtext';
+                            $tv['caption'] = $this->getDefaultTvCaption($tvName);
+                            $access = TRUE;
+                            break;
+                        case 'introtext'    :
+                            $tv['type'] = 'textarea';
+                            $tv['caption'] = $this->getDefaultTvCaption($tvName);
+                            $access = TRUE;
+                            break;
                     }
 
                     // Check TV access
@@ -1077,43 +1086,40 @@ class Qm {
     // Check if user has manager access permissions to current document
     //_______________________________________________________
     function checkAccess() {
-        $access = FALSE;
-
-        // If user is admin (role = 1)
-        if ($_SESSION['mgrRole'] == 1) $access = TRUE;
-
-        else {
-            $docID = $this->modx->documentIdentifier;
-
-            // Database table
-            $table= $this->modx->getFullTableName("document_groups");
-
-            // Check if current document is assigned to one or more doc groups
-            $result = $this->modx->db->select('count(id)', $table, "document='{$docID}'");
-            $rowCount= $this->modx->db->getValue($result);
-
-            // If document is assigned to one or more doc groups, check access
-            if ($rowCount >= 1) {
-
-                // Get document groups for current user
-                $mrgDocGroups = $_SESSION['mgrDocgroups'];
-                if (!empty($mrgDocGroups))  {
-                    $docGroup = implode(",", $mrgDocGroups);
-
-                    // Check if user has access to current document
-                    $result = $this->modx->db->select('count(id)', $table, "document = '{$docID}' AND document_group IN ({$docGroup})");
-                    $rowCount = $this->modx->db->getValue($result);
-
-                    if ($rowCount >= 1) $access = TRUE;
-                }
-
-                else $access = FALSE;
-            }
-
-            else $access = TRUE;
+        if ($_SESSION['mgrRole'] == 1) {
+            return TRUE;
         }
 
-        return $access;
+        $docID = $this->modx->documentIdentifier;
+
+        // Database table
+        $table= $this->modx->getFullTableName("document_groups");
+
+        // Check if current document is assigned to one or more doc groups
+        $result = $this->modx->db->select('count(id)', $table, "document='{$docID}'");
+        $rowCount= $this->modx->db->getValue($result);
+
+        // If document is assigned to one or more doc groups, check access
+        if ($rowCount < 1) {
+            return TRUE;
+        }
+        $mrgDocGroups = $_SESSION['mgrDocgroups'];
+        if (empty($mrgDocGroups)) {
+            return FALSE;
+        }
+
+        $docGroup = implode(",", $mrgDocGroups);
+
+        // Check if user has access to current document
+        $rowCount = $this->modx->db->getValue(
+            $this->modx->db->select('count(id)', $table, "document = '{$docID}' AND document_group IN ({$docGroup})")
+        );
+
+        if ($rowCount >= 1) {
+            return TRUE;
+        }
+
+        return FALSE;
     }
 
     // Function from: processors/cache_sync.class.processor.php
@@ -1156,10 +1162,18 @@ class Qm {
 	    }
 
 	    // Return TV button link if access
-	    if ($access && $caption != '') {
-            $amp = ($this->modx->config['friendly_urls'] == 1) ? '?' : '&';
-	        return '<span class="'.$this->tvbclass.'"><a class="colorbox" href="'.$this->modx->makeUrl($docID).$amp.'quickmanagertv=1&amp;tvname='.$matches[1].'"><span>'.$caption.'</span></a></span>';
+	    if (!$access || $caption == '') {
+            return null;
         }
+        $amp = ($this->modx->config['friendly_urls'] == 1) ? '?' : '&';
+        return sprintf(
+            '<span class="%s"><a class="colorbox" href="%s%squickmanagertv=1&amp;tvname=%s"><span>%s</span></a></span>',
+            $this->tvbclass,
+            $this->modx->makeUrl($docID),
+            $amp,
+            $matches[1],
+            $caption
+        );
     }
 
     // Check user access to TV
@@ -1245,8 +1259,8 @@ class Qm {
         $pageId = $this->modx->documentIdentifier;
         $time = time();
         $user = $_SESSION['mgrInternalKey'];
-        $tvId = isset($_POST['tvid']) ? intval($_POST['tvid']) : '';
-        $tvContent = isset($_POST['tv'.$tvName]) ? $_POST['tv'.$tvName] : '';
+        $tvId = isset($_POST['tvid']) ? (int)$_POST['tvid'] : '';
+        $tvContent = $_POST['tv' . $tvName] ?? '';
         $tvContentTemp = '';
 
         // Escape TV content
@@ -1267,15 +1281,20 @@ class Qm {
                 'contentid' => $pageId,
                 'value'     => $tvContent,
                 );
-            $result = $this->modx->db->select('count(id)', $tmplvarContentValuesTable, "tmplvarid = '{$fields['tmplvarid']}' AND contentid = '{$fields['contentid']}'");
+            $result = $this->modx->db->select(
+                'count(id)',
+                $tmplvarContentValuesTable,
+                sprintf("tmplvarid='%s' AND contentid='%s'", $fields['tmplvarid'], $fields['contentid'])
+            );
 
             // TV exists, update TV
             if($this->modx->db->getValue($result)) {
-                $this->modx->db->update($fields, $tmplvarContentValuesTable, "tmplvarid = '{$fields['tmplvarid']}' AND contentid = '{$fields['contentid']}'");
-            }
-
-            // TV does not exist, create new TV
-            else {
+                $this->modx->db->update(
+                    $fields,
+                    $tmplvarContentValuesTable,
+                    sprintf("tmplvarid='%s' AND contentid='%s'", $fields['tmplvarid'], $fields['contentid'])
+                );
+            } else {
                 $this->modx->db->insert($fields, $tmplvarContentValuesTable);
             }
 
