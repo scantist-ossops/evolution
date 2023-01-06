@@ -560,9 +560,6 @@ class DocumentParser
      */
     public function getUserSettings()
     {
-        $tbl_web_user_settings = $this->getFullTableName('web_user_settings');
-        $tbl_user_settings = $this->getFullTableName('user_settings');
-
         // load user setting if user is logged in
         $usrSettings = [];
         if ($id = $this->getLoginUserID()) {
@@ -579,20 +576,16 @@ class DocumentParser
             if (isset ($_SESSION[$usrType . 'UsrConfigSet'])) {
                 $usrSettings = &$_SESSION[$usrType . 'UsrConfigSet'];
             } else {
-                if ($usrType == 'web') {
-                    $from = $tbl_web_user_settings;
-                    $where = "webuser='{$id}'";
-                } else {
-                    $from = $tbl_user_settings;
-                    $where = "user='{$id}'";
-                }
-
-                $which_browser_default = $this->configGlobal['which_browser'] ? $this->configGlobal['which_browser'] : $this->config['which_browser'];
-
-                $result = $this->db->select('setting_name, setting_value', $from, $where);
+                $result = $this->db->select(
+                    'setting_name, setting_value',
+                    ($usrType === 'web')
+                        ? $this->getFullTableName('web_user_settings')
+                        : $this->getFullTableName('user_settings'),
+                    ($usrType === 'web') ? "webuser='" . $id . "'" : "user='" . $id . "'"
+                );
                 while ($row = $this->db->getRow($result)) {
                     if ($row['setting_name'] === 'which_browser' && $row['setting_value'] === 'default') {
-                        $row['setting_value'] = $which_browser_default;
+                        $row['setting_value'] = $this->configGlobal['which_browser'] ?: $this->config['which_browser'];
                     }
                     $usrSettings[$row['setting_name']] = $row['setting_value'];
                 }
@@ -606,7 +599,12 @@ class DocumentParser
             if (isset ($_SESSION['mgrUsrConfigSet'])) {
                 $musrSettings = &$_SESSION['mgrUsrConfigSet'];
             } else {
-                if ($result = $this->db->select('setting_name, setting_value', $tbl_user_settings, "user='{$mgrid}'")) {
+                $result = $this->db->select(
+                    'setting_name, setting_value',
+                    $this->getFullTableName('user_settings'),
+                    "user='" . $mgrid . "'"
+                );
+                if ($result) {
                     while ($row = $this->db->getRow($result)) {
                         $musrSettings[$row['setting_name']] = $row['setting_value'];
                     }
@@ -625,8 +623,16 @@ class DocumentParser
         }
 
         $this->config = array_merge($this->config, $usrSettings);
-        $this->config['filemanager_path'] = str_replace('[(base_path)]', MODX_BASE_PATH, $this->config['filemanager_path']);
-        $this->config['rb_base_dir'] = str_replace('[(base_path)]', MODX_BASE_PATH, $this->config['rb_base_dir']);
+        $this->config['filemanager_path'] = str_replace(
+            '[(base_path)]',
+            MODX_BASE_PATH,
+            $this->config['filemanager_path']
+        );
+        $this->config['rb_base_dir'] = str_replace(
+            '[(base_path)]',
+            MODX_BASE_PATH,
+            $this->config['rb_base_dir']
+        );
 
         return $usrSettings;
     }
