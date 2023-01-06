@@ -326,6 +326,10 @@ class DocumentParser
         if (empty ($url)) {
             return false;
         }
+        if (strpos($url, "\n") !== false) {
+            $this->messageQuit('No newline allowed in redirect url.');
+            exit;
+        }
         if ($count_attempts) {
             // append the redirect count string to the url
             $currentNumberOfRedirects = $_GET['err'] ?? 0;
@@ -364,10 +368,6 @@ class DocumentParser
             header($responseCode);
         }
 
-        if (strpos($url, "\n") !== false) {
-            $this->messageQuit('No newline allowed in redirect url.');
-            exit;
-        }
         if (strpos($url, MODX_BASE_URL) === 0) {
             $url = MODX_SITE_URL . substr($url, strlen(MODX_BASE_URL));
         }
