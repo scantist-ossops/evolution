@@ -457,8 +457,8 @@ class Qm {
                                     $buttonRoles = explode(",", $buttonParams[4]); // Roles are divided by ','
 
                                     // Check if user role is found
-                                    foreach($buttonRoles as $key => $field) {
-                                        if ($field == $_SESSION['mgrRole']) {
+                                    foreach($buttonRoles as $role) {
+                                        if ($role == $_SESSION['mgrRole']) {
                                             $showButton = TRUE;
                                         }
                                     }
