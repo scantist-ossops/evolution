@@ -360,8 +360,8 @@ class DocumentParser
             exit;
         }
 
-        if ($type !== 'REDIRECT_HEADER') {
-            return true;
+        if ($type && $type !== 'REDIRECT_HEADER') {
+            return false;
         }
 
         if ($responseCode && (strpos($responseCode, '30') !== false)) {
