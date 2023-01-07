@@ -10,7 +10,7 @@
 if(!class_exists('Qm')) {
 
 class Qm {
-  var $modx;
+    private $modx;
 
     //_______________________________________________________
     function __construct(&$modx,
@@ -543,9 +543,7 @@ class Qm {
                             $css .= '
                             <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/actionButtons.css" />
                             ';
-                        }
-                        else
-                        if ($this->buttonStyle == 'navButtons') {
+                        } elseif ($this->buttonStyle === 'navButtons') {
                             $css .= '
                             <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/navButtons.css" />
                             ';
@@ -617,10 +615,7 @@ class Qm {
                             }
                             </style>
                             ';
-                        }
-                        else
-                        // Bottom toolbar Autohide true
-                        if (($this->autohide == 'true') && ($this->position == 'bottom')) {
+                        } elseif (($this->autohide == 'true') && ($this->position === 'bottom')) {
                             $css .= '
                             <style type="text/css">
                             #qmEditor, #qmEditorClosed { left:0; bottom: -30px; width: 100%;}
@@ -640,10 +635,7 @@ class Qm {
                             }
                             </style>
                             ';
-                        }
-                        else
-                        // Bottom toolbar Autohide false
-                        if (($this->autohide == 'false') && ($this->position == 'bottom')) {
+                        } elseif (($this->autohide == 'false') && ($this->position === 'bottom')) {
                             $css .= '
                             <style type="text/css">
                             #qmEditor, #qmEditorClosed { left:0; bottom: 0; width: 100%;}
@@ -679,10 +671,7 @@ class Qm {
                             #qmLogoClose:after {margin-left:11px!important;}
                             </style>
                             ';
-                        }
-                        else
-                        // Left toolbar Autohide false
-                        if (($this->autohide == 'false') && ($this->position == 'left')) {
+                        } elseif ($this->autohide == 'false' && $this->position === 'left') {
                             $css .= '
                             <style type="text/css">
                             #qmEditor, #qmEditorClosed {left:0; top: 0; width: 40px; height:100%}
@@ -711,10 +700,7 @@ class Qm {
                             #qmLogoClose:after {margin-left:11px!important;}
                             </style>
                             ';
-                        }
-                        else
-                        // Right toolbar Autohide false
-                        if (($this->autohide == 'false') && ($this->position == 'right')) {
+                        } elseif (($this->autohide == 'false') && ($this->position == 'right')) {
                             $css .= '
                             <style type="text/css">
                             #qmEditor, #qmEditorClosed {right:0; top: 0; width: 40px; height:100%}
@@ -736,9 +722,7 @@ class Qm {
                             #qmEditor .qmId {background: rgba(255, 255, 255, 0.3); font-size:13px; text-align:center;  color: #666; padding:2px;}
                             </style>
                             ';
-                        }
-                        else
-                        if (($this->removeBg == 'yes') && ($this->buttonStyle == 'navButtons')) {
+                        } elseif (($this->removeBg === 'yes') && ($this->buttonStyle === 'navButtons')) {
                             $css .= '
                             <style type="text/css">
                             #qmEditor, #qmEditorClosed {background: none; background-color: transparent!important;}
