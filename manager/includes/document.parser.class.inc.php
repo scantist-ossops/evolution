@@ -1311,7 +1311,7 @@ class DocumentParser
      * @param string $right
      * @return array
      */
-    public function _getTagsFromContent($content, $left = '[+', $right = '+]')
+    private function _getTagsFromContent($content, $left = '[+', $right = '+]')
     {
         if (strpos($content, $left) === false) {
             return [];
@@ -1394,11 +1394,10 @@ class DocumentParser
                     $fetch .= $right;
                 }
             } else {
-                if (0 < $lc) {
-                    $fetch .= $v;
-                } else {
+                if (0 >= $lc) {
                     continue;
                 }
+                $fetch .= $v;
             }
         }
         foreach($tags as $i=>$tag) {
