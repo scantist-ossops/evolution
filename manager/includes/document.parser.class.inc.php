@@ -371,9 +371,7 @@ class DocumentParser
         if (strpos($url, MODX_BASE_URL) === 0) {
             $url = MODX_SITE_URL . substr($url, strlen(MODX_BASE_URL));
         }
-        if ($responseCode && (strpos($responseCode, '30') !== false)) {
-            header('Location: ' . $url);
-        }
+        header('Location: ' . $url);
         exit;
     }
 
