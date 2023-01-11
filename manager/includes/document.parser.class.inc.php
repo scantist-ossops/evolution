@@ -3932,32 +3932,41 @@ class DocumentParser
      * @param string $fields Default: id, pagetitle, description, parent, alias, menutitle
      * @return array
      */
-    public function getActiveChildren($id = 0, $sort = 'menuindex', $dir = 'ASC', $fields = 'id, pagetitle, description, parent, alias, menutitle')
+    public function getActiveChildren($id = 0,
+                                      $sort = 'menuindex',
+                                      $dir = 'ASC',
+                                      $fields = 'id, pagetitle, description, parent, alias, menutitle')
     {
+        static $cache = null;
         $cacheKey = md5(print_r(func_get_args(), true));
-        if (isset($this->tmpCache[__FUNCTION__][$cacheKey])) {
-            return $this->tmpCache[__FUNCTION__][$cacheKey];
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
         }
 
-        $tblsc = $this->getFullTableName("site_content");
-        $tbldg = $this->getFullTableName("document_groups");
+        $result = $this->db->select(
+            'DISTINCT sc.' . implode(
+                ',sc.',
+                array_filter(
+                    array_map('trim', explode(',', $fields))
+                )
+            ),
+            [
+                sprintf('%s sc', $this->getFullTableName('site_content')),
+                sprintf(
+                    'LEFT JOIN %s dg on dg.document=sc.id',
+                    $this->getFullTableName('document_groups')
+                )
+            ],
+            sprintf(
+                "sc.parent='%s' AND sc.published=1 AND sc.deleted=0 AND (%s) GROUP BY sc.id",
+                $id,
+                $this->docAccessConditions()
+            ),
+            sprintf("sc.%s %s", implode(',sc.', array_filter(array_map('trim', explode(',', $sort)))), $dir)
+        );
 
-        // modify field names to use sc. table reference
-        $fields = 'sc.' . implode(',sc.', array_filter(array_map('trim', explode(',', $fields))));
-        $sort = 'sc.' . implode(',sc.', array_filter(array_map('trim', explode(',', $sort))));
-        // get document groups for current user
-        if ($docgrp = $this->getUserDocGroups()) {
-            $docgrp = implode(",", $docgrp);
-        }
-        // build query
-        $access = ($this->isFrontend() ? "sc.privateweb=0" : "1='" . $_SESSION['mgrRole'] . "' OR sc.privatemgr=0") . (!$docgrp ? "" : " OR dg.document_group IN ($docgrp)");
-        $result = $this->db->select("DISTINCT {$fields}", "{$tblsc} sc
-                LEFT JOIN {$tbldg} dg on dg.document = sc.id", "sc.parent = '{$id}' AND sc.published=1 AND sc.deleted=0 AND ({$access}) GROUP BY sc.id", "{$sort} {$dir}");
-        $resourceArray = $this->db->makeArray($result);
-
-        $this->tmpCache[__FUNCTION__][$cacheKey] = $resourceArray;
-
-        return $resourceArray;
+        $cache[$cacheKey] = $this->db->makeArray($result);
+        return $cache[$cacheKey];
     }
 
     /**
