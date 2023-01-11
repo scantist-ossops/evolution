@@ -7035,15 +7035,12 @@ class DocumentParser
      */
     public function applyFilter($value = '', $modifiers = false, $key = '')
     {
-        if ($modifiers === false || $modifiers == 'raw') {
+        if ($modifiers === false || $modifiers === 'raw') {
             return $value;
-        }
-        if ($modifiers !== false) {
-            $modifiers = trim($modifiers);
         }
 
         $this->loadExtension('MODIFIERS');
-        return $this->filter->phxFilter($key, $value, $modifiers);
+        return $this->filter->phxFilter($key, $value, trim($modifiers));
     }
 
     // End of class.
