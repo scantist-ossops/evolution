@@ -5415,32 +5415,42 @@ class DocumentParser
     {
         if ($this->isFrontend() && isset($_SESSION['webDocgroups']) && isset($_SESSION['webValidated'])) {
             $dg = $_SESSION['webDocgroups'];
-            $dgn = isset($_SESSION['webDocgrpNames']) ? $_SESSION['webDocgrpNames'] : false;
+            $dgn = $_SESSION['webDocgrpNames'] ?? false;
         } elseif ($this->isBackend() && isset($_SESSION['mgrDocgroups']) && isset($_SESSION['mgrValidated'])) {
             $dg = $_SESSION['mgrDocgroups'];
-            $dgn = isset($_SESSION['mgrDocgrpNames']) ? $_SESSION['mgrDocgrpNames'] : false;
+            $dgn = $_SESSION['mgrDocgrpNames'] ?? false;
         } else {
             $dg = '';
         }
         if (!$resolveIds) {
             return $dg;
-        } elseif (is_array($dgn)) {
-            return $dgn;
-        } elseif (is_array($dg)) {
-            // resolve ids to names
-            $dgn = [];
-            $ds = $this->db->select('name', $this->getFullTableName("documentgroup_names"), "id IN (" . implode(",", $dg) . ")");
-            while ($row = $this->db->getRow($ds)) {
-                $dgn[] = $row['name'];
-            }
-            // cache docgroup names to session
-            if ($this->isFrontend()) {
-                $_SESSION['webDocgrpNames'] = $dgn;
-            } else {
-                $_SESSION['mgrDocgrpNames'] = $dgn;
-            }
+        }
+
+        if (is_array($dgn)) {
             return $dgn;
         }
+
+        if (!is_array($dg)) {
+            return [];
+        }
+
+        // resolve ids to names
+        $dgn = [];
+        $ds = $this->db->select(
+            'name',
+            $this->getFullTableName("documentgroup_names"),
+            sprintf('id IN (%s)', implode(',', $dg))
+        );
+        while ($row = $this->db->getRow($ds)) {
+            $dgn[] = $row['name'];
+        }
+        // cache docgroup names to session
+        if ($this->isFrontend()) {
+            $_SESSION['webDocgrpNames'] = $dgn;
+        } else {
+            $_SESSION['mgrDocgrpNames'] = $dgn;
+        }
+        return $dgn;
     }
 
     /**
