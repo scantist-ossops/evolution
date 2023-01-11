@@ -4961,76 +4961,80 @@ class DocumentParser
      */
     public function getTemplateVars($idnames = [], $fields = '*', $docid = '', $published = 1, $sort = 'rank', $dir = 'ASC')
     {
+        static $cache = null;
         $cacheKey = md5(print_r(func_get_args(), true));
-        if (isset($this->tmpCache[__FUNCTION__][$cacheKey])) {
-            return $this->tmpCache[__FUNCTION__][$cacheKey];
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
         }
 
         if (($idnames !== '*' && !is_array($idnames)) || empty($idnames) ) {
             return false;
-        } else {
-            // get document record
-            if (empty($docid)) {
-                $docid = $this->documentIdentifier;
-                $docRow = $this->documentObject;
-            } else {
-                $docRow = $this->getDocument($docid, '*', $published);
-
-                if (!$docRow) {
-                    $this->tmpCache[__FUNCTION__][$cacheKey] = false;
-                    return false;
-                }
-            }
-
-            // get user defined template variables
-            if (!empty($fields) && (is_scalar($fields) || \is_array($fields))) {
-                if(\is_scalar($fields)) {
-                    $fields = explode(',', $fields);
-                }
-                $fields = array_filter(array_map('trim', $fields), function($value) {
-                    return $value !== 'value';
-                });
-                $fields = 'tv.' . implode(',tv.', $fields);
-            } else {
-                $fields = 'tv.*';
-            }
-            $sort = ($sort == '') ? '' : 'tv.' . implode(',tv.', array_filter(array_map('trim', explode(',', $sort))));
-
-            if ($idnames === '*') {
-                $query = 'tv.id<>0';
-            } else {
-                $query = (is_numeric($idnames[0]) ? 'tv.id' : 'tv.name') . " IN ('" . implode("','", $idnames) . "')";
-            }
-
-            $rs = $this->db->select(
-                "{$fields}, IF(tvc.value != '', tvc.value, tv.default_text) as value",
-                $this->getFullTableName('site_tmplvars') . ' tv ' .
-                        'INNER JOIN ' . $this->getFullTableName('site_tmplvar_templates') . ' tvtpl ON tvtpl.tmplvarid = tv.id ' .
-                        'LEFT JOIN ' . $this->getFullTableName('site_tmplvar_contentvalues') . " tvc ON tvc.tmplvarid = tv.id AND tvc.contentid = '" . $docid . "'",
-                $query . " AND tvtpl.templateid = '" . $docRow['template'] . "'",
-                ($sort ? ($sort . ' ' . $dir) : '')
-            );
-
-            $result = $this->db->makeArray($rs);
-
-            // get default/built-in template variables
-            if(is_array($docRow)){
-                ksort($docRow);
-
-                foreach ($docRow as $key => $value) {
-                    if ($idnames === '*' || in_array($key, $idnames)) {
-                        array_push($result, array(
-                            'name' => $key,
-                            'value' => $value
-                        ));
-                    }
-                }
-            }
-
-            $this->tmpCache[__FUNCTION__][$cacheKey] = $result;
-
-            return $result;
         }
+
+        // get document record
+        if (empty($docid)) {
+            $docid = $this->documentIdentifier;
+            $docRow = $this->documentObject;
+        } else {
+            $docRow = $this->getDocument($docid, '*', $published);
+
+            if (!$docRow) {
+                $cache[$cacheKey] = false;
+                return false;
+            }
+        }
+
+        // get user defined template variables
+        if (!empty($fields) && (is_scalar($fields) || \is_array($fields))) {
+            if(\is_scalar($fields)) {
+                $fields = explode(',', $fields);
+            }
+            $fields = array_filter(array_map('trim', $fields), function($value) {
+                return $value !== 'value';
+            });
+            $fields = 'tv.' . implode(',tv.', $fields);
+        } else {
+            $fields = 'tv.*';
+        }
+
+        if ($idnames === '*') {
+            $query = 'tv.id<>0';
+        } else {
+            $query = (is_numeric($idnames[0]) ? 'tv.id' : 'tv.name') . " IN ('" . implode("','", $idnames) . "')";
+        }
+
+        $rs = $this->db->select(
+            $fields . ", IF(tvc.value != '', tvc.value, tv.default_text) as value",
+            $this->getFullTableName('site_tmplvars') . ' tv ' .
+                    'INNER JOIN ' . $this->getFullTableName('site_tmplvar_templates') . ' tvtpl ON tvtpl.tmplvarid = tv.id ' .
+                    'LEFT JOIN ' . $this->getFullTableName('site_tmplvar_contentvalues') . " tvc ON tvc.tmplvarid = tv.id AND tvc.contentid = '" . $docid . "'",
+            $query . " AND tvtpl.templateid = '" . $docRow['template'] . "'",
+            $sort
+                    ? sprintf(
+                        'tv.%s %s',
+                        implode(',tv.', array_filter(array_map('trim', explode(',', $sort)))),
+                        $dir
+                    )
+                    : ''
+        );
+
+        $result = $this->db->makeArray($rs);
+
+        // get default/built-in template variables
+        if(is_array($docRow)){
+            ksort($docRow);
+            foreach ($docRow as $key => $value) {
+                if ($idnames === '*' || in_array($key, $idnames)) {
+                    $result[] = array(
+                        'name' => $key,
+                        'value' => $value
+                    );
+                }
+            }
+        }
+
+        $cache[$cacheKey] = $result;
+        return $result;
     }
 
     /**
