@@ -374,12 +374,6 @@ class Qm {
 
                     if(isset($_SESSION['mgrValidated']) && $_REQUEST['z'] !== 'manprev') {
 
-                        // If logout break here
-                        if(isset($_REQUEST['logout'])) {
-                            $this->Logout();
-                            break;
-                        }
-
                         $userID = $_SESSION['mgrInternalKey'];
 
                         // Add ID
