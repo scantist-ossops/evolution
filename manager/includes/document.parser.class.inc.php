@@ -2719,13 +2719,10 @@ class DocumentParser
             return $cache[$cacheKey];
         }
 
-        $tblsc = $this->getFullTableName("site_content");
-        $tbldg = $this->getFullTableName("document_groups");
-
         // allow alias to be full path
         if ($method === 'alias') {
-            $identifier = $this->cleanDocumentIdentifier($identifier);
             $method = $this->documentMethod;
+            $identifier = $this->cleanDocumentIdentifier($identifier);
         }
         if ($method === 'alias' && $this->config['use_alias_path'] && array_key_exists($identifier, $this->documentListing)) {
             $method = 'id';
@@ -2736,32 +2733,25 @@ class DocumentParser
         if (is_array($out) && is_array($out[0])) {
             $cache[$cacheKey] = $out[0];
             return $out[0];
-            }
+        }
 
-        // get document groups for current user
-        if ($docgrp = $this->getUserDocGroups()) {
-            $docgrp = implode(",", $docgrp);
-        }
-        // get document
-        if ($this->isFrontend()) {
-            if (!$docgrp) {
-                $access = "sc.privateweb=0";
-            } else {
-                $access = sprintf("sc.privateweb=0 OR dg.document_group IN (%s)", $docgrp);
-            }
-        } elseif ($_SESSION['mgrRole'] != 1) {
-            if (!$docgrp) {
-                $access = 'sc.privatemgr=0';
-            } else {
-                $access = sprintf("sc.privatemgr=0 OR dg.document_group IN (%s)", $docgrp);
-            }
-        } else {
-            $access = '';
-        }
+        $access = $this->docAccessConditions();
+
         $rs = $this->db->select(
             'sc.*',
-            $tblsc . " sc
-            LEFT JOIN " . $tbldg . " dg ON dg.document = sc.id", "sc." . $method . " = '" . $identifier . "' AND (" . $access . ")", "", 1);
+            [
+                sprintf('%s sc', $this->getFullTableName('site_content')),
+                sprintf('LEFT JOIN %s dg ON dg.document=sc.id', $this->getFullTableName('document_groups')),
+            ],
+            sprintf(
+                "sc.%s='%s' AND (%s)",
+                $method,
+                $identifier,
+                $access
+            ),
+            '',
+            1
+        );
         if ($this->db->getRecordCount($rs) < 1) {
             $seclimit = 0;
             if ($this->config['unauthorized_page']) {
@@ -2771,8 +2761,8 @@ class DocumentParser
                         'count(dg.id)',
                         sprintf(
                             "%s as dg, %s as sc",
-                            $tbldg,
-                            $tblsc
+                            $this->getFullTableName('document_groups'),
+                            $this->getFullTableName('site_content')
                         ), "dg.document = sc.id AND sc.alias = '" . $identifier . "'",
                         '',
                         1
@@ -2780,8 +2770,10 @@ class DocumentParser
                 } else {
                     $secrs = $this->db->select(
                         'count(id)',
-                        $tbldg,
-                        "document = '" . $identifier . "'", '', 1
+                        $this->getFullTableName('document_groups'),
+                        sprintf("document='%s'", $identifier),
+                        '',
+                        1
                     );
                 }
                 // check if file is not public
@@ -2809,9 +2801,20 @@ class DocumentParser
             // load TVs and merge with document - Orig by Apodigm - Docvars
             $rs = $this->db->select(
                 "tv.*, IF(tvc.value!='',tvc.value,tv.default_text) as value",
-                $this->getFullTableName("site_tmplvars") . " tv
-            INNER JOIN " . $this->getFullTableName("site_tmplvar_templates") . " tvtpl ON tvtpl.tmplvarid = tv.id
-            LEFT JOIN " . $this->getFullTableName("site_tmplvar_contentvalues") . " tvc ON tvc.tmplvarid=tv.id AND tvc.contentid = '{$documentObject['id']}'", "tvtpl.templateid = '{$documentObject['template']}'");
+                [
+                    sprintf('%s tv', $this->getFullTableName("site_tmplvars")),
+                    sprintf(
+                        'INNER JOIN %s tvtpl ON tvtpl.tmplvarid=tv.id',
+                        $this->getFullTableName('site_tmplvar_templates')
+                    ),
+                    sprintf(
+                        "LEFT JOIN %s tvc ON tvc.tmplvarid=tv.id AND tvc.contentid='%s'",
+                        $this->getFullTableName('site_tmplvar_contentvalues'),
+                        $documentObject['id']
+                    )
+                ],
+                sprintf("tvtpl.templateid='%s'", $documentObject['template'])
+            );
             $tmplvars = [];
             while ($row = $this->db->getRow($rs)) {
                 $tmplvars[$row['name']] = array(
