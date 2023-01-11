@@ -915,7 +915,7 @@ class DocumentParser
             $docGrps = explode(',', $docObj['__MODxDocGroups__']);
             // check is user has access to doc groups
             if (is_array($usrGrps)) {
-                foreach ($usrGrps as $k => $v) {
+                foreach ($usrGrps as $v) {
                     if (!in_array($v, $docGrps)) {
                         continue;
                     }
