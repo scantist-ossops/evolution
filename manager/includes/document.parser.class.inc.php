@@ -7054,22 +7054,21 @@ class DocumentParser
      */
     private static function _getCleanQueryString()
     {
-        $q = MODX_CLI ? null : (isset($_GET['q']) ? $_GET['q'] : '');
+        if (MODX_CLI) {
+            return null;
+        }
+
+        $q = $_GET['q'] ?? '';
 
         //Return null if the query doesn't exist
         if (empty($q)) {
             return null;
         }
 
-        //If we have a string, return it
-        if (is_string($q)) {
-            return $q;
-        }
-
-        //If we have an array, return the first element
         if (is_array($q)) {
             return $q[0];
         }
+        return $q;
     }
 
     /**
