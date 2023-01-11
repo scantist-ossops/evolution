@@ -6999,7 +6999,10 @@ class DocumentParser
     public function isJson($string, $returnData = false)
     {
         $data = json_decode($string, true);
-        return (json_last_error() == JSON_ERROR_NONE) ? ($returnData ? $data : true) : false;
+        if (json_last_error() != JSON_ERROR_NONE) {
+            return false;
+        }
+        return ($returnData ? $data : true);
     }
 
     /**
