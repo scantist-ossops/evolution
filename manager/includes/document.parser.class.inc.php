@@ -6937,18 +6937,24 @@ class DocumentParser
             $str = substr($str, 0, strpos("\n", $str));
         }
 
-        $str = substr($str, 9);
-        $str = trim($str);
-        $str = str_replace('\\', '/', $str);
-        $str = ltrim($str, '/');
+        $str = ltrim(
+            str_replace(
+                '\\',
+                '/',
+                trim(substr($str, 9))
+            ),
+            '/'
+        );
 
         $tpl_dir = 'assets/templates/';
 
         if (strpos($str, MODX_MANAGER_PATH) === 0) {
             return false;
-        } elseif (is_file(MODX_BASE_PATH . $str)) {
+        }
+
+        if (is_file(MODX_BASE_PATH . $str)) {
             $file_path = MODX_BASE_PATH . $str;
-        } elseif (is_file(MODX_BASE_PATH . "{$tpl_dir}{$str}")) {
+        } elseif (is_file(MODX_BASE_PATH . $tpl_dir . $str)) {
             $file_path = MODX_BASE_PATH . $tpl_dir . $str;
         } else {
             return false;
@@ -6966,7 +6972,7 @@ class DocumentParser
         }
         $content = ob_get_clean();
         if (!$content && $result) {
-            $content = $result;
+            return $result;
         }
         return $content;
     }
