@@ -4142,17 +4142,17 @@ class DocumentParser
      */
     public function getDocument($id = 0, $fields = '*', $published = 1, $deleted = 0)
     {
-        if ($id == 0) {
+        if (!$id) {
             return false;
-        } else {
-            $docs = $this->getDocuments(array($id), $published, $deleted, $fields, '', '', '', 1);
-
-            if ($docs != false) {
-                return $docs[0];
-            } else {
-                return false;
-            }
         }
+
+        $docs = $this->getDocuments(array($id), $published, $deleted, $fields, '', '', '', 1);
+
+        if (!$docs) {
+            return false;
+        }
+
+        return $docs[0];
     }
 
     /**
