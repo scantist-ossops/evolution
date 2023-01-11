@@ -4166,7 +4166,8 @@ class DocumentParser
 
         if (!$docid) {
             $docid = $this->documentIdentifier ?? null;
-        } elseif (!preg_match('@^[0-9]+$@', $docid)) {
+        }
+        if (!preg_match('@^[1-9][0-9]*$@', $docid)) {
             $docid = $this->getIdFromAlias($docid);
         }
 
