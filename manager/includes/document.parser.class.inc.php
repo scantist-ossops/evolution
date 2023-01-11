@@ -2712,92 +2712,124 @@ class DocumentParser
      */
     public function getDocumentObject($method, $identifier, $isPrepareResponse = false)
     {
+        static $cache = null;
 
         $cacheKey = md5(print_r(func_get_args(), true));
-        if (isset($this->tmpCache[__FUNCTION__][$cacheKey])) {
-            return $this->tmpCache[__FUNCTION__][$cacheKey];
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
         }
 
         $tblsc = $this->getFullTableName("site_content");
         $tbldg = $this->getFullTableName("document_groups");
 
         // allow alias to be full path
-        if ($method == 'alias') {
+        if ($method === 'alias') {
             $identifier = $this->cleanDocumentIdentifier($identifier);
             $method = $this->documentMethod;
         }
-        if ($method == 'alias' && $this->config['use_alias_path'] && array_key_exists($identifier, $this->documentListing)) {
+        if ($method === 'alias' && $this->config['use_alias_path'] && array_key_exists($identifier, $this->documentListing)) {
             $method = 'id';
             $identifier = $this->documentListing[$identifier];
         }
 
         $out = $this->invokeEvent('OnBeforeLoadDocumentObject', compact('method', 'identifier'));
         if (is_array($out) && is_array($out[0])) {
-            $documentObject = $out[0];
-        } else {
-            // get document groups for current user
-            if ($docgrp = $this->getUserDocGroups()) {
-                $docgrp = implode(",", $docgrp);
+            $cache[$cacheKey] = $out[0];
+            return $out[0];
             }
-            // get document
-            $access = ($this->isFrontend() ? "sc.privateweb=0" : "1='" . $_SESSION['mgrRole'] . "' OR sc.privatemgr=0") . (!$docgrp ? "" : " OR dg.document_group IN ($docgrp)");
-            $rs = $this->db->select('sc.*', "{$tblsc} sc
-                LEFT JOIN {$tbldg} dg ON dg.document = sc.id", "sc.{$method} = '{$identifier}' AND ({$access})", "", 1);
-            if ($this->db->getRecordCount($rs) < 1) {
-                $seclimit = 0;
-                if ($this->config['unauthorized_page']) {
-                    // method may still be alias, while identifier is not full path alias, e.g. id not found above
-                    if ($method === 'alias') {
-                        $secrs = $this->db->select('count(dg.id)', "{$tbldg} as dg, {$tblsc} as sc", "dg.document = sc.id AND sc.alias = '{$identifier}'", '', 1);
-                    } else {
-                        $secrs = $this->db->select('count(id)', $tbldg, "document = '{$identifier}'", '', 1);
-                    }
-                    // check if file is not public
-                    $seclimit = $this->db->getValue($secrs);
-                }
-                if ($seclimit > 0) {
-                    // match found but not publicly accessible, send the visitor to the unauthorized_page
-                    $this->sendUnauthorizedPage();
-                    exit; // stop here
-                } else {
-                    $this->sendErrorPage();
-                    exit;
-                }
-            }
-            # this is now the document :) #
-            $documentObject = $this->db->getRow($rs);
 
-            if ($isPrepareResponse === 'prepareResponse') {
-                $this->documentObject = &$documentObject;
+        // get document groups for current user
+        if ($docgrp = $this->getUserDocGroups()) {
+            $docgrp = implode(",", $docgrp);
+        }
+        // get document
+        if ($this->isFrontend()) {
+            if (!$docgrp) {
+                $access = "sc.privateweb=0";
+            } else {
+                $access = sprintf("sc.privateweb=0 OR dg.document_group IN (%s)", $docgrp);
             }
-            $out = $this->invokeEvent('OnLoadDocumentObject', compact('method', 'identifier', 'documentObject'));
-            if (is_array($out) && is_array($out[0])) {
-                $documentObject = $out[0];
+        } elseif ($_SESSION['mgrRole'] != 1) {
+            if (!$docgrp) {
+                $access = 'sc.privatemgr=0';
+            } else {
+                $access = sprintf("sc.privatemgr=0 OR dg.document_group IN (%s)", $docgrp);
             }
-            if ($documentObject['template']) {
-                // load TVs and merge with document - Orig by Apodigm - Docvars
-                $rs = $this->db->select("tv.*, IF(tvc.value!='',tvc.value,tv.default_text) as value", $this->getFullTableName("site_tmplvars") . " tv
-                INNER JOIN " . $this->getFullTableName("site_tmplvar_templates") . " tvtpl ON tvtpl.tmplvarid = tv.id
-                LEFT JOIN " . $this->getFullTableName("site_tmplvar_contentvalues") . " tvc ON tvc.tmplvarid=tv.id AND tvc.contentid = '{$documentObject['id']}'", "tvtpl.templateid = '{$documentObject['template']}'");
-                $tmplvars = [];
-                while ($row = $this->db->getRow($rs)) {
-                    $tmplvars[$row['name']] = array(
-                        $row['name'],
-                        $row['value'],
-                        $row['display'],
-                        $row['display_params'],
-                        $row['type']
+        } else {
+            $access = '';
+        }
+        $rs = $this->db->select(
+            'sc.*',
+            $tblsc . " sc
+            LEFT JOIN " . $tbldg . " dg ON dg.document = sc.id", "sc." . $method . " = '" . $identifier . "' AND (" . $access . ")", "", 1);
+        if ($this->db->getRecordCount($rs) < 1) {
+            $seclimit = 0;
+            if ($this->config['unauthorized_page']) {
+                // method may still be alias, while identifier is not full path alias, e.g. id not found above
+                if ($method === 'alias') {
+                    $secrs = $this->db->select(
+                        'count(dg.id)',
+                        sprintf(
+                            "%s as dg, %s as sc",
+                            $tbldg,
+                            $tblsc
+                        ), "dg.document = sc.id AND sc.alias = '" . $identifier . "'",
+                        '',
+                        1
+                    );
+                } else {
+                    $secrs = $this->db->select(
+                        'count(id)',
+                        $tbldg,
+                        "document = '" . $identifier . "'", '', 1
                     );
                 }
-                $documentObject = array_merge($documentObject, $tmplvars);
+                // check if file is not public
+                $seclimit = $this->db->getValue($secrs);
             }
-            $out = $this->invokeEvent('OnAfterLoadDocumentObject', compact('method', 'identifier', 'documentObject'));
-            if (is_array($out) && array_key_exists(0, $out) !== false && is_array($out[0])) {
-                $documentObject = $out[0];
+            if ($seclimit <= 0) {
+                $this->sendErrorPage();
+                exit;
             }
+            // match found but not publicly accessible, send the visitor to the unauthorized_page
+            $this->sendUnauthorizedPage();
+            exit; // stop here
+        }
+        # this is now the document :) #
+        $documentObject = $this->db->getRow($rs);
+
+        if ($isPrepareResponse === 'prepareResponse') {
+            $this->documentObject = &$documentObject;
+        }
+        $out = $this->invokeEvent('OnLoadDocumentObject', compact('method', 'identifier', 'documentObject'));
+        if (is_array($out) && is_array($out[0])) {
+            $documentObject = $out[0];
+        }
+        if ($documentObject['template']) {
+            // load TVs and merge with document - Orig by Apodigm - Docvars
+            $rs = $this->db->select(
+                "tv.*, IF(tvc.value!='',tvc.value,tv.default_text) as value",
+                $this->getFullTableName("site_tmplvars") . " tv
+            INNER JOIN " . $this->getFullTableName("site_tmplvar_templates") . " tvtpl ON tvtpl.tmplvarid = tv.id
+            LEFT JOIN " . $this->getFullTableName("site_tmplvar_contentvalues") . " tvc ON tvc.tmplvarid=tv.id AND tvc.contentid = '{$documentObject['id']}'", "tvtpl.templateid = '{$documentObject['template']}'");
+            $tmplvars = [];
+            while ($row = $this->db->getRow($rs)) {
+                $tmplvars[$row['name']] = array(
+                    $row['name'],
+                    $row['value'],
+                    $row['display'],
+                    $row['display_params'],
+                    $row['type']
+                );
+            }
+            $documentObject = array_merge($documentObject, $tmplvars);
+        }
+        $out = $this->invokeEvent('OnAfterLoadDocumentObject', compact('method', 'identifier', 'documentObject'));
+        if (is_array($out) && array_key_exists(0, $out) !== false && is_array($out[0])) {
+            $documentObject = $out[0];
         }
 
-        $this->tmpCache[__FUNCTION__][$cacheKey] = $documentObject;
+        $cache[$cacheKey] = $documentObject;
 
         return $documentObject;
     }
