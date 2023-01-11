@@ -7006,23 +7006,25 @@ class DocumentParser
     }
 
     /**
-     * @param $key
+     * @param $str
      * @return array
      */
-    public function splitKeyAndFilter($key)
+    public function splitKeyAndFilter($str)
     {
-        if (isset($this->config['enable_filter']) && $this->config['enable_filter'] == 1 && strpos($key, ':') !== false && stripos($key, '@FILE') !== 0) {
-            list($key, $modifiers) = explode(':', $key, 2);
-        } else {
-            $modifiers = false;
+        if (empty($this->config['enable_filter'])) {
+            return [trim($str), false];
         }
 
-        $key = trim($key);
-        if ($modifiers !== false) {
-            $modifiers = trim($modifiers);
+        if (strpos($str, ':') === false) {
+            return [trim($str), false];
         }
 
-        return array($key, $modifiers);
+        if (stripos($str, '@FILE') === 0) {
+            return [trim($str), false];
+        }
+
+        list($key, $modifiers) = explode(':', $str, 2);
+        return [trim($key), trim($modifiers)];
     }
 
     /**
