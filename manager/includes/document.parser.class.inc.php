@@ -4108,32 +4108,31 @@ class DocumentParser
      */
     public function getField($field = 'content', $docid = '')
     {
-        if (empty($docid) && isset($this->documentIdentifier)) {
-            $docid = $this->documentIdentifier;
+        static $cache = null;
+
+        if (!$docid) {
+            $docid = $this->documentIdentifier ?? null;
         } elseif (!preg_match('@^[0-9]+$@', $docid)) {
             $docid = $this->getIdFromAlias($docid);
         }
 
-        if (empty($docid)) {
+        if (!$docid) {
             return false;
         }
 
-        $cacheKey = md5(print_r(func_get_args(), true));
-        if (isset($this->tmpCache[__FUNCTION__][$cacheKey])) {
-            return $this->tmpCache[__FUNCTION__][$cacheKey];
+        if (isset($cache[$field][$docid])) {
+            return $cache[$field][$docid];
         }
 
         $doc = $this->getDocumentObject('id', $docid);
         if (is_array($doc[$field])) {
             $tvs = $this->getTemplateVarOutput($field, $docid, 1);
-            $content = $tvs[$field];
+            $cache[$field][$docid] = $tvs[$field];
         } else {
-            $content = $doc[$field];
+            $cache[$field][$docid] = $doc[$field];
         }
 
-        $this->tmpCache[__FUNCTION__][$cacheKey] = $content;
-
-        return $content;
+        return $cache[$field][$docid];
     }
 
     /**
