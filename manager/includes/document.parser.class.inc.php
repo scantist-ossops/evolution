@@ -4069,6 +4069,25 @@ class DocumentParser
         }
     }
 
+    private function docAccessConditions() {
+        $docgrp = $this->getUserDocGroups();
+        if ($docgrp) {
+            $docgrp = implode(',', $docgrp);
+        }
+
+        if($this->isBackend()) {
+            if($_SESSION['mgrRole']==1) {
+                return '';
+            }
+            return $docgrp
+                ? 'sc.privatemgr=0 OR dg.document_group IN (' . $docgrp . ')'
+                : 'sc.privatemgr=0';
+        }
+        return $docgrp
+            ? 'sc.privateweb=0 OR dg.document_group IN (' . $docgrp . ')'
+            : 'sc.privateweb=0';
+    }
+
     /**
      * getDocument
      * @version 1.0.1 (2014-02-19)
