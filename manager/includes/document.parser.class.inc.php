@@ -4203,34 +4203,36 @@ class DocumentParser
      *                       Default: id, pagetitle, description, alias
      * @return boolean|array
      */
-    public function getPageInfo($pageid = -1, $active = 1, $fields = 'id, pagetitle, description, alias')
+    public function getPageInfo($pageid = null, $active = 1, $fields = 'id, pagetitle, description, alias')
     {
+        static $cache = null;
 
         $cacheKey = md5(print_r(func_get_args(), true));
-        if (isset($this->tmpCache[__FUNCTION__][$cacheKey])) {
-            return $this->tmpCache[__FUNCTION__][$cacheKey];
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
         }
 
-        if ($pageid == 0) {
+        if (!$pageid) {
             return false;
-        } else {
-            $tblsc = $this->getFullTableName("site_content");
-            $tbldg = $this->getFullTableName("document_groups");
-            $activeSql = $active == 1 ? "AND sc.published=1 AND sc.deleted=0" : "";
-            // modify field names to use sc. table reference
-            $fields = 'sc.' . implode(',sc.', array_filter(array_map('trim', explode(',', $fields))));
-            // get document groups for current user
-            if ($docgrp = $this->getUserDocGroups()) {
-                $docgrp = implode(",", $docgrp);
-            }
-            $access = ($this->isFrontend() ? "sc.privateweb=0" : "1='" . $_SESSION['mgrRole'] . "' OR sc.privatemgr=0") . (!$docgrp ? "" : " OR dg.document_group IN ($docgrp)");
-            $result = $this->db->select($fields, "{$tblsc} sc LEFT JOIN {$tbldg} dg on dg.document = sc.id", "(sc.id='{$pageid}' {$activeSql}) AND ({$access})", "", 1);
-            $pageInfo = $this->db->getRow($result);
-
-            $this->tmpCache[__FUNCTION__][$cacheKey] = $pageInfo;
-
-            return $pageInfo;
         }
+
+        $result = $this->db->select(
+            'sc.' . implode(',sc.', array_filter(array_map('trim', explode(',', $fields)))),
+            [
+                sprintf('%s sc', $this->getFullTableName('site_content')),
+                sprintf('LEFT JOIN %s dg on dg.document = sc.id', $this->getFullTableName('document_groups'))
+            ],
+            sprintf(
+                "(sc.id='%s' %s) AND (%s)",
+                $pageid,
+                $active == 1 ? "AND sc.published=1 AND sc.deleted=0" : '',
+                $this->docAccessConditions()
+            ),
+            '',
+            1
+        );
+        $cache[$cacheKey] = $this->db->getRow($result);
+        return $cache[$cacheKey];
     }
 
     /**
