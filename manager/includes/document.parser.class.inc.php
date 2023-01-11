@@ -673,17 +673,13 @@ class DocumentParser
      */
     public function isLoggedIn($context = 'mgr')
     {
-        if (strpos($context, 'm') === 0) {
-            $_ = 'mgrValidated';
-        } else {
-            $_ = 'webValidated';
+        $_ = strpos($context, 'm') === 0 ? 'mgrValidated' : 'webValidated';
+
+        if (MODX_CLI || !empty($_SESSION[$_])) {
+            return true;
         }
 
-        if (!MODX_CLI && (!isset($_SESSION[$_]) || empty($_SESSION[$_]))) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     /**
