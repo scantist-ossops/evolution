@@ -5031,7 +5031,12 @@ class DocumentParser
      *
      * @return array|bool Result array, or false.
      */
-    public function getTemplateVars($idnames = [], $fields = '*', $docid = '', $published = 1, $sort = 'rank', $dir = 'ASC')
+    public function getTemplateVars($idnames = [],
+                                    $fields = '*',
+                                    $docid = '',
+                                    $published = 1,
+                                    $sort = 'rank',
+                                    $dir = 'ASC')
     {
         static $cache = null;
         $cacheKey = md5(print_r(func_get_args(), true));
@@ -5039,55 +5044,70 @@ class DocumentParser
             return $cache[$cacheKey];
         }
 
-        if (($idnames !== '*' && !is_array($idnames)) || empty($idnames) ) {
+        if (!$idnames ) {
+            return false;
+        }
+        if (!is_array($idnames) && $idnames !== '*') {
             return false;
         }
 
-        // get document record
-        if (empty($docid)) {
+        if (!$docid) {
             $docid = $this->documentIdentifier;
             $docRow = $this->documentObject;
         } else {
             $docRow = $this->getDocument($docid, '*', $published);
-
             if (!$docRow) {
                 $cache[$cacheKey] = false;
                 return false;
             }
         }
 
-        // get user defined template variables
-        if (!empty($fields) && (is_scalar($fields) || \is_array($fields))) {
-            if(\is_scalar($fields)) {
+        if (!$fields || (!is_scalar($fields) && !is_array($fields))) {
+            $fields = 'tv.*';
+        } else {
+            if (is_scalar($fields)) {
                 $fields = explode(',', $fields);
             }
-            $fields = array_filter(array_map('trim', $fields), function($value) {
-                return $value !== 'value';
-            });
-            $fields = 'tv.' . implode(',tv.', $fields);
-        } else {
-            $fields = 'tv.*';
-        }
-
-        if ($idnames === '*') {
-            $query = 'tv.id<>0';
-        } else {
-            $query = (is_numeric($idnames[0]) ? 'tv.id' : 'tv.name') . " IN ('" . implode("','", $idnames) . "')";
+            $fields = sprintf(
+                'tv.%s',
+                implode(
+                    ',tv.',
+                    array_filter(array_map('trim', $fields), static function ($value) {
+                        return $value !== 'value';
+                    })
+                )
+            );
         }
 
         $rs = $this->db->select(
             $fields . ", IF(tvc.value != '', tvc.value, tv.default_text) as value",
-            $this->getFullTableName('site_tmplvars') . ' tv ' .
-                    'INNER JOIN ' . $this->getFullTableName('site_tmplvar_templates') . ' tvtpl ON tvtpl.tmplvarid = tv.id ' .
-                    'LEFT JOIN ' . $this->getFullTableName('site_tmplvar_contentvalues') . " tvc ON tvc.tmplvarid = tv.id AND tvc.contentid = '" . $docid . "'",
-            $query . " AND tvtpl.templateid = '" . $docRow['template'] . "'",
+            [
+                sprintf('%s tv', $this->getFullTableName('site_tmplvars')),
+                sprintf(
+                    'INNER JOIN %s tvtpl ON tvtpl.tmplvarid=tv.id ',
+                    $this->getFullTableName('site_tmplvar_templates')
+                ),
+                sprintf(
+                    "LEFT JOIN %s tvc ON tvc.tmplvarid=tv.id AND tvc.contentid='%s'",
+                    $this->getFullTableName('site_tmplvar_contentvalues'),
+                    $docid
+                )
+            ],
+            $idnames === '*'
+                ? 'tv.id!=0'
+                : sprintf(
+                    "%s IN ('%s') AND tvtpl.templateid='%s'",
+                    is_numeric($idnames[0]) ? 'tv.id' : 'tv.name',
+                    implode("','", $idnames),
+                    $docRow['template']
+                ),
             $sort
-                    ? sprintf(
-                        'tv.%s %s',
-                        implode(',tv.', array_filter(array_map('trim', explode(',', $sort)))),
-                        $dir
-                    )
-                    : ''
+                ? sprintf(
+                    'tv.%s %s',
+                    implode(',tv.', array_filter(array_map('trim', explode(',', $sort)))),
+                    $dir
+                )
+                : ''
         );
 
         $result = $this->db->makeArray($rs);
