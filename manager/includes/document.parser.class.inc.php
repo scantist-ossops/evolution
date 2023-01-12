@@ -5131,10 +5131,6 @@ class DocumentParser
 
     /**
      * getTemplateVarOutput
-     * @version 1.0.1 (2014-02-19)
-     *
-     * @desc Returns an associative array containing TV rendered output values.
-     *
      * @param array $idnames {array; '*'}
      * - Which TVs to fetch - Can relate to the TV ids in the db (array elements should be numeric only) or the TV names (array elements should be names only). @required
      * @param string $docid {integer; ''}
@@ -5143,41 +5139,50 @@ class DocumentParser
      * - Document publication status. Once the parameter equals 'all', the result will be returned regardless of whether the ducuments are published or they are not. Default: 1.
      * @param string $sep {string}
      * - Separator that is used while concatenating in getTVDisplayFormat(). Default: ''.
-     * @return array {array; false} - Result array, or false.
+     * @return array|false
      * - Result array, or false.
+     *@version 1.0.1 (2014-02-19)
+     *
+     * @desc Returns an associative array containing TV rendered output values.
+     *
      */
     public function getTemplateVarOutput($idnames = [], $docid = '', $published = 1, $sep = '')
     {
-        if (is_array($idnames) && empty($idnames) ) {
+        if (!$idnames) {
             return false;
-        } else {
-            $output = [];
-            $vars = ($idnames == '*' || is_array($idnames)) ? $idnames : array($idnames);
-
-            $docid = (int)$docid > 0 ? (int)$docid : $this->documentIdentifier;
-            // remove sort for speed
-            $result = $this->getTemplateVars($vars, '*', $docid, $published, '', '');
-
-            if ($result == false) {
-                return false;
-            } else {
-                $baspath = MODX_MANAGER_PATH . 'includes';
-                include_once $baspath . '/tmplvars.format.inc.php';
-                include_once $baspath . '/tmplvars.commands.inc.php';
-
-                for ($i = 0; $i < count($result); $i++) {
-                    $row = $result[$i];
-
-                    if (!isset($row['id']) or !$row['id']) {
-                        $output[$row['name']] = $row['value'];
-                    } else {
-                        $output[$row['name']] = getTVDisplayFormat($row['name'], $row['value'], $row['display'], $row['display_params'], $row['type'], $docid, $sep);
-                    }
-                }
-
-                return $output;
-            }
         }
+
+        if (!preg_match('/^[1-9][0-9]*$/', $docid)) {
+            $docid = $this->documentIdentifier;
+        }
+
+        $result = $this->getTemplateVars(
+            (is_array($idnames) || $idnames === '*') ? $idnames : array($idnames),
+            '*',
+            $docid,
+            $published,
+            '',
+            ''
+        );
+        if (!$result) {
+            return false;
+        }
+
+        include_once __DIR__ . '/tmplvars.format.inc.php';
+        include_once __DIR__ . '/tmplvars.commands.inc.php';
+
+        $output = [];
+        foreach ($result as $row) {
+            if (empty($row['id'])) {
+                $output[$row['name']] = $row['value'];
+                continue;
+            }
+            $output[$row['name']] = getTVDisplayFormat(
+                $row['name'], $row['value'], $row['display'], $row['display_params'], $row['type'], $docid, $sep
+            );
+        }
+
+        return $output;
     }
 
     /**
