@@ -10,41 +10,69 @@
 if(!class_exists('Qm')) {
 
 class Qm {
-  var $modx;
+    private $modx;
 
     //_______________________________________________________
-    function __construct(&$modx, $jqpath='', $loadmanagerjq='', $loadfrontendjq='', $noconflictjq='', $loadfa='', $loadtb='', $tbwidth='', $tbheight='', $hidefields='', $hidetabs='', $hidesections='', $addbutton='', $tpltype='', $tplid='', $custombutton='', $managerbutton='', $logout='', $autohide='', $position='', $editbuttons='', $editbclass='', $newbuttons='', $newbclass='', $tvbuttons='', $tvbclass='', $buttonStyle='', $removeBg='') {
+    function __construct(&$modx,
+                         $jqpath = '',
+                         $loadmanagerjq = '',
+                         $loadfrontendjq = '',
+                         $noconflictjq = '',
+                         $loadfa = '',
+                         $loadtb = '',
+                         $tbwidth = '',
+                         $tbheight = '',
+                         $hidefields = '',
+                         $hidetabs = '',
+                         $hidesections = '',
+                         $addbutton = '',
+                         $tpltype = '',
+                         $tplid = '',
+                         $custombutton = '',
+                         $managerbutton = '',
+                         $logout = '',
+                         $autohide = '',
+                         $position = '',
+                         $editbuttons = '',
+                         $editbclass = '',
+                         $newbuttons = '',
+                         $newbclass = '',
+                         $tvbuttons = '',
+                         $tvbclass = '',
+                         $buttonStyle = '',
+                         $removeBg = '')
+    {
         $this->modx = $modx;
 
         // Get plugin parameters
-        $this->jqpath = $jqpath;
-        $this->loadmanagerjq = $loadmanagerjq;
+        $this->jqpath         = $jqpath;
+        $this->loadmanagerjq  = $loadmanagerjq;
         $this->loadfrontendjq = $loadfrontendjq;
-        $this->noconflictjq = $noconflictjq;
-        $this->loadfa = $loadfa;
-        $this->loadtb = $loadtb;
-        $this->tbwidth = $tbwidth;
-        $this->tbheight = $tbheight;
-        $this->usemm = null;
-        $this->hidefields = $hidefields;
-        $this->hidetabs = $hidetabs;
-        $this->hidesections = $hidesections;
-        $this->addbutton = $addbutton;
-        $this->tpltype = $tpltype;
-        $this->tplid = $tplid;
-        $this->custombutton = $custombutton;
-        $this->managerbutton = $managerbutton;
-        $this->logout = $logout;
-        $this->autohide = $autohide;
-        $this->position = $position;
-        $this->editbuttons = $editbuttons;
-        $this->editbclass = $editbclass;
-        $this->newbuttons = $newbuttons;
-        $this->newbclass = $newbclass;
-        $this->tvbuttons = $tvbuttons;
-        $this->tvbclass = $tvbclass;
-        $this->buttonStyle = $buttonStyle;
-        $this->removeBg = $removeBg;
+        $this->noconflictjq   = $noconflictjq;
+        $this->loadfa         = $loadfa;
+        $this->loadtb         = $loadtb;
+        $this->tbwidth        = $tbwidth;
+        $this->tbheight       = $tbheight;
+        $this->usemm          = null;
+        $this->hidefields     = $hidefields;
+        $this->hidetabs       = $hidetabs;
+        $this->hidesections   = $hidesections;
+        $this->addbutton      = $addbutton;
+        $this->tpltype        = $tpltype;
+        $this->tplid          = $tplid;
+        $this->custombutton   = $custombutton;
+        $this->managerbutton  = $managerbutton;
+        $this->logout         = $logout;
+        $this->autohide       = $autohide;
+        $this->position       = $position;
+        $this->editbuttons    = $editbuttons;
+        $this->editbclass     = $editbclass;
+        $this->newbuttons     = $newbuttons;
+        $this->newbclass      = $newbclass;
+        $this->tvbuttons      = $tvbuttons;
+        $this->tvbclass       = $tvbclass;
+        $this->buttonStyle    = $buttonStyle;
+        $this->removeBg       = $removeBg;
 
         // Includes
         include_once($this->modx->config['base_path'].'assets/plugins/qm/mcc.class.php');
@@ -63,7 +91,9 @@ class Qm {
         $manager_language = $this->modx->config['manager_language'];
 
         // Individual user language setting (if set)
-        if (isset($_SESSION['mgrUsrConfigSet']['manager_language'])) $manager_language = $_SESSION['mgrUsrConfigSet']['manager_language'];
+        if (isset($_SESSION['mgrUsrConfigSet']['manager_language'])) {
+            $manager_language = $_SESSION['mgrUsrConfigSet']['manager_language'];
+        }
 
 		// Include_once the language file
         if(!isset($manager_language) || !file_exists(MODX_MANAGER_PATH."includes/lang/".$manager_language.".inc.php")) {
@@ -73,7 +103,7 @@ class Qm {
         include_once MODX_MANAGER_PATH."includes/lang/english.inc.php";
 
         // Include user language
-        if($manager_language!="english" && file_exists(MODX_MANAGER_PATH."includes/lang/".$manager_language.".inc.php")) {
+        if($manager_language !== 'english' && file_exists(MODX_MANAGER_PATH."includes/lang/".$manager_language.".inc.php")) {
             include_once MODX_MANAGER_PATH."includes/lang/".$manager_language.".inc.php";
         }
 
@@ -87,7 +117,7 @@ class Qm {
             case 'OnDocFormSave':
 
                 // Saving process for Qm only
-                if(intval($_REQUEST['quickmanager']) == 1) {
+                if((int)$_REQUEST['quickmanager'] == 1) {
 
                     $id = $e->params['id'];
                     $key = $id;
@@ -95,28 +125,25 @@ class Qm {
                     // Normal saving document procedure stops to redirect => Before redirecting secure documents and clear cache
 
                     // Secure web documents - flag as private (code from: processors/save_content.processor.php)
-    		        include $this->modx->config['site_manager_path']."includes/secure_web_documents.inc.php";
-    		        secureWebDocument($key);
+                    include $this->modx->config['site_manager_path']."includes/secure_web_documents.inc.php";
+                    secureWebDocument($key);
 
             		// Secure manager documents - flag as private (code from: processors/save_content.processor.php)
-            		include $this->modx->config['site_manager_path']."includes/secure_mgr_documents.inc.php";
-            		secureMgrDocument($key);
+                    include $this->modx->config['site_manager_path']."includes/secure_mgr_documents.inc.php";
+                    secureMgrDocument($key);
 
                     // Clear cache
                     $this->modx->clearCache('full');
 
                     // Different doc to be refreshed than the one we are editing?
                     if (isset($_POST['qmrefresh'])) {
-                        $id = intval($_POST['qmrefresh']);
+                        $id = (int)$_POST['qmrefresh'];
                     }
 
                     // Redirect to clearer page which refreshes parent window and closes modal box frame
-                    if ($this->modx->config['friendly_urls'] == 1){
-                        $this->modx->sendRedirect($this->modx->makeUrl($id).'?quickmanagerclose=1', 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently'); 
-                    }else{
-                        $this->modx->sendRedirect($this->modx->makeUrl($id).'&quickmanagerclose=1', 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently');    
-                    }
-                    
+                    $this->modx->sendRedirect(
+                        $this->modx->makeUrl($id,null,'quickmanagerclose=1'), null, 'REDIRECT_JS'
+                    );
                 }
 
                 break;
@@ -151,7 +178,7 @@ class Qm {
                 }
 
                 // QM+ TV edit
-                if(intval($_GET['quickmanagertv'] == 1) && $_GET['tvname'] != '' && $this->tvbuttons == 'true') {
+                if((int)($_GET['quickmanagertv'] == 1) && $_GET['tvname'] != '' && $this->tvbuttons == 'true') {
 
                     $tvName = '';
                     $locked = FALSE;
@@ -165,26 +192,40 @@ class Qm {
                     include_once(MODX_MANAGER_PATH.'includes/tmplvars.format.inc.php');
 
                     // Get save status
-                    if (isset($_POST['save'])) $save = intval($_POST['save']);
+                    if (isset($_POST['save'])) $save = (int)$_POST['save'];
 
                     // Get TV name
-                    if (preg_match('/^([^\\"\'\(\)<>!?]+)/i', $_GET['tvname'])) $tvName = $_GET['tvname'];
+                    if (preg_match('/^([^"\'()<>!?]+)/i', $_GET['tvname'])) $tvName = $_GET['tvname'];
 
                     // Get TV array
                     $tv = $this->modx->getTemplateVar($tvName, '*', $docID);
 
                     // Handle default TVs
                     switch ($tvName) {
-                        case 'pagetitle'    : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'longtitle'    : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'description'  : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'content'      : $tv['type'] = 'richtext'; $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'menutitle'    : $tv['type'] = 'text';     $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
-                        case 'introtext'    : $tv['type'] = 'textarea'; $tv['caption'] = $this->getDefaultTvCaption($tvName); $access = TRUE; break;
+                        case 'longtitle':
+                        case 'description':
+                        case 'menutitle':
+                        case 'pagetitle'    :
+                            $tv['type'] = 'text';
+                            $tv['caption'] = $this->getDefaultTvCaption($tvName);
+                            $access = TRUE;
+                            break;
+                        case 'content'      :
+                            $tv['type'] = 'richtext';
+                            $tv['caption'] = $this->getDefaultTvCaption($tvName);
+                            $access = TRUE;
+                            break;
+                        case 'introtext'    :
+                            $tv['type'] = 'textarea';
+                            $tv['caption'] = $this->getDefaultTvCaption($tvName);
+                            $access = TRUE;
+                            break;
                     }
 
                     // Check TV access
-                    if (!$access) { $access = $this->checkTvAccess($tv['id']); }
+                    if (!$access) {
+                        $access = $this->checkTvAccess($tv['id']);
+                    }
 
                     // User can access TV
                     if ($access) {
@@ -193,13 +234,14 @@ class Qm {
                         if ($save == 0) {
 
                             // Check is document locked? Someone else is editing the document...  //$_lang['lock_msg']
-                            if ($this->checkLocked()) $locked = TRUE;
-
-                            // Set document locked
-                            else $this->setLocked(1);
+                            if ($this->checkLocked()) {
+                                $locked = TRUE;
+                            } else {
+                                $this->setLocked(1);
+                            }
 
                             // Handle RTE
-                            if($tv['type'] == 'richtext') {
+                            if($tv['type'] === 'richtext') {
                                 // Invoke OnRichTextEditorInit event
                                 $eventOutput = $this->modx->invokeEvent("OnRichTextEditorInit", array('editor'=>$this->modx->config['which_editor'], 'elements'=>array('tv'.$tvName)));
 
@@ -212,12 +254,12 @@ class Qm {
                             $tvHtml = renderFormElement($tv['type'], $tv['name'], $tv['default_text'], $tv['elements'], $tv['value']);
 
                             // Get jQuery conflict mode
-    					    if ($this->noconflictjq == 'true') $jq_mode = '$j';
-    					    else $jq_mode = '$';
-					    }
-
-                        // Save TV
-                        else {
+                            if ($this->noconflictjq == 'true') {
+                                $jq_mode = '$j';
+                            } else {
+                                $jq_mode = '$';
+                            }
+                        } else {
                             // Remove document locked
                             $this->setLocked(0);
 
@@ -255,7 +297,7 @@ class Qm {
                             // Normal form
                             else {
                                 // Image preview
-                                if ($tv['type'] == 'image') {
+                                if ($tv['type'] === 'image') {
                                     $imagePreview = '
                                     <div id="qm-tv-image-preview"><img class="qm-tv-image-preview-drskip qm-tv-image-preview-skip" src="'.$this->modx->config['site_url'].$tv['value'].'" alt="" /></div>
                                     <script type="text/javascript" charset="UTF-8">
@@ -267,19 +309,19 @@ class Qm {
 
                                         OriginalSetUrl = SetUrl; // Copy the existing Image browser SetUrl function
                             			SetUrl = function(url, width, height, alt) {	// Redefine it to also tell the preview to update
-                            				OriginalSetUrl(url, width, height, alt);
-                            				$(previewImage).trigger("change");
-                            			}
+                                            OriginalSetUrl(url, width, height, alt);
+                                            $(previewImage).trigger("change");
+                                        }
 
                                         $(previewImage).change(function() {
                                             $("#qm-tv-image-preview").empty();
-                                             if ($(previewImage).val()!="" ){
-                                                 $("#qm-tv-image-preview").append("<img class=\"qm-tv-image-preview-drskip qm-tv-image-preview-skip\" src=\"" + siteUrl + $(previewImage).val()  + "\" alt=\"\" />");
-                                             }
-                                             else{
-                                                 $("#qm-tv-image-preview").append("");
-                                             }
-                                         });
+                                            if ($(previewImage).val()!="" ){
+                                                $("#qm-tv-image-preview").append("<img class=\"qm-tv-image-preview-drskip qm-tv-image-preview-skip\" src=\"" + siteUrl + $(previewImage).val()  + "\" alt=\"\" />");
+                                            }
+                                            else{
+                                                $("#qm-tv-image-preview").append("");
+                                            }
+                                        });
                                     });
 
                                     </script>
@@ -320,566 +362,546 @@ class Qm {
                         </body>
                         </html>
                         ';
-                    }
-
-                    else {
+                    } else {
                         $output = 'Error: Access denied.';
                     }
-                }
-
-                // QM+ with toolbar
-                else {
-
-                    if(isset($_SESSION['mgrValidated']) && $_REQUEST['z'] != 'manprev') {
-
-                        // If logout break here
-                        if(isset($_REQUEST['logout'])) {
-                            $this->Logout();
-                            break;
-                        }
-
-                        $userID = $_SESSION['mgrInternalKey'];
-
-                        // Add ID
-                        $controls .= '<li class="qmId"><span class="textid">ID: </span>'.$docID.'</li>';
-                        // Go to Manager button
-                        if ($this->managerbutton == 'true') {
-                            $managerButton  = '
-                            <li class="qmManager">
-                            <a class="qmButton qmManager" title="'.$_lang['manager'].'" href="'.$this->modx->config['site_manager_url'].'" ><i class="fa fa-2x fa-fw fa-home butticon"></i><span class="butttext">'.$_lang['manager'].'</span></a>
-                            </li>
-                            ';
-                            $controls .= $managerButton;
-                        }
-                        // Edit button
-
-                        $editButton = '
-                        <li class="qmEdit">
-                        <a title="'.$_lang['edit_resource'].'" class="qmButton qmEdit colorbox primary" href="'.$this->modx->config['site_manager_url'].'index.php?a=27&amp;id='.$docID.'&amp;quickmanager=1"><i class="fa fa-2x fa-fw fa-pencil-square-o butticon"></i><span class="butttext">'.$_lang['edit_resource'].'</span></a>
+                } elseif(isset($_SESSION['mgrValidated']) && $_REQUEST['z'] !== 'manprev') {
+                    // QM+ with toolbar
+                    // Add ID
+                    $controls = '<li class="qmId"><span class="textid">ID: </span>'.$docID.'</li>';
+                    // Go to Manager button
+                    if ($this->managerbutton == 'true') {
+                        $managerButton  = sprintf('
+                        <li class="qmManager">
+                        <a class="qmButton qmManager" title="%s" href="%s" >
+                        <i class="fa fa-2x fa-fw fa-home butticon"></i>
+                        <span class="butttext">%s</span>
+                        </a>
                         </li>
-                        ';
+                        ', $_lang['manager'], $this->modx->config['site_manager_url'], $_lang['manager']);
+                        $controls .= $managerButton;
+                    }
+                    // Edit button
 
-                        // Check if user has manager access to current document
-                        $access = $this->checkAccess();
+                    $editButton = sprintf('
+                    <li class="qmEdit">
+                    <a title="%s" class="qmButton qmEdit colorbox primary" href="%sindex.php?a=27&amp;id=%s&amp;quickmanager=1">
+                    <i class="fa fa-2x fa-fw fa-pencil-square-o butticon"></i>
+                    <span class="butttext">%s</span>
+                    </a>
+                    </li>
+                    ',
+                        $_lang['edit_resource'],
+                        $this->modx->config['site_manager_url'],
+                        $docID,
+                        $_lang['edit_resource']
+                    );
 
-                        // Does user have permissions to edit document
-                        if($access) $controls .= $editButton;
+                    // Check if user has manager access to current document
+                    $access = $this->checkAccess();
 
-                        if ($this->addbutton == 'true' && $access) {
-                            // Add button
-                            $addButton = '
-                            <li class="qmAdd">
-                            <a class="qmButton qmAdd colorbox" href="'.$this->modx->config['site_manager_url'].'index.php?a=4&amp;pid='.$docID.'&amp;quickmanager=1"><i class="fa fa-2x fa-fw fa-file butticon"></i><span class="butttext">'.$_lang['create_resource_here'].'</span></a>
-                            </li>
-                            ';
+                    // Does user have permissions to edit document
+                    if($access) {
+                        $controls .= $editButton;
+                    }
 
-                            // Does user have permissions to add document
-                            if($this->modx->hasPermission('new_document')) $controls .= $addButton;
+                    if ($this->addbutton == 'true' && $access) {
+                        // Add button
+                        $addButton = sprintf('
+                        <li class="qmAdd">
+                        <a class="qmButton qmAdd colorbox" href="%sindex.php?a=4&amp;pid=%s&amp;quickmanager=1">
+                        <i class="fa fa-2x fa-fw fa-file butticon"></i>
+                        <span class="butttext">%s</span>
+                        </a>
+                        </li>
+                        ', $this->modx->config['site_manager_url'], $docID, $_lang['create_resource_here']);
+
+                        // Does user have permissions to add document
+                        if($this->modx->hasPermission('new_document')) {
+                            $controls .= $addButton;
                         }
+                    }
 
-                        // Custom add buttons if not empty and enough permissions
-                        if ($this->custombutton != '') {
+                    // Custom add buttons if not empty and enough permissions
+                    if ($this->custombutton != '') {
 
-                            // Replace [*id*] with current doc id
-                            $this->custombutton = str_replace("[*id*]", $docID, $this->custombutton);
+                        // Replace [*id*] with current doc id
+                        $this->custombutton = str_replace("[*id*]", $docID, $this->custombutton);
 
-                            // Handle [~id~] links
-                            $this->custombutton = $this->modx->rewriteUrls($this->custombutton);
+                        // Handle [~id~] links
+                        $this->custombutton = $this->modx->rewriteUrls($this->custombutton);
 
-                            $buttons = explode("||", $this->custombutton); // Buttons are divided by "||"
+                        $buttons = explode("||", $this->custombutton); // Buttons are divided by "||"
 
-                            // Custom buttons class index
-                            $i = 0;
+                        // Custom buttons class index
+                        $i = 0;
 
-                            // Parse buttons
-                            foreach($buttons as $key => $field) {
-                                $i++;
+                        // Parse buttons
+                        foreach($buttons as $field) {
+                            $i++;
 
-                                $field = substr($field, 1, -1); // Trim "'" from beginning and from end
-                                $buttonParams = explode("','", $field); // Button params are divided by "','"
+                            $field = substr($field, 1, -1); // Trim "'" from beginning and from end
+                            $buttonParams = explode("','", $field); // Button params are divided by "','"
 
-                                $buttonTitle = $buttonParams[0];
-                                $buttonAction = $buttonParams[1]; // Contains URL if this is not add button
-                                $buttonParentId = $buttonParams[2]; // Is empty is this is not add button
-                                $buttonTplId = $buttonParams[3];
+                            $buttonTitle = $buttonParams[0];
+                            $buttonAction = $buttonParams[1]; // Contains URL if this is not add button
+                            $buttonParentId = $buttonParams[2]; // Is empty is this is not add button
+                            $buttonTplId = $buttonParams[3];
 
-                                // Button visible for all
-                                if ($buttonParams[4] == '') {
-                                    $showButton = TRUE;
-                                }
-                                // Button is visible for specific user roles
-                                else {
-                                    $showButton = FALSE;
+                            // Button visible for all
+                            if ($buttonParams[4] == '') {
+                                $showButton = TRUE;
+                            } else {
+                                $showButton = FALSE;
 
-                                    // Get user roles the button is visible for
-                                    $buttonRoles = explode(",", $buttonParams[4]); // Roles are divided by ','
+                                // Get user roles the button is visible for
+                                $buttonRoles = explode(",", $buttonParams[4]); // Roles are divided by ','
 
-                                    // Check if user role is found
-                                    foreach($buttonRoles as $key => $field) {
-                                        if ($field == $_SESSION['mgrRole']) {
-                                            $showButton = TRUE;
-                                        }
+                                // Check if user role is found
+                                foreach($buttonRoles as $role) {
+                                    if ($role == $_SESSION['mgrRole']) {
+                                        $showButton = TRUE;
                                     }
-                                }
-                                $buttonIcon = $buttonParams[5];
-                                // Show custom button
-                                if ($showButton) {
-                                    switch ($buttonAction)
-                                    {
-                                        case 'new':
-                                            $customButton = '
-                                            <li class="qm-custom-'.$i.' qmCustom">
-                                            <a title="'.$buttonTitle.'" class="qmButton qmCustom colorbox" href="'.$this->modx->config['site_manager_url'].'index.php?a=4&amp;pid='.$buttonParentId.'&amp;quickmanager=1&amp;customaddtplid='.$buttonTplId.'"><i class="fa fa-2x fa-fw fa-'.$buttonIcon.' butticon"></i><span class="butttext">'.$buttonTitle.'</span></a>
-                                            </li>
-                                            ';
-                                        break;
-
-                                        case 'link':
-                                            $customButton  = '
-                                            <li class="qm-custom-'.$i.' qmCustom">
-                                            <a title="'.$buttonTitle.'" class="qmButton qmCustom" href="'.$buttonParentId.'" ><i class="fa fa-2x fa-fw fa-'.$buttonIcon.' butticon"></i><span class="butttext">'.$buttonTitle.'</span></a>
-                                            </li>
-                                            ';
-                                        break;
-
-                                        case 'modal':
-                                            $customButton  = '
-                                            <li class="qm-custom-'.$i.' qmCustom">
-                                            <a title="'.$buttonTitle.'" class="qmButton qmCustom colorbox" href="'.$buttonParentId.'" ><i class="fa fa-2x fa-fw fa-'.$buttonIcon.' butticon"></i><span class="butttext">'.$buttonTitle.'</span></a>
-                                            </li>
-                                            ';
-                                        break;
-                                    }
-                                    $controls .= $customButton;
                                 }
                             }
-                        }
-
-
-
-                        // Logout button
-                        $logout = $this->modx->config['site_manager_url'].'index.php?a=8&amp;quickmanager=logout&amp;logoutid='.$docID;
-                        $logoutButton  = '
-                        <li class="qmLogout">
-                        <a id="qmLogout" class="qmButton qmLogout" title="'.$_lang['logout'].'" href="'.$logout.'" ><i class="fa fa-2x fa-fw fa-sign-out butticon"></i><span class="butttext">'.$_lang['logout'].'</span></a>
-                        </li>
-                        ';
-
-                        $controls .= $logoutButton;
-
-                        $username = $_SESSION['mgrShortname'];
-                        // Add action buttons
-                        $editor = '
-                        <div id="qmEditorClosed"></div>
-
-    					<div id="qmEditor">
-
-                        <ul>
-                        <li id="qmUser">
-                        <span class="qmUser"> <span class="butttext">'.$username.'</span> <i class="fa fa-2x fa-fw fa-user-circle usericon"></i></span>
-                        </li>
-
-                        <li><a id="qmLogoClose" class="qmClose" href="#" onclick="javascript: return false;"></a></li>
-                        '.$controls.'
-                        </ul>
-    					</div>';
-
-                        $MGR_DIR = $this->modx->getManagerPath( );
-                        $css = '
-                        <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/style.css" />';
-
-                        $css .= '
-                        <!--[if IE]><link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/ie.css" /><![endif]-->
-                        ';
-
-                        // font-awesome
-                        if ($this->loadfa == 'true') {
-                        $css .= '
-                        <link rel="stylesheet" type="text/css" href="'.$MGR_DIR.'media/style/common/font-awesome/css/font-awesome.min.css" />
-                            ';
-                        }
-                        // Buttons Styles
-                        if ($this->buttonStyle == 'actionButtons') {
-                            $css .= '
-                            <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/actionButtons.css" />
-                            ';
-                        }
-                        else
-                        if ($this->buttonStyle == 'navButtons') {
-                            $css .= '
-                            <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/navButtons.css" />
-                            ';
-                        }
-                        // Top toolbar Autohide false
-                        if (($this->autohide == 'false') && ($this->position == 'top')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed { left:0; top: 0px; width: 100%;}
-                            #qmEditor:hover, #qmEditorClosed:hover {top: 0px;}
-                            .butticon {display:inline}
-                            @media only screen and (max-width: 728px) {
-                            .butttext {display:none}
-                            #qmUser {display:none}
-                            }
-                            @media only screen
-                            and (min-device-width: 768px)
-                            and (max-device-width: 1024px)
-                            and (orientation: portrait)
-                            and (-webkit-min-device-pixel-ratio: 1) {
-                            .butttext {display:none}
-                            .butticon {display:inline!important}
-                            }
-                            </style>
-                            ';
-                        }
-                        else
-                        // Top toolbar Autohide true
-                        if (($this->autohide == 'true') && ($this->position == 'top')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed { left:0; top: -30px; width: 100%;}
-                            #qmEditor:hover, #qmEditorClosed:hover {top: 0px;}
-                            .butticon {display:none}
-                            @media only screen and (max-width: 728px) {
-                            .butttext {display:none}
-                            #qmUser {display:none}
-                            }
-                            @media only screen
-                            and (min-device-width: 768px)
-                            and (max-device-width: 1024px)
-                            and (orientation: portrait)
-                            and (-webkit-min-device-pixel-ratio: 1) {
-                            .butttext {display:none}
-                            .butticon {display:inline!important}
-                            }
-                            </style>
-                            ';
-                        }
-                        else
-                        // Top toolbar Relative
-                        if ($this->position == 'before') {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed {position: relative; left:0; top: 0; width: 100%; height:35px; opacity:1; -ms-filter:"" !important; filter:none !important;}
-                            #qmEditor:hover, #qmEditorClosed:hover {top: 0}
-                            .butticon {display:none}
-                            @media only screen and (max-width: 728px) {
-                            .butttext {display:none}
-                            #qmUser {display:none}
-                            }
-                            @media only screen
-                            and (min-device-width: 768px)
-                            and (max-device-width: 1024px)
-                            and (orientation: portrait)
-                            and (-webkit-min-device-pixel-ratio: 1) {
-                            .butttext {display:none}
-                            .butticon {display:inline!important}
-                            }
-                            </style>
-                            ';
-                        }
-                        else
-                        // Bottom toolbar Autohide true
-                        if (($this->autohide == 'true') && ($this->position == 'bottom')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed { left:0; bottom: -30px; width: 100%;}
-                            #qmEditor:hover, #qmEditorClosed:hover {bottom: 0;}
-                            .butticon {display:none}
-                            @media only screen and (max-width: 728px) {
-                            .butttext {display:none}
-                            #qmUser {display:none}
-                            }
-                            @media only screen
-                            and (min-device-width: 768px)
-                            and (max-device-width: 1024px)
-                            and (orientation: portrait)
-                            and (-webkit-min-device-pixel-ratio: 1) {
-                            .butttext {display:none}
-                            .butticon {display:inline!important}
-                            }
-                            </style>
-                            ';
-                        }
-                        else
-                        // Bottom toolbar Autohide false
-                        if (($this->autohide == 'false') && ($this->position == 'bottom')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed { left:0; bottom: 0; width: 100%;}
-                            #qmEditor:hover, #qmEditorClosed:hover {bottom: 0;}
-                            .butticon {display:none}
-                            @media only screen and (max-width: 728px) {
-                            .butttext {display:none}
-                            #qmUser {display:none}
-                            }
-                            @media only screen
-                            and (min-device-width: 768px)
-                            and (max-device-width: 1024px)
-                            and (orientation: portrait)
-                            and (-webkit-min-device-pixel-ratio: 1) {
-                            .butttext {display:none}
-                            .butticon {display:inline!important}
-                            }
-                            </style>
-                            ';
-                        }
-                        // Left toolbar Autohide true
-                        if (($this->autohide == 'true') && ($this->position == 'left')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed {left:-33px; top: 0; width: 40px; height:100%}
-                            #qmEditor:hover, #qmEditorClosed:hover {left: 0}
-                            #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
-                            #qmUser {display:none;}
-                            .butttext, span.textid {display:none}
-                            #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
-                            #qmEditorClosed { width:40px !important;}
-                            #qmEditorClosed:after {margin-left:18px!important;}
-                            #qmLogoClose:after {margin-left:11px!important;}
-                            </style>
-                            ';
-                        }
-                        else
-                        // Left toolbar Autohide false
-                        if (($this->autohide == 'false') && ($this->position == 'left')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed {left:0; top: 0; width: 40px; height:100%}
-                            #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
-                            #qmUser {display:none;}
-                            .butttext, span.textid {display:none}
-                            #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
-                            #qmEditorClosed { width:40px !important;}
-                            #qmEditorClosed:after {margin-left:18px!important;}
-                            #qmLogoClose:after {margin-left:11px!important;}
-                            </style>
-                            ';
-                        }
-                        // Right toolbar Autohide true
-                        if (($this->autohide == 'true') && ($this->position == 'right')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed {right:-33px; top: 0; width: 40px; height:100%}
-                            #qmEditor:hover, #qmEditorClosed:hover {right: 0;}
-                            #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
-                            #qmUser {display:none;}
-                            .butttext, span.textid {display:none}
-                            #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
-                            #qmEditorClosed { width:40px !important;}
-                            #qmEditorClosed:after {margin-left:18px!important;}
-                            #qmLogoClose:after {margin-left:11px!important;}
-                            </style>
-                            ';
-                        }
-                        else
-                        // Right toolbar Autohide false
-                        if (($this->autohide == 'false') && ($this->position == 'right')) {
-                            $css .= '
-                            <style type="text/css">
-                            #qmEditor, #qmEditorClosed {right:0; top: 0; width: 40px; height:100%}
-                            #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
-                            #qmUser {display:none;}
-                            .butttext, span.textid {display:none}
-                            #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
-                            #qmEditorClosed { width:40px !important;}
-                            #qmEditorClosed:after {margin-left:18px!important;}
-                            #qmLogoClose:after {margin-left:11px!important;}
-                            </style>
-                            ';
-                        }
-                        // Remove background
-                        if (($this->removeBg == 'yes') && ($this->buttonStyle == 'actionButtons')) {
-                            $css .= '
-                            <style type="text/css">
-                             #qmEditor, #qmEditorClosed {background: none; background-color: transparent!important;}
-                            #qmEditor .qmId {background: rgba(255, 255, 255, 0.3); font-size:13px; text-align:center;  color: #666; padding:2px;}
-                            </style>
-                            ';
-                        }
-                        else
-                        if (($this->removeBg == 'yes') && ($this->buttonStyle == 'navButtons')) {
-                            $css .= '
-                            <style type="text/css">
-                             #qmEditor, #qmEditorClosed {background: none; background-color: transparent!important;}
-                            #qmEditor .qmId {font-size:13px; text-align:center;  color: #666; padding:1px; margin-right:2px!important;}
-                            #qmEditor .qmButton, .qm-edit, .qm-new, .qm-tv, .qm-save, .qm-cancel {transition: all; background-color:rgba(57, 81, 93, 0.8);border-color: rgba(255, 255, 255, 0.8)}
-                            #qmEditor .qmButton:hover, .qm-edit:hover, .qm-new:hover, .qm-tv:hover, .qm-save:hover, .qm-cancel:hover { color:#FFF!important; background-color:rgba(57, 81, 93,.4); border-color: rgba(255, 255, 255, 1)}
-                            </style>
-                            ';
-                        }
-                        // Insert jQuery and ColorBox in head if needed
-                        $head = '';
-                        if ($this->loadfrontendjq == 'true') $head .= '<script src="'.$this->modx->config['site_url'].$this->jqpath.'" type="text/javascript"></script>';
-                        if ($this->loadtb == 'true') {
-                            $head .= '
-                            <link type="text/css" media="screen" rel="stylesheet" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/colorbox.css" />
-
-                            <style type="text/css">
-                            .cboxIE #cboxTopLeft{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderTopLeft.png, sizingMethod=\'scale\');}
-                            .cboxIE #cboxTopCenter{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderTopCenter.png, sizingMethod=\'scale\');}
-                            .cboxIE #cboxTopRight{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderTopRight.png, sizingMethod=\'scale\');}
-                            .cboxIE #cboxBottomLeft{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderBottomLeft.png, sizingMethod=\'scale\');}
-                            .cboxIE #cboxBottomCenter{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderBottomCenter.png, sizingMethod=\'scale\');}
-                            .cboxIE #cboxBottomRight{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderBottomRight.png, sizingMethod=\'scale\');}
-                            .cboxIE #cboxMiddleLeft{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderMiddleLeft.png, sizingMethod=\'scale\');}
-                            .cboxIE #cboxMiddleRight{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderMiddleRight.png, sizingMethod=\'scale\');}
-                            </style>
-
-                            <script type="text/javascript" src="'.$this->modx->config['site_url'].'assets/plugins/qm/js/jquery.colorbox-min.js"></script>
-                            ';
-                        }
-
-                        // Insert ColorBox jQuery definitions for QuickManager+
-                        $head .= '
-                        <script type="text/javascript">
-                        ';
-
-                        // jQuery in noConflict mode
-                        if ($this->noconflictjq == 'true')
-                        {
-                            $head .= '
-                        	var $j = jQuery.noConflict();
-                        	$j(document).ready(function($)
-                        	';
-
-                        	$jvar = 'j';
-                        }
-
-                        // jQuery in normal mode
-                        else {
-                            $head .= '$(document).ready(function($)';
-
-                            $jvar = '';
-                        }
-
-                        $head .= '
-                            {
-                        		$'.$jvar.'("a.colorbox").colorbox({width:"'.$this->tbwidth.'", height:"'.$this->tbheight.'", iframe:true, overlayClose:false, opacity:0.5, transition:"fade", speed:150});
-
-                            	// Bindings
-                            	$'.$jvar.'(document).bind("cbox_open", function(){
-                                    $'.$jvar.'("body").css({"overflow":"hidden"});
-                                    $'.$jvar.'("html").css({"overflow":"hidden"});
-                                    $'.$jvar.'("#qmEditor").css({"display":"none"});
-                                });
-
-                                $'.$jvar.'(document).bind("cbox_cleanup", function(){
-                                    //window is closing and cannot be stopped so clear dirty settings for all fields and tinyMCE
-				    var foundit;
-
-                                    //loop through the iframes, checking their scr
-                                    iframearray = document.getElementsByTagName(\'iframe\');
-
-                                    for(var i=0; i < iframearray.length; i++) {
-                                        //if the matching colorbox src, we have found the correct iframe
-                                        haystack=iframearray[i].src;
-                                        needle="'.$this->modx->config["site_url"]."manager/index.php?a=27".'";
-                                        if(haystack.substr(0, needle.length) == needle){
-                                            foundit=iframearray[i]; //assign it to the foundit variable created earlier
-                                            break; //no need to keep looking
-                                        }
-                                    }
-                                    if (foundit) {
-                                        foundit.contentWindow.window.documentDirty=false; //clear document dirty for fields
-                                        //loop through tinyMCE editors and clear any dirty flags
-                                        if (typeof(foundit.contentWindow.window.tinyMCE)!==\'undefined\') {
-                                            var i, t = foundit.contentWindow.window.tinyMCE.editors;for (i in t){
-                                            if (t.hasOwnProperty(i)){    t[i].isNotDirty=true }}
-                                        }
-                                    }
-                                });
-
-                            	$'.$jvar.'(document).bind("cbox_closed", function(){
-                                    $'.$jvar.'("body").css({"overflow":"auto"});
-                                    $'.$jvar.'("html").css({"overflow":"auto"});
-                                    $'.$jvar.'("#qmEditor").css({"display":"block"});
-                                    // Remove manager lock by going to home page
-                                    $'.$jvar.'.ajax({ type: "GET", url: "'.$this->modx->config['site_manager_url'].'index.php?a=2" });
-                                });
-
-                                // Hide QM+ if cookie found
-                                if (getCookie("hideQM") == 1)
+                            $buttonIcon = $buttonParams[5];
+                            // Show custom button
+                            if ($showButton) {
+                                switch ($buttonAction)
                                 {
-                                    $'.$jvar.'("#qmEditor").css({"display":"none"});
-                                    $'.$jvar.'("#qmEditorClosed").css({"display":"block"});
+                                    case 'new':
+                                        $customButton = '
+                                        <li class="qm-custom-'.$i.' qmCustom">
+                                        <a title="'.$buttonTitle.'" class="qmButton qmCustom colorbox" href="'.$this->modx->config['site_manager_url'].'index.php?a=4&amp;pid='.$buttonParentId.'&amp;quickmanager=1&amp;customaddtplid='.$buttonTplId.'"><i class="fa fa-2x fa-fw fa-'.$buttonIcon.' butticon"></i><span class="butttext">'.$buttonTitle.'</span></a>
+                                        </li>
+                                        ';
+                                    break;
+
+                                    case 'link':
+                                        $customButton  = '
+                                        <li class="qm-custom-'.$i.' qmCustom">
+                                        <a title="'.$buttonTitle.'" class="qmButton qmCustom" href="'.$buttonParentId.'" ><i class="fa fa-2x fa-fw fa-'.$buttonIcon.' butticon"></i><span class="butttext">'.$buttonTitle.'</span></a>
+                                        </li>
+                                        ';
+                                    break;
+
+                                    case 'modal':
+                                        $customButton  = '
+                                        <li class="qm-custom-'.$i.' qmCustom">
+                                        <a title="'.$buttonTitle.'" class="qmButton qmCustom colorbox" href="'.$buttonParentId.'" ><i class="fa fa-2x fa-fw fa-'.$buttonIcon.' butticon"></i><span class="butttext">'.$buttonTitle.'</span></a>
+                                        </li>
+                                        ';
+                                    break;
                                 }
+                                $controls .= $customButton;
+                            }
+                        }
+                    }
 
-                                // Hide QM+
-                                $'.$jvar.'(".qmClose").click(function () {
-                                    $'.$jvar.'("#qmEditor").hide("normal");
-                                    $'.$jvar.'("#qmEditorClosed").show("normal");
-                                    document.cookie = "hideQM=1; path=/;";
-                                });
+                    // Logout button
+                    $logout = $this->modx->config['site_manager_url'].'index.php?a=8&amp;quickmanager=logout&amp;logoutid='.$docID;
+                    $logoutButton  = '
+                    <li class="qmLogout">
+                    <a id="qmLogout" class="qmButton qmLogout" title="'.$_lang['logout'].'" href="'.$logout.'" ><i class="fa fa-2x fa-fw fa-sign-out butticon"></i><span class="butttext">'.$_lang['logout'].'</span></a>
+                    </li>
+                    ';
 
-                                // Show QM+
-                                $'.$jvar.'("#qmEditorClosed").click(function () {
-                                    {
-                                        $'.$jvar.'("#qmEditorClosed").hide("normal");
-                                        $'.$jvar.'("#qmEditor").show("normal");
-                                        document.cookie = "hideQM=0; path=/;";
-                                    }
-                                });
+                    $controls .= $logoutButton;
 
+                    $username = $_SESSION['mgrShortname'];
+                    // Add action buttons
+                    $editor = '
+                    <div id="qmEditorClosed"></div>
+
+                    <div id="qmEditor">
+
+                    <ul>
+                    <li id="qmUser">
+                    <span class="qmUser"> <span class="butttext">'.$username.'</span> <i class="fa fa-2x fa-fw fa-user-circle usericon"></i></span>
+                    </li>
+
+                    <li><a id="qmLogoClose" class="qmClose" href="#" onclick="javascript: return false;"></a></li>
+                    '.$controls.'
+                    </ul>
+                    </div>';
+
+                    $MGR_DIR = $this->modx->getManagerPath( );
+                    $css = '
+                    <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/style.css" />';
+
+                    $css .= '
+                    <!--[if IE]><link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/ie.css" /><![endif]-->
+                    ';
+
+                    // font-awesome
+                    if ($this->loadfa == 'true') {
+                    $css .= '
+                    <link rel="stylesheet" type="text/css" href="'.$MGR_DIR.'media/style/common/font-awesome/css/font-awesome.min.css" />
+                        ';
+                    }
+                    // Buttons Styles
+                    if ($this->buttonStyle === 'actionButtons') {
+                        $css .= '
+                        <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/actionButtons.css" />
+                        ';
+                    } elseif ($this->buttonStyle === 'navButtons') {
+                        $css .= '
+                        <link rel="stylesheet" type="text/css" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/navButtons.css" />
+                        ';
+                    }
+                    // Top toolbar Autohide false
+                    if (($this->autohide == 'false') && ($this->position === 'top')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed { left:0; top: 0px; width: 100%;}
+                        #qmEditor:hover, #qmEditorClosed:hover {top: 0px;}
+                        .butticon {display:inline}
+                        @media only screen and (max-width: 728px) {
+                        .butttext {display:none}
+                        #qmUser {display:none}
+                        }
+                        @media only screen
+                        and (min-device-width: 768px)
+                        and (max-device-width: 1024px)
+                        and (orientation: portrait)
+                        and (-webkit-min-device-pixel-ratio: 1) {
+                        .butttext {display:none}
+                        .butticon {display:inline!important}
+                        }
+                        </style>
+                        ';
+                    }
+                    else
+                    // Top toolbar Autohide true
+                    if (($this->autohide == 'true') && ($this->position === 'top')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed { left:0; top: -30px; width: 100%;}
+                        #qmEditor:hover, #qmEditorClosed:hover {top: 0px;}
+                        .butticon {display:none}
+                        @media only screen and (max-width: 728px) {
+                        .butttext {display:none}
+                        #qmUser {display:none}
+                        }
+                        @media only screen
+                        and (min-device-width: 768px)
+                        and (max-device-width: 1024px)
+                        and (orientation: portrait)
+                        and (-webkit-min-device-pixel-ratio: 1) {
+                        .butttext {display:none}
+                        .butticon {display:inline!important}
+                        }
+                        </style>
+                        ';
+                    } else
+                    if ($this->position === 'before') {
+                        // Top toolbar Relative
+                        $css .= '
+                        <style>
+                        #qmEditor, #qmEditorClosed {position: relative; left:0; top: 0; width: 100%; height:35px; opacity:1; -ms-filter:"" !important; filter:none !important;}
+                        #qmEditor:hover, #qmEditorClosed:hover {top: 0}
+                        .butticon {display:none}
+                        @media only screen and (max-width: 728px) {
+                        .butttext {display:none}
+                        #qmUser {display:none}
+                        }
+                        @media only screen
+                        and (min-device-width: 768px)
+                        and (max-device-width: 1024px)
+                        and (orientation: portrait)
+                        and (-webkit-min-device-pixel-ratio: 1) {
+                        .butttext {display:none}
+                        .butticon {display:inline!important}
+                        }
+                        </style>
+                        ';
+                    } elseif (($this->autohide == 'true') && ($this->position === 'bottom')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed { left:0; bottom: -30px; width: 100%;}
+                        #qmEditor:hover, #qmEditorClosed:hover {bottom: 0;}
+                        .butticon {display:none}
+                        @media only screen and (max-width: 728px) {
+                        .butttext {display:none}
+                        #qmUser {display:none}
+                        }
+                        @media only screen
+                        and (min-device-width: 768px)
+                        and (max-device-width: 1024px)
+                        and (orientation: portrait)
+                        and (-webkit-min-device-pixel-ratio: 1) {
+                        .butttext {display:none}
+                        .butticon {display:inline!important}
+                        }
+                        </style>
+                        ';
+                    } elseif (($this->autohide == 'false') && ($this->position === 'bottom')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed { left:0; bottom: 0; width: 100%;}
+                        #qmEditor:hover, #qmEditorClosed:hover {bottom: 0;}
+                        .butticon {display:none}
+                        @media only screen and (max-width: 728px) {
+                        .butttext {display:none}
+                        #qmUser {display:none}
+                        }
+                        @media only screen
+                        and (min-device-width: 768px)
+                        and (max-device-width: 1024px)
+                        and (orientation: portrait)
+                        and (-webkit-min-device-pixel-ratio: 1) {
+                        .butttext {display:none}
+                        .butticon {display:inline!important}
+                        }
+                        </style>
+                        ';
+                    }
+                    // Left toolbar Autohide true
+                    if ($this->autohide == 'true' && $this->position === 'left') {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed {left:-33px; top: 0; width: 40px; height:100%}
+                        #qmEditor:hover, #qmEditorClosed:hover {left: 0}
+                        #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
+                        #qmUser {display:none;}
+                        .butttext, span.textid {display:none}
+                        #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
+                        #qmEditorClosed { width:40px !important;}
+                        #qmEditorClosed:after {margin-left:18px!important;}
+                        #qmLogoClose:after {margin-left:11px!important;}
+                        </style>
+                        ';
+                    } elseif ($this->autohide == 'false' && $this->position === 'left') {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed {left:0; top: 0; width: 40px; height:100%}
+                        #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
+                        #qmUser {display:none;}
+                        .butttext, span.textid {display:none}
+                        #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
+                        #qmEditorClosed { width:40px !important;}
+                        #qmEditorClosed:after {margin-left:18px!important;}
+                        #qmLogoClose:after {margin-left:11px!important;}
+                        </style>
+                        ';
+                    }
+                    // Right toolbar Autohide true
+                    if (($this->autohide == 'true') && ($this->position == 'right')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed {right:-33px; top: 0; width: 40px; height:100%}
+                        #qmEditor:hover, #qmEditorClosed:hover {right: 0;}
+                        #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
+                        #qmUser {display:none;}
+                        .butttext, span.textid {display:none}
+                        #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
+                        #qmEditorClosed { width:40px !important;}
+                        #qmEditorClosed:after {margin-left:18px!important;}
+                        #qmLogoClose:after {margin-left:11px!important;}
+                        </style>
+                        ';
+                    } elseif (($this->autohide == 'false') && ($this->position == 'right')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed {right:0; top: 0; width: 40px; height:100%}
+                        #qmEditor .qmButton, .qm-edit, .qm-new {padding: 6px 7px; margin-bottom:3px;}
+                        #qmUser {display:none;}
+                        .butttext, span.textid {display:none}
+                        #qmEditor .qmId {width:40px; font-size:12px; text-align:center;}
+                        #qmEditorClosed { width:40px !important;}
+                        #qmEditorClosed:after {margin-left:18px!important;}
+                        #qmLogoClose:after {margin-left:11px!important;}
+                        </style>
+                        ';
+                    }
+                    // Remove background
+                    if (($this->removeBg === 'yes') && ($this->buttonStyle === 'actionButtons')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed {background: none; background-color: transparent!important;}
+                        #qmEditor .qmId {background: rgba(255, 255, 255, 0.3); font-size:13px; text-align:center;  color: #666; padding:2px;}
+                        </style>
+                        ';
+                    } elseif (($this->removeBg === 'yes') && ($this->buttonStyle === 'navButtons')) {
+                        $css .= '
+                        <style type="text/css">
+                        #qmEditor, #qmEditorClosed {background: none; background-color: transparent!important;}
+                        #qmEditor .qmId {font-size:13px; text-align:center;  color: #666; padding:1px; margin-right:2px!important;}
+                        #qmEditor .qmButton, .qm-edit, .qm-new, .qm-tv, .qm-save, .qm-cancel {transition: all; background-color:rgba(57, 81, 93, 0.8);border-color: rgba(255, 255, 255, 0.8)}
+                        #qmEditor .qmButton:hover, .qm-edit:hover, .qm-new:hover, .qm-tv:hover, .qm-save:hover, .qm-cancel:hover { color:#FFF!important; background-color:rgba(57, 81, 93,.4); border-color: rgba(255, 255, 255, 1)}
+                        </style>
+                        ';
+                    }
+                    // Insert jQuery and ColorBox in head if needed
+                    $head = '';
+                    if ($this->loadfrontendjq == 'true') {
+                        $head .= '<script src="' . $this->modx->config['site_url'] . $this->jqpath . '" type="text/javascript"></script>';
+                    }
+                    if ($this->loadtb == 'true') {
+                        $head .= '
+                        <link type="text/css" media="screen" rel="stylesheet" href="'.$this->modx->config['site_url'].'assets/plugins/qm/css/colorbox.css" />
+
+                        <style type="text/css">
+                        .cboxIE #cboxTopLeft{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderTopLeft.png, sizingMethod=\'scale\');}
+                        .cboxIE #cboxTopCenter{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderTopCenter.png, sizingMethod=\'scale\');}
+                        .cboxIE #cboxTopRight{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderTopRight.png, sizingMethod=\'scale\');}
+                        .cboxIE #cboxBottomLeft{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderBottomLeft.png, sizingMethod=\'scale\');}
+                        .cboxIE #cboxBottomCenter{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderBottomCenter.png, sizingMethod=\'scale\');}
+                        .cboxIE #cboxBottomRight{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderBottomRight.png, sizingMethod=\'scale\');}
+                        .cboxIE #cboxMiddleLeft{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderMiddleLeft.png, sizingMethod=\'scale\');}
+                        .cboxIE #cboxMiddleRight{background:transparent; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.$this->modx->config['site_url'].'assets/plugins/qm/css/images/internet_explorer/borderMiddleRight.png, sizingMethod=\'scale\');}
+                        </style>
+
+                        <script type="text/javascript" src="'.$this->modx->config['site_url'].'assets/plugins/qm/js/jquery.colorbox-min.js"></script>
+                        ';
+                    }
+
+                    // Insert ColorBox jQuery definitions for QuickManager+
+                    $head .= '
+                    <script type="text/javascript">
+                    ';
+
+                    // jQuery in noConflict mode
+                    if ($this->noconflictjq == 'true')
+                    {
+                        $head .= '
+                        var $j = jQuery.noConflict();
+                        $j(document).ready(function($)
+                        ';
+
+                        $jvar = 'j';
+                    } else {
+                        $head .= '$(document).ready(function($)';
+
+                        $jvar = '';
+                    }
+
+                    $head .= '
+                        {
+                        $'.$jvar.'("a.colorbox").colorbox({width:"'.$this->tbwidth.'", height:"'.$this->tbheight.'", iframe:true, overlayClose:false, opacity:0.5, transition:"fade", speed:150});
+
+                            // Bindings
+                                $'.$jvar.'(document).bind("cbox_open", function(){
+                                $'.$jvar.'("body").css({"overflow":"hidden"});
+                                $'.$jvar.'("html").css({"overflow":"hidden"});
+                                $'.$jvar.'("#qmEditor").css({"display":"none"});
                             });
 
-                            function getCookie(cookieName)
-                            {
-                                var results = document.cookie.match ( "(^|;) ?" + cookieName + "=([^;]*)(;|$)" );
+                            $'.$jvar.'(document).bind("cbox_cleanup", function(){
+                                //window is closing and cannot be stopped so clear dirty settings for all fields and tinyMCE
+                var foundit;
 
-                                if (results) return (unescape(results[2]));
-                                else return null;
-                            }
+                                //loop through the iframes, checking their scr
+                                iframearray = document.getElementsByTagName(\'iframe\');
 
-                        </script>
-                        ';
-
-                        $head .= "
-                        <script>
-                        // Assure keeping session and related locks alive
-                        $".$jvar."(document).ready(function($".$jvar.") {
-                            function updateMODXsession() {
-                              $".$jvar.".ajax({ url: '".MODX_MANAGER_URL."index.php', method:'post', data:{'updateMsgCount':true},
-                                success: function(data) {},
-                                complete: function() {
-                                  setTimeout(updateMODXsession, ". ($this->modx->config['mail_check_timeperiod'] * 1000) .");
+                                for(var i=0; i < iframearray.length; i++) {
+                                    //if the matching colorbox src, we have found the correct iframe
+                                    haystack=iframearray[i].src;
+                                    needle="'.$this->modx->config["site_url"]."manager/index.php?a=27".'";
+                                    if(haystack.substr(0, needle.length) == needle){
+                                        foundit=iframearray[i]; //assign it to the foundit variable created earlier
+                                        break; //no need to keep looking
+                                    }
                                 }
-                              });
+                                if (foundit) {
+                                    foundit.contentWindow.window.documentDirty=false; //clear document dirty for fields
+                                    //loop through tinyMCE editors and clear any dirty flags
+                                    if (typeof(foundit.contentWindow.window.tinyMCE)!==\'undefined\') {
+                                        var i, t = foundit.contentWindow.window.tinyMCE.editors;for (i in t){
+                                        if (t.hasOwnProperty(i)){    t[i].isNotDirty=true }}
+                                    }
+                                }
+                            });
+
+                                $'.$jvar.'(document).bind("cbox_closed", function(){
+                                $'.$jvar.'("body").css({"overflow":"auto"});
+                                $'.$jvar.'("html").css({"overflow":"auto"});
+                                $'.$jvar.'("#qmEditor").css({"display":"block"});
+                                // Remove manager lock by going to home page
+                                $'.$jvar.'.ajax({ type: "GET", url: "'.$this->modx->config['site_manager_url'].'index.php?a=2" });
+                            });
+
+                            // Hide QM+ if cookie found
+                            if (getCookie("hideQM") == 1)
+                            {
+                                $'.$jvar.'("#qmEditor").css({"display":"none"});
+                                $'.$jvar.'("#qmEditorClosed").css({"display":"block"});
                             }
-                            setTimeout(updateMODXsession, ". ($this->modx->config['mail_check_timeperiod'] * 1000) .");
+
+                            // Hide QM+
+                            $'.$jvar.'(".qmClose").click(function () {
+                                $'.$jvar.'("#qmEditor").hide("normal");
+                                $'.$jvar.'("#qmEditorClosed").show("normal");
+                                document.cookie = "hideQM=1; path=/;";
+                            });
+
+                            // Show QM+
+                            $'.$jvar.'("#qmEditorClosed").click(function () {
+                                {
+                                    $'.$jvar.'("#qmEditorClosed").hide("normal");
+                                    $'.$jvar.'("#qmEditor").show("normal");
+                                    document.cookie = "hideQM=0; path=/;";
+                                }
+                            });
+
                         });
-                        </script>
-                        ";
 
-                        // Insert QM+ css in head
-                        $head .= $css;
+                        function getCookie(cookieName)
+                        {
+                            var results = document.cookie.match ( "(^|;) ?" + cookieName + "=([^;]*)(;|$)" );
 
-                        // Place QM+ head information in head, just before </head> tag
-                        $output = preg_replace('~(</head>)~i', $head . '\1', $output);
-
-                        // Insert editor toolbar right after <body> tag
-                        $output = preg_replace('~(<body[^>]*>)~i', '\1' . $editor, $output);
-
-                        // Search and create edit buttons in to the content
-                        if ($this->editbuttons == 'true' && $access) {
-                            $output = preg_replace('/<!-- '.$this->editbclass.' ([0-9]+) \'([^\\"\'\(\)<>!?]+)\' -->/', '<span class="'.$this->editbclass.'"><a class="colorbox" href="'.$this->modx->config['site_manager_url'].'index.php?a=27&amp;id=$1&amp;quickmanager=1&amp;qmrefresh='.$docID.'"><span>$2</span></a></span>', $output);
+                            if (results) return (unescape(results[2]));
+                            else return null;
                         }
 
-                        // Search and create new document buttons in to the content
-                        if ($this->newbuttons == 'true' && $access) {
-                            $output = preg_replace('/<!-- '.$this->newbclass.' ([0-9]+) ([0-9]+) \'([^\\"\'\(\)<>!?]+)\' -->/', '<span class="'.$this->newbclass.'"><a class="colorbox" href="'.$this->modx->config['site_manager_url'].'index.php?a=4&amp;pid=$1&amp;quickmanager=1&amp;customaddtplid=$2"><span>$3</span></a></span>', $output);
-                        }
+                    </script>
+                    ';
 
-                        // Search and create new document buttons in to the content
-                        if ($this->tvbuttons == 'true' && $access) {
-                            // Set and get user doc groups for TV permissions
-                            $this->docGroup = '';
-                            $mrgDocGroups = $_SESSION['mgrDocgroups'];
-                            if (!empty($mrgDocGroups)) $this->docGroup = implode(",", $mrgDocGroups);
-
-                            // Create TV buttons and check TV permissions
-                            $output = preg_replace_callback('/<!-- '.$this->tvbclass.' ([^\\"\'\(\)<>!?]+) -->/', array(&$this, 'createTvButtons'), $output);
+                    $head .= "
+                    <script>
+                    // Assure keeping session and related locks alive
+                    $".$jvar."(document).ready(function($".$jvar.") {
+                        function updateMODXsession() {
+                            $".$jvar.".ajax({ url: '".MODX_MANAGER_URL."index.php', method:'post', data:{'updateMsgCount':true},
+                            success: function(data) {},
+                            complete: function() {
+                              setTimeout(updateMODXsession, ". ($this->modx->config['mail_check_timeperiod'] * 1000) . ")
+                            }
+                            });
                         }
+                        setTimeout(updateMODXsession, " . ($this->modx->config['mail_check_timeperiod'] * 1000) . ")
+                    })
+                    </script>
+                    ";
+
+                    // Insert QM+ css in head
+                    $head .= $css;
+
+                    // Place QM+ head information in head, just before </head> tag
+                    $output = preg_replace('~(</head>)~i', $head . '\1', $output);
+
+                    // Insert editor toolbar right after <body> tag
+                    $output = preg_replace('~(<body[^>]*>)~i', '\1' . $editor, $output);
+
+                    // Search and create edit buttons in to the content
+                    if ($this->editbuttons == 'true' && $access) {
+                        $output = preg_replace('/<!-- '.$this->editbclass.' ([0-9]+) \'([^"\'(\)<>!?]+)\' -->/', '<span class="'.$this->editbclass.'"><a class="colorbox" href="'.$this->modx->config['site_manager_url'].'index.php?a=27&amp;id=$1&amp;quickmanager=1&amp;qmrefresh='.$docID.'"><span>$2</span></a></span>', $output);
+                    }
+
+                    // Search and create new document buttons in to the content
+                    if ($this->newbuttons == 'true' && $access) {
+                        $output = preg_replace('/<!-- '.$this->newbclass.' ([0-9]+) ([0-9]+) \'([^"\'(\)<>!?]+)\' -->/', '<span class="'.$this->newbclass.'"><a class="colorbox" href="'.$this->modx->config['site_manager_url'].'index.php?a=4&amp;pid=$1&amp;quickmanager=1&amp;customaddtplid=$2"><span>$3</span></a></span>', $output);
+                    }
+
+                    // Search and create new document buttons in to the content
+                    if ($this->tvbuttons == 'true' && $access) {
+                        // Set and get user doc groups for TV permissions
+                        $this->docGroup = '';
+                        $mrgDocGroups = $_SESSION['mgrDocgroups'];
+                        if (!empty($mrgDocGroups)) $this->docGroup = implode(",", $mrgDocGroups);
+
+                        // Create TV buttons and check TV permissions
+                        $output = preg_replace_callback('/<!-- '.$this->tvbclass.' ([^"\'(\)<>!?]+) -->/', array(&$this, 'createTvButtons'), $output);
                     }
                 }
 
@@ -889,17 +911,17 @@ class Qm {
             case 'OnDocFormPrerender':
 
                 // If there is Qm call, add control buttons and modify to edit document page
-                if (intval($_REQUEST['quickmanager']) == 1) {
+                if ((int)$_REQUEST['quickmanager'] == 1) {
 
                     global $content, $_style;
 
                     // Set template for new document, action = 4
-                    if(intval($_GET['a']) == 4) {
+                    if((int)$_GET['a'] == 4) {
 
                         // Custom add button
                         if (isset($_GET['customaddtplid'])) {
                             // Set template
-                            $content['template'] = intval($_GET['customaddtplid']);
+                            $content['template'] = (int)$_GET['customaddtplid'];
                         }
 
                         // Normal add button
@@ -908,7 +930,7 @@ class Qm {
                                 // Template type is parent
                                 case 'parent':
                                     // Get parent document id
-                                    $pid = $content['parent'] ? $content['parent'] : intval($_REQUEST['pid']);
+                                    $pid = $content['parent'] ?: (int)$_REQUEST['pid'];
 
                                     // Get parent document
                                     $parent = $this->modx->getDocument($pid);
@@ -928,7 +950,7 @@ class Qm {
                                 case 'selected': // Template is inherited by Inherit Selected Template plugin
                                 case 'sibling':
                                     // Get parent document id
-                                    $pid = $content['parent'] ? $content['parent'] : intval($_REQUEST['pid']);
+                                    $pid = $content['parent'] ?: (int)$_REQUEST['pid'];
 
                                     if ($this->modx->config['auto_template_logic'] === 'sibling') {
                                         // Eoler: template_autologic in Evolution 1.0.5+
@@ -940,18 +962,20 @@ class Qm {
                                         }
                                         if(!empty($sibl)) {
                                             $tv['value'] = $sibl[0]['template'];
-                                        }
-                                        else $tv['value'] = ''; // Added by yama
-                                    }
-                                    else
-                                    {
+                                        } else {
+                                            $tv['value'] = '';
+                                        } // Added by yama
+                                    } else {
                                         // Get "inheritTpl" TV
                                         $tv = $this->modx->getTemplateVar('inheritTpl', '', $pid);
                                     }
 
                                     // Set template to inherit
-                                    if ($tv['value'] != '') $content['template'] = $tv['value'];
-                                    else                    $content['template'] = $this->modx->config['default_template'];
+                                    if ($tv['value'] != '') {
+                                        $content['template'] = $tv['value'];
+                                    } else {
+                                        $content['template'] = $this->modx->config['default_template'];
+                                    }
                                     break;
                             }
                         }
@@ -963,17 +987,18 @@ class Qm {
                     // Hide default manager action buttons
                     $mc->addLine('$("#actions").hide();');
 
-                    // Get doc id
-                    $doc_id = intval($_REQUEST['id']);
-
-                    // Different doc to be returned to for cancel?
                     if (isset($_REQUEST['qmrefresh'])) {
-                        $doc_id = intval($_REQUEST['qmrefresh']);
+                        $doc_id = (int)$_REQUEST['qmrefresh'];
+                    } else {
+                        $doc_id = (int)$_REQUEST['id'];
                     }
 
                     // Get jQuery conflict mode
-                    if ($this->noconflictjq == 'true') $jq_mode = '$j';
-                    else $jq_mode = '$';
+                    if ($this->noconflictjq == 'true') {
+                        $jq_mode = '$j';
+                    } else {
+                        $jq_mode = '$';
+                    }
 
                     // Add action buttons
                     $url = $this->modx->makeUrl($doc_id,'','','full');
@@ -1018,7 +1043,7 @@ class Qm {
 
                     // Different doc to be refreshed?
                     if (isset($_REQUEST['qmrefresh'])) {
-                        $hiddenFields .= '<input type="hidden" name="qmrefresh" value="'.intval($_REQUEST['qmrefresh']).'" />';
+                        $hiddenFields .= '<input type="hidden" name="qmrefresh" value="'. (int)$_REQUEST['qmrefresh'] .'" />';
                     }
 
                     // Output
@@ -1030,9 +1055,9 @@ class Qm {
             // Where to logout
             case 'OnManagerLogout':
                 // Only if cancel editing the document and QuickManager is in use
-                if ($_REQUEST['quickmanager'] == 'logout') {
+                if ($_REQUEST['quickmanager'] === 'logout') {
                     // Redirect to document id
-                    if ($this->logout != 'manager') {
+                    if ($this->logout !== 'manager') {
                         $this->modx->sendRedirect($this->modx->makeUrl($_REQUEST['logoutid']), 0, 'REDIRECT_HEADER', 'HTTP/1.1 301 Moved Permanently');
                     }
                 }
@@ -1044,43 +1069,40 @@ class Qm {
     // Check if user has manager access permissions to current document
     //_______________________________________________________
     function checkAccess() {
-        $access = FALSE;
-
-        // If user is admin (role = 1)
-        if ($_SESSION['mgrRole'] == 1) $access = TRUE;
-
-        else {
-            $docID = $this->modx->documentIdentifier;
-
-            // Database table
-            $table= $this->modx->getFullTableName("document_groups");
-
-            // Check if current document is assigned to one or more doc groups
-            $result = $this->modx->db->select('count(id)', $table, "document='{$docID}'");
-            $rowCount= $this->modx->db->getValue($result);
-
-            // If document is assigned to one or more doc groups, check access
-            if ($rowCount >= 1) {
-
-                // Get document groups for current user
-                $mrgDocGroups = $_SESSION['mgrDocgroups'];
-                if (!empty($mrgDocGroups))  {
-                    $docGroup = implode(",", $mrgDocGroups);
-
-                    // Check if user has access to current document
-                    $result = $this->modx->db->select('count(id)', $table, "document = '{$docID}' AND document_group IN ({$docGroup})");
-                    $rowCount = $this->modx->db->getValue($result);
-
-                    if ($rowCount >= 1) $access = TRUE;
-                }
-
-                else $access = FALSE;
-            }
-
-            else $access = TRUE;
+        if ($_SESSION['mgrRole'] == 1) {
+            return TRUE;
         }
 
-        return $access;
+        $docID = $this->modx->documentIdentifier;
+
+        // Database table
+        $table= $this->modx->getFullTableName("document_groups");
+
+        // Check if current document is assigned to one or more doc groups
+        $result = $this->modx->db->select('count(id)', $table, "document='{$docID}'");
+        $rowCount= $this->modx->db->getValue($result);
+
+        // If document is assigned to one or more doc groups, check access
+        if ($rowCount < 1) {
+            return TRUE;
+        }
+        $mrgDocGroups = $_SESSION['mgrDocgroups'];
+        if (empty($mrgDocGroups)) {
+            return FALSE;
+        }
+
+        $docGroup = implode(",", $mrgDocGroups);
+
+        // Check if user has access to current document
+        $rowCount = $this->modx->db->getValue(
+            $this->modx->db->select('count(id)', $table, "document = '{$docID}' AND document_group IN ({$docGroup})")
+        );
+
+        if ($rowCount >= 1) {
+            return TRUE;
+        }
+
+        return FALSE;
     }
 
     // Function from: processors/cache_sync.class.processor.php
@@ -1104,8 +1126,6 @@ class Qm {
 	//_____________________________________________________
 	function createTvButtons($matches) {
 
-        $access = FALSE;
-        $table = $this->modx->getFullTableName('site_tmplvar_access');
         $docID = $this->modx->documentIdentifier;
 
         // Get TV caption for button title
@@ -1120,18 +1140,23 @@ class Qm {
 
             // Resolve caption
             $caption = $this->getDefaultTvCaption($matches[1]);
-	    }
-
-	    // Check TV access
-	    else {
+	    } else {
 	       $access = $this->checkTvAccess($tv['id']);
 	    }
 
 	    // Return TV button link if access
-	    if ($access && $caption != '') {
-            $amp = ($this->modx->config['friendly_urls'] == 1) ? '?' : '&';
-	        return '<span class="'.$this->tvbclass.'"><a class="colorbox" href="'.$this->modx->makeUrl($docID).$amp.'quickmanagertv=1&amp;tvname='.$matches[1].'"><span>'.$caption.'</span></a></span>';
+	    if (!$access || $caption == '') {
+            return null;
         }
+        $amp = ($this->modx->config['friendly_urls'] == 1) ? '?' : '&';
+        return sprintf(
+            '<span class="%s"><a class="colorbox" href="%s%squickmanagertv=1&amp;tvname=%s"><span>%s</span></a></span>',
+            $this->tvbclass,
+            $this->modx->makeUrl($docID),
+            $amp,
+            $matches[1],
+            $caption
+        );
     }
 
     // Check user access to TV
@@ -1155,7 +1180,9 @@ class Qm {
 	    if (!$access && $this->docGroup != '') {
             $result = $this->modx->db->select('count(id)', $table, "tmplvarid = '{$tvId}' AND documentgroup IN ({$this->docGroup})");
             $rowCount = $this->modx->db->getValue($result);
-            if ($rowCount >= 1) { $access = TRUE; }
+            if ($rowCount >= 1) {
+                $access = TRUE;
+            }
         }
 
         return $access;
@@ -1185,13 +1212,11 @@ class Qm {
 	function checkLocked() {
 
 		$pageId = $this->modx->documentIdentifier;
-		$locked = TRUE;
-
 		if ($this->modx->elementIsLocked(7, $pageId) === NULL) {
-			$locked = FALSE;
+			return FALSE;
 		}
 
-		return $locked;
+		return TRUE;
 	}
 
 	// Set document locked on/off
@@ -1203,10 +1228,7 @@ class Qm {
 		// Set document locked
 		if ($locked == 1) {
     		$this->modx->lockElement(7, $pageId);
-        }
-
-        // Set document unlocked
-        else {
+        } else {
             $this->modx->unlockElement(7, $pageId);
         }
 	}
@@ -1218,11 +1240,10 @@ class Qm {
         $tmplvarContentValuesTable = $this->modx->getFullTableName('site_tmplvar_contentvalues');
         $siteContentTable = $this->modx->getFullTableName('site_content');
         $pageId = $this->modx->documentIdentifier;
-        $result = null;
         $time = time();
         $user = $_SESSION['mgrInternalKey'];
-        $tvId = isset($_POST['tvid']) ? intval($_POST['tvid']) : '';
-        $tvContent = isset($_POST['tv'.$tvName]) ? $_POST['tv'.$tvName] : '';
+        $tvId = isset($_POST['tvid']) ? (int)$_POST['tvid'] : '';
+        $tvContent = $_POST['tv' . $tvName] ?? '';
         $tvContentTemp = '';
 
         // Escape TV content
@@ -1243,15 +1264,20 @@ class Qm {
                 'contentid' => $pageId,
                 'value'     => $tvContent,
                 );
-            $result = $this->modx->db->select('count(id)', $tmplvarContentValuesTable, "tmplvarid = '{$fields['tmplvarid']}' AND contentid = '{$fields['contentid']}'");
+            $result = $this->modx->db->select(
+                'count(id)',
+                $tmplvarContentValuesTable,
+                sprintf("tmplvarid='%s' AND contentid='%s'", $fields['tmplvarid'], $fields['contentid'])
+            );
 
             // TV exists, update TV
             if($this->modx->db->getValue($result)) {
-                $this->modx->db->update($fields, $tmplvarContentValuesTable, "tmplvarid = '{$fields['tmplvarid']}' AND contentid = '{$fields['contentid']}'");
-            }
-
-            // TV does not exist, create new TV
-            else {
+                $this->modx->db->update(
+                    $fields,
+                    $tmplvarContentValuesTable,
+                    sprintf("tmplvarid='%s' AND contentid='%s'", $fields['tmplvarid'], $fields['contentid'])
+                );
+            } else {
                 $this->modx->db->insert($fields, $tmplvarContentValuesTable);
             }
 
@@ -1260,17 +1286,20 @@ class Qm {
                 array(
                     'editedon' => $time,
                     'editedby' => $user
-                    ), $siteContentTable, "id = '{$pageId}'");
-        }
-
-        // Save default field, e.g. pagetitle
-        else {
+                    ),
+                $siteContentTable,
+                "id = '{$pageId}'"
+            );
+        } else {
             $this->modx->db->update(
                 array(
                     $tvName    => $tvContent,
                     'editedon' => $time,
                     'editedby' => $user
-                    ), $siteContentTable, "id = '{$pageId}'");
+                    ),
+                $siteContentTable,
+                "id = '{$pageId}'"
+            );
         }
 
             // Invoke OnDocFormSave event
@@ -1279,6 +1308,5 @@ class Qm {
             // Clear cache
             $this->modx->clearCache('full');
     }
-
 }
 }
