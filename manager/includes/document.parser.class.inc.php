@@ -4059,7 +4059,14 @@ class DocumentParser
      *
      * @return {array; false} - Result array with documents, or false.
      */
-    public function getDocuments($ids = [], $published = 1, $deleted = 0, $fields = '*', $where = '', $sort = 'menuindex', $dir = 'ASC', $limit = '')
+    public function getDocuments($ids = [],
+                                 $published = 1,
+                                 $deleted = 0,
+                                 $fields = '*',
+                                 $where = '',
+                                 $sort = 'menuindex',
+                                 $dir = 'ASC',
+                                 $limit = '')
     {
         static $cache = null;
 
