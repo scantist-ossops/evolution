@@ -132,7 +132,6 @@ class DocumentParser
     public $snippetsTime = [];
     public $chunkCache;
     public $snippetCache;
-    public $contentTypes;
     public $dumpSQL = false;
     public $queryCode;
     public $virtualDir;
