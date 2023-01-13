@@ -2584,7 +2584,7 @@ class DocumentParser
     {
         // rewrite the urls
         if ($this->config['friendly_urls'] == 1) {
-            $aliases = [];
+            $aliases = $isfolder = array();
             if (is_array($this->documentListing)) {
                 foreach ($this->documentListing as $path => $docid) { // This is big Loop on large site!
                     $aliases[$docid] = $path;
@@ -4499,7 +4499,7 @@ class DocumentParser
                     if ($this->config['use_alias_path'] == '1') {
                         //&& $tmp['path'] != '' - fix error slash with epty path
                         $tmp = $this->getAliasListing($this->aliasListing[$id]['parent']);
-                        $this->aliasListing[$id]['path'] = $tmp['path'] . ($tmp['alias_visible'] ? (($tmp['parent'] > 0 && $tmp['path'] != '') ? '/' : '') . $tmp['alias'] : '');
+                        $this->aliasListing[$id]['path'] = ($tmp['path'] ?? '') . ($tmp['alias_visible'] ? (($tmp['parent'] > 0 && $tmp['path'] != '') ? '/' : '') . $tmp['alias'] : '');
                     } else {
                         $this->aliasListing[$id]['path'] = '';
                     }
