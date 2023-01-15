@@ -6915,31 +6915,42 @@ class DocumentParser
      */
     public function getHiddenIdFromAlias($parentid, $alias)
     {
-        $out = false;
-        if ($alias !== '') {
-            $table = $this->getFullTableName('site_content');
-            $query = $this->db->query("SELECT
-                `sc`.`id` AS `hidden_id`,
-                `children`.`id` AS `child_id`,
-                children.alias AS `child_alias`,
-                COUNT(`grandsons`.`id`) AS `grandsons_count`
-                FROM " . $table ." AS `sc`
-                JOIN " . $table . " AS `children` ON `children`.`parent` = `sc`.`id`
-                LEFT JOIN " . $table . " AS `grandsons` ON `grandsons`.`parent` = `children`.`id`
-                WHERE `sc`.`parent` = '" . (int)$parentid . "' AND `sc`.`alias_visible` = '0'
-                GROUP BY `children`.`id`");
+        if ($alias === '') {
+            return false;
+        }
 
-            while ($child = $this->db->getRow($query)) {
-                if ($child['child_alias'] == $alias || $child['child_id'] == $alias) {
-                    $out = $child['child_id'];
-                    break;
-                } elseif ($child['grandsons_count'] > 0 && ($id = $this->getHiddenIdFromAlias($child['hidden_id'], $alias))) {
-                    $out = $id;
-                    break;
-                }
+        $query = $this->db->select(
+            'sc.id AS hidden_id,
+            children.id AS child_id,
+            children.alias AS child_alias,
+            COUNT(grandsons.id) AS grandsons_count',
+            [
+                sprintf('%s AS sc', $this->getFullTableName('site_content')),
+                sprintf(
+                    'JOIN %s AS children ON children.parent=sc.id',
+                    $this->getFullTableName('site_content')
+                ),
+                sprintf(
+                    'LEFT JOIN %s AS grandsons ON grandsons.parent=children.id',
+                    $this->getFullTableName('site_content')
+                )
+            ],
+            sprintf(
+                "sc.parent='%s' AND sc.alias_visible=0 GROUP BY children.id",
+                (int)$parentid
+            )
+        );
+
+        while ($child = $this->db->getRow($query)) {
+            if ($child['child_alias'] == $alias || $child['child_id'] == $alias) {
+                return $child['child_id'];
+            }
+            $id = $this->getHiddenIdFromAlias($child['hidden_id'], $alias);
+            if ($child['grandsons_count'] > 0 && $id) {
+                return $id;
             }
         }
-        return $out;
+        return false;
     }
 
     /**
