@@ -4752,9 +4752,14 @@ class DocumentParser
             return false;
         }
 
-        return $prefix === '[+' && $suffix === '+]' && $this->isChunkProcessor('DLTemplate') ?
-            DLTemplate::getInstance($this)->parseChunk($chunkName, $chunkArr) :
-            $this->parseText($this->getChunk($chunkName), $chunkArr, $prefix, $suffix);
+        if ($prefix !== '[+' || $suffix !== '+]') {
+            return $this->parseText($this->getChunk($chunkName), $chunkArr, $prefix, $suffix);
+        }
+        if (!$this->isChunkProcessor('DLTemplate')) {
+            return $this->parseText($this->getChunk($chunkName), $chunkArr);
+        }
+
+        return DLTemplate::getInstance($this)->parseChunk($chunkName, $chunkArr);
     }
 
     /**
