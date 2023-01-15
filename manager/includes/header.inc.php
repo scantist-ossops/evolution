@@ -3,13 +3,11 @@ if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
     die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />
     Please use the EVO Content Manager instead of accessing this file directly.");
 }
-$mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
 
 // invoke OnManagerRegClientStartupHTMLBlock event
 $evtOut = $modx->invokeEvent('OnManagerMainFrameHeaderHTMLBlock');
-$modx_textdir = isset($modx_textdir) ? $modx_textdir : null;
+$modx_textdir = $modx_textdir ?? null;
 $onManagerMainFrameHeaderHTMLBlock = is_array($evtOut) ? implode("\n", $evtOut) : '';
-$textdir = $modx_textdir === 'rtl' ? 'rtl' : 'ltr';
 if (!isset($modx->config['mgr_jquery_path'])) {
     $modx->config['mgr_jquery_path'] = 'media/script/jquery/jquery.min.js';
 }
@@ -19,30 +17,31 @@ if (!isset($modx->config['mgr_date_picker_path'])) {
 
 $body_class = '';
 $theme_modes = array('', 'lightness', 'light', 'dark', 'darkness');
-$theme_mode = isset($_COOKIE['MODX_themeMode']) ? $_COOKIE['MODX_themeMode'] : '';
-if (!empty($theme_modes[$theme_mode])) {
+$theme_mode = $_COOKIE['MODX_themeMode'] ?? '';
+if ($theme_mode && !empty($theme_modes[$theme_mode])) {
     $body_class .= ' ' . $theme_modes[$theme_mode];
 } elseif (!empty($theme_modes[$modx->config['manager_theme_mode']])) {
     $body_class .= ' ' . $theme_modes[$modx->config['manager_theme_mode']];
 }
 
-$css = 'media/style/' . $modx->config['manager_theme'] . '/style.css?v=' . $lastInstallTime;
+$css = 'media/style/' . $modx->config['manager_theme'] . '/style.css?v=' . $modx->recentUpdate;
 
-if ($modx->config['manager_theme'] == 'default') {
-    if (!file_exists(MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/styles.min.css')
-        && is_writable(MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css')) {
+$style_path = MODX_MANAGER_PATH . 'media/style/';
+if ($modx->config['manager_theme'] === 'default') {
+    if (!file_exists($style_path . $modx->config['manager_theme'] . '/css/styles.min.css')
+        && is_writable($style_path . $modx->config['manager_theme'] . '/css')) {
         $files = array(
-            'bootstrap' => MODX_MANAGER_PATH . 'media/style/common/bootstrap/css/bootstrap.min.css',
-            'font-awesome' => MODX_MANAGER_PATH . 'media/style/common/font-awesome/css/font-awesome.min.css',
-            'fonts' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/fonts.css',
-            'forms' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/forms.css',
-            'mainmenu' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/mainmenu.css',
-            'tree' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/tree.css',
-            'custom' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/custom.css',
-            'tabpane' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/tabpane.css',
-            'contextmenu' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/contextmenu.css',
-            'index' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/index.css',
-            'main' => MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/main.css'
+            'bootstrap' => $style_path . 'common/bootstrap/css/bootstrap.min.css',
+            'font-awesome' => $style_path . 'common/font-awesome/css/font-awesome.min.css',
+            'fonts' => $style_path . $modx->config['manager_theme'] . '/css/fonts.css',
+            'forms' => $style_path . $modx->config['manager_theme'] . '/css/forms.css',
+            'mainmenu' => $style_path . $modx->config['manager_theme'] . '/css/mainmenu.css',
+            'tree' => $style_path . $modx->config['manager_theme'] . '/css/tree.css',
+            'custom' => $style_path . $modx->config['manager_theme'] . '/css/custom.css',
+            'tabpane' => $style_path . $modx->config['manager_theme'] . '/css/tabpane.css',
+            'contextmenu' => $style_path . $modx->config['manager_theme'] . '/css/contextmenu.css',
+            'index' => $style_path . $modx->config['manager_theme'] . '/css/index.css',
+            'main' => $style_path . $modx->config['manager_theme'] . '/css/main.css'
         );
         $evtOut = $modx->invokeEvent('OnBeforeMinifyCss', array(
             'files' => $files,
@@ -63,18 +62,18 @@ if ($modx->config['manager_theme'] == 'default') {
         $minifier = new Formatter\CSSMinify($files);
         $css = $minifier->minify();
         file_put_contents(
-            MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/styles.min.css',
+            $style_path . $modx->config['manager_theme'] . '/css/styles.min.css',
             $css
         );
     }
-    if (file_exists(MODX_MANAGER_PATH . 'media/style/' . $modx->config['manager_theme'] . '/css/styles.min.css')) {
-        $css = 'media/style/' . $modx->config['manager_theme'] . '/css/styles.min.css?v=' . $lastInstallTime;
+    if (file_exists($style_path . $modx->config['manager_theme'] . '/css/styles.min.css')) {
+        $css = 'media/style/' . $modx->config['manager_theme'] . '/css/styles.min.css?v=' . $modx->recentUpdate;
     }
 }
 
 ?>
 <!DOCTYPE html>
-<html lang="<?= $mxla ?>" dir="<?= $textdir ?>">
+<html lang="<?= $modx_lang_attribute ?: 'en' ?>" dir="<?= $modx_textdir === 'rtl' ? 'rtl' : 'ltr' ?>">
 <head>
     <title>Evolution CMS</title>
     <meta http-equiv="Content-Type" content="text/html; charset=<?= $modx_manager_charset ?>"/>
@@ -88,7 +87,7 @@ if ($modx->config['manager_theme'] == 'default') {
         <script src="media/style/<?= $modx->config['manager_theme'] ?>/js/color.switcher.js"
                 type="text/javascript"></script>
     <?php } ?>
-    <?php if ($modx->config['enable_mootools'] != "0") { ?>    
+    <?php if ($modx->config['enable_mootools'] != "0") { ?>
     <?php
     $aArr = array('2');
     if (!in_array($_REQUEST['a'], $aArr)) { ?>
