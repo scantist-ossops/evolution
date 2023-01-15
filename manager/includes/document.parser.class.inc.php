@@ -984,8 +984,8 @@ class DocumentParser
     {
         $this->documentOutput = $this->documentContent;
 
-        if ($this->documentGenerated == 1 && $this->documentObject['cacheable'] == 1) {
-            if($this->documentObject['type'] === 'document' && $this->documentObject['published'] == 1) {
+        if ($this->documentGenerated && $this->documentObject['cacheable']) {
+            if($this->documentObject['type'] === 'document' && $this->documentObject['published']) {
                 if (!empty($this->sjscripts)) {
                     $this->documentObject['__MODxSJScripts__'] = $this->sjscripts;
                 }
@@ -1040,13 +1040,12 @@ class DocumentParser
                     $name = $this->cleanUpMODXTags($name);
                     $name = strtolower($name);
                     $name = preg_replace('/&.+?;/', '', $name); // kill entities
-                    $name = preg_replace('/[^\.%a-z0-9 _-]/', '', $name);
+                    $name = preg_replace('/[^.%a-z0-9 _-]/', '', $name);
                     $name = preg_replace('/\s+/', '-', $name);
-                    $name = preg_replace('|-+|', '-', $name);
+                    $name = preg_replace('/-+/', '-', $name);
                     $name = trim($name, '-');
                 }
-                $header = 'Content-Disposition: attachment; filename=' . $name;
-                header($header);
+                header('Content-Disposition: attachment; filename=' . $name);
             }
         }
         $this->setConditional();
