@@ -4712,13 +4712,22 @@ class DocumentParser
      */
     public function isChunkProcessor($processor)
     {
-        $value = (string)$this->getConfig('chunk_processor');
-
         if(is_object($processor)) {
             $processor = get_class($processor);
         }
 
-        return is_scalar($processor) && mb_strtolower($value) === mb_strtolower($processor) && class_exists($processor, false);
+        if (!is_scalar($processor)) {
+            return false;
+        }
+
+        if (mb_strtolower($this->getConfig('chunk_processor', '')) !== mb_strtolower($processor)) {
+            return false;
+        }
+        if (!class_exists($processor, false)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
