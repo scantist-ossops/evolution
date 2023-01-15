@@ -304,7 +304,7 @@ class DBAPI
         $modx = evolutionCMS();
         if (!$table) {
             $modx->messageQuit('Empty '.$table.' parameter in DBAPI::update().');
-            return;
+            return false;
         }
         $table = $this->replaceFullTableName($table);
         if (is_array($fields)) {
@@ -319,7 +319,7 @@ class DBAPI
             $fields = implode(',', $fields);
         }
         if ($where && stripos(trim($where), 'WHERE') !== 0) {
-            $where = 'WHERE '.$where;
+            $where = 'WHERE '.trim($where);
         }
         return $this->query('UPDATE '.$table.' SET '.$fields.' '.$where);
 }
