@@ -423,11 +423,9 @@ class DocumentParser
         // invoke OnPageUnauthorized event
         $_REQUEST['refurl'] = $this->documentIdentifier;
         $this->systemCacheKey = 'unauth';
-
         if (!$noEvent) {
             $this->invokeEvent('OnPageUnauthorized');
         }
-
         if ($this->config['unauthorized_page']) {
             $this->sendForward($this->config['unauthorized_page'], 'HTTP/1.1 401 Unauthorized');
             exit();
