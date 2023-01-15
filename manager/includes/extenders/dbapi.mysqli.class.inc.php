@@ -50,11 +50,11 @@ class DBAPI
     public function connect($host = '', $dbase = '', $uid = '', $pwd = '')
     {
         $modx = evolutionCMS();
-        $uid = $uid ? $uid : $this->config['user'];
-        $pwd = $pwd ? $pwd : $this->config['pass'];
-        $host = $host ? $host : $this->config['host'];
+        $uid = $uid ?: $this->config['user'];
+        $pwd = $pwd ?: $this->config['pass'];
+        $host = $host ?: $this->config['host'];
         $host = explode(':', $host, 2);
-        $dbase = $dbase ? $dbase : $this->config['dbase'];
+        $dbase = $dbase ?: $this->config['dbase'];
         $dbase = trim($dbase, '`'); // remove the `` chars
         $charset = $this->config['charset'];
         $connection_method = $this->config['connection_method'];
