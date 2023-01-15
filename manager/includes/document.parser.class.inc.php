@@ -6796,67 +6796,55 @@ class DocumentParser
         $MakeTable->setRowAlternateClass('gridAltItem');
         $table = [];
         $backtrace = array_reverse($backtrace);
-        foreach ($backtrace as $key => $val) {
-            $key++;
-            if (substr($val['function'], 0, 11) === 'messageQuit') {
+        foreach ($backtrace as $val) {
+            if (strpos($val['function'], 'messageQuit') === 0) {
                 break;
-            } elseif (substr($val['function'], 0, 8) === 'phpError') {
+            }
+            if (strpos($val['function'], 'phpError') === 0) {
                 break;
+            }
+            $num = 1;
+            $_ = empty($val['args']) ? 0 : count($val['args']);
+            $args = array_pad([], $_, '$var');
+            $args = implode(", ", $args);
+            $args = preg_replace_callback(
+                '/\$var/',
+                function () use (&$num, $val) {
+                    $arg = $val['args'][$num - 1];
+                    if (is_null($arg)) {
+                        $out = 'NULL';
+                    } elseif (is_numeric($arg)) {
+                        $out = $arg;
+                    } elseif (is_scalar($arg)) {
+                        if (strlen($arg) <= 20) {
+                            $out = sprintf("'%s'", $this->htmlspecialchars(str_replace("'", "\\'", $arg)));
+                        } else {
+                            $out = 'string $var' . $num;
+                        }
+                    } elseif (is_bool($arg)) {
+                        $out = $arg ? 'TRUE' : 'FALSE';
+                    } elseif (is_array($arg)) {
+                        $out = 'array $var' . $num;
+                    } elseif (is_object($arg)) {
+                        $out = get_class($arg) . ' $var' . $num;
+                    } else {
+                        $out = '$var' . $num;
+                    }
+                    $num++;
+                    return $out;
+                },
+                $args
+            );
+            if (in_array($val['type'], ['->', '::'])) {
+                $val['function'] = $val['class'] . $val['type'] . $val['function'];
             }
             $path = str_replace('\\', '/', $val['file']);
             if (strpos($path, MODX_BASE_PATH) === 0) {
                 $path = substr($path, strlen(MODX_BASE_PATH));
             }
-            switch ($val['type']) {
-                case '->':
-                case '::':
-                    $functionName = $val['function'] = $val['class'] . $val['type'] . $val['function'];
-                    break;
-                default:
-                    $functionName = $val['function'];
-            }
-            $tmp = 1;
-            $_ = (!empty($val['args'])) ? count($val['args']) : 0;
-            $args = array_pad([], $_, '$var');
-            $args = implode(", ", $args);
-            $modx = &$this;
-            $args = preg_replace_callback('/\$var/', function () use ($modx, &$tmp, $val) {
-                $arg = $val['args'][$tmp - 1];
-                switch (true) {
-                    case is_null($arg): {
-                        $out = 'NULL';
-                        break;
-                    }
-                    case is_numeric($arg): {
-                        $out = $arg;
-                        break;
-                    }
-                    case is_scalar($arg): {
-                        $out = strlen($arg) > 20 ? 'string $var' . $tmp : ("'" . $this->htmlspecialchars(str_replace("'", "\\'", $arg)) . "'");
-                        break;
-                    }
-                    case is_bool($arg): {
-                        $out = $arg ? 'TRUE' : 'FALSE';
-                        break;
-                    }
-                    case is_array($arg): {
-                        $out = 'array $var' . $tmp;
-                        break;
-                    }
-                    case is_object($arg): {
-                        $out = get_class($arg) . ' $var' . $tmp;
-                        break;
-                    }
-                    default: {
-                        $out = '$var' . $tmp;
-                    }
-                }
-                $tmp++;
-                return $out;
-            }, $args);
             $line = array(
-                "<strong>" . $functionName . "</strong>(" . $args . ")",
-                $path . " on line " . $val['line']
+                sprintf('<strong>%s</strong>(%s)', $val['function'], $args),
+                sprintf('%s on line %s', $path, $val['line'])
             );
             $table[] = array(implode("<br />", $line));
         }
