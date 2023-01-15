@@ -424,17 +424,22 @@ class DocumentParser
         // invoke OnPageUnauthorized event
         $_REQUEST['refurl'] = $this->documentIdentifier;
         $this->systemCacheKey = 'unauth';
+
         if (!$noEvent) {
             $this->invokeEvent('OnPageUnauthorized');
         }
+
         if ($this->config['unauthorized_page']) {
-            $unauthorizedPage = $this->config['unauthorized_page'];
-        } elseif ($this->config['error_page']) {
-            $unauthorizedPage = $this->config['error_page'];
-        } else {
-            $unauthorizedPage = $this->config['site_start'];
+            $this->sendForward($this->config['unauthorized_page'], 'HTTP/1.1 401 Unauthorized');
+            exit();
         }
-        $this->sendForward($unauthorizedPage, 'HTTP/1.1 401 Unauthorized');
+
+        if ($this->config['error_page']) {
+            $this->sendForward($this->config['error_page'], 'HTTP/1.1 401 Unauthorized');
+            exit();
+        }
+
+        $this->sendForward($this->config['site_start'], 'HTTP/1.1 401 Unauthorized');
         exit();
     }
 
