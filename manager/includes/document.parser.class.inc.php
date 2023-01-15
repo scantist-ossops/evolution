@@ -1166,7 +1166,13 @@ class DocumentParser
 
     public function setConditional()
     {
-        if (!empty($_POST) || (defined('MODX_API_MODE') && MODX_API_MODE) || $this->getLoginUserID('mgr') || !$this->useConditional || empty($this->recentUpdate)) {
+        if (!empty($_POST)) {
+            return;
+        }
+        if (defined('MODX_API_MODE') && MODX_API_MODE) {
+            return;
+        }
+        if ($this->getLoginUserID('mgr') || !$this->useConditional || empty($this->recentUpdate)) {
             return;
         }
         $last_modified = gmdate('D, d M Y H:i:s T', $this->recentUpdate);
