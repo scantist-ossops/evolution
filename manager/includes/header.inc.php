@@ -3,11 +3,13 @@ if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
     die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />
     Please use the EVO Content Manager instead of accessing this file directly.");
 }
+$mxla = $modx_lang_attribute ? $modx_lang_attribute : 'en';
 
 // invoke OnManagerRegClientStartupHTMLBlock event
 $evtOut = $modx->invokeEvent('OnManagerMainFrameHeaderHTMLBlock');
 $modx_textdir = $modx_textdir ?? null;
 $onManagerMainFrameHeaderHTMLBlock = is_array($evtOut) ? implode("\n", $evtOut) : '';
+$textdir = $modx_textdir === 'rtl' ? 'rtl' : 'ltr';
 if (!isset($modx->config['mgr_jquery_path'])) {
     $modx->config['mgr_jquery_path'] = 'media/script/jquery/jquery.min.js';
 }
@@ -73,7 +75,7 @@ if ($modx->config['manager_theme'] === 'default') {
 
 ?>
 <!DOCTYPE html>
-<html lang="<?= $modx_lang_attribute ?: 'en' ?>" dir="<?= $modx_textdir === 'rtl' ? 'rtl' : 'ltr' ?>">
+<html lang="<?= $mxla ?>" dir="<?= $textdir ?>">
 <head>
     <title>Evolution CMS</title>
     <meta http-equiv="Content-Type" content="text/html; charset=<?= $modx_manager_charset ?>"/>
