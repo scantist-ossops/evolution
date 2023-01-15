@@ -6954,60 +6954,64 @@ class DocumentParser
     }
 
     /**
-     * @param string $alias
+     * @param string $aliasPath
      * @return bool|int
      */
-    public function getIdFromAlias($alias)
+    public function getIdFromAlias($aliasPath)
     {
-        if (isset($this->documentListing[$alias])) {
-            return $this->documentListing[$alias];
+        if (isset($this->documentListing[$aliasPath])) {
+            return $this->documentListing[$aliasPath];
         }
 
-        $tbl_site_content = $this->getFullTableName('site_content');
         if (!$this->config['use_alias_path']) {
             $rs = $this->db->select(
                 'id',
-                $tbl_site_content,
-                "deleted=0 and alias='" . $alias . "'",
+                $this->getFullTableName('site_content'),
+                "deleted=0 and alias='" . $aliasPath . "'",
                 'parent, menuindex'
             );
             $id = $this->db->getValue($rs);
             if (!$id) {
-                $id = false;
+                return false;
             }
             return $id;
         }
 
-        if ($alias === '.') {
+        if ($aliasPath === '.') {
             return 0;
         }
 
-        if (strpos($alias, '/') !== false) {
-            $_a = explode('/', $alias);
-        } else {
-            $_a[] = $alias;
-        }
-        $id = 0;
+        $_a = strpos($aliasPath, '/') !== false
+            ? explode('/', $aliasPath)
+            : [$aliasPath]
+        ;
 
+        $id = 0;
         foreach ($_a as $alias) {
             if ($id === false) {
-                break;
+                return false;
             }
-            $alias = $this->db->escape($alias);
             $rs = $this->db->select(
                 'id',
-                $tbl_site_content,
-                "deleted=0 and parent='" . $id . "' and alias='" . $alias . "'"
+                $this->getFullTableName('site_content'),
+                sprintf(
+                    "deleted=0 and parent='%s' and alias='%s'",
+                    $id,
+                    $this->db->escape($alias)
+                )
             );
-            if ($this->db->getRecordCount($rs) == 0) {
+            if (!$this->db->getRecordCount($rs)) {
                 $rs = $this->db->select(
                     'id',
-                    $tbl_site_content,
-                    "deleted=0 and parent='" . $id . "' and id='" . $alias . "'"
+                    $this->getFullTableName('site_content'),
+                    sprintf(
+                        "deleted=0 and parent='%s' and id='%s'",
+                        $id,
+                        $this->db->escape($alias)
+                    )
                 );
             }
-            $next = $this->db->getValue($rs);
-            $id = $next ?: $this->getHiddenIdFromAlias($id, $alias);
+            $id = $this->db->getValue($rs) ?: $this->getHiddenIdFromAlias($id, $alias);
         }
         return $id;
     }
