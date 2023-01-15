@@ -6603,7 +6603,7 @@ class DocumentParser
         $referer = $this->htmlspecialchars($_SERVER['HTTP_REFERER'], ENT_QUOTES, $this->config['modx_charset']);
         if ($is_error) {
             $str = '<h2 style="color:red">&laquo; Evo Parse Error &raquo;</h2>';
-            if ($msg != 'PHP Parse Error') {
+            if ($msg !== 'PHP Parse Error') {
                 $str .= '<h3 style="color:red">' . $msg . '</h3>';
             }
         } else {
@@ -6711,14 +6711,14 @@ class DocumentParser
         $totalTime = sprintf("%2.4f s", $totalTime);
         $phpTime = sprintf("%2.4f s", $phpTime);
 
-        $str = str_replace('[^q^]', $queries, $str);
-        $str = str_replace('[^qt^]', $queryTime, $str);
-        $str = str_replace('[^p^]', $phpTime, $str);
-        $str = str_replace('[^t^]', $totalTime, $str);
-        $str = str_replace('[^m^]', $total_mem, $str);
+        $str = str_replace(
+            ['[^q^]', '[^qt^]', '[^p^]', '[^t^]', '[^m^]'],
+            [$queries, $queryTime, $phpTime, $totalTime, $total_mem],
+            $str
+        );
 
         if (isset($php_errormsg) && !empty($php_errormsg)) {
-            $str = "<b>{$php_errormsg}</b><br />\n{$str}";
+            $str = "<b>" . $php_errormsg . "</b><br />\n" . $str;
         }
         $str .= $this->get_backtrace(debug_backtrace());
         // Log error
