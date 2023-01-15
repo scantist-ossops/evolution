@@ -11,6 +11,7 @@
 !/assets/cache/.htaccess
 !/assets/cache/index.html
 !/assets/cache/siteManager.php
+!/assets/cache/sitePublishing.idx.php
 !/assets/cache/images/index.html
 !/assets/cache/rss/index.html
 !/assets/cache/updater/index.html
