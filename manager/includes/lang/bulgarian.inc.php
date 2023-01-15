@@ -839,10 +839,10 @@ $_lang["role_view_logs"] = 'Преглед на системните логов�
 $_lang["role_view_unpublished"] = 'Преглед на непубликувани документи';
 $_lang["role_web_access_persmissions"] = 'Права за уеб достъп';
 $_lang["role_web_user_management"] = 'Управление на уеб потребителите';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Въвеждане на URL адрес за MODX Новините.';
 $_lang["rss_url_news_title"] = 'RSS на Новините';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Въвеждане на URL адрес за MODX Сигурността.';
 $_lang["rss_url_security_title"] = 'RSS на Сигурността';
 $_lang["run_module"] = 'Стартиране на модул';
@@ -941,7 +941,7 @@ $_lang["sunday"] = 'Неделя';
 $_lang["sys_alert"] = 'Системен сигнал';
 $_lang["sysinfo_activity_message"] = 'Този списък показва кои документи са били редактирани напоследък от потребителите.';
 $_lang["sysinfo_userid"] = 'Потребител';
-$_lang["system_email_signup"] = 'Здравей [+uid+] 
+$_lang["system_email_signup"] = 'Здравей [+uid+]
 
 Въведи потребителско име и парола, за да влезеш в Мениджъра на [+sname+]:
 
@@ -966,7 +966,7 @@ $_lang["system_email_webreminder"] = 'Здравей [+uid+]
 
 С уважение,
 Администратор';
-$_lang["system_email_websignup"] = 'Здравей [+uid+] 
+$_lang["system_email_websignup"] = 'Здравей [+uid+]
 
 Ето детайлите за акаунта ти в [+sname+]:
 
