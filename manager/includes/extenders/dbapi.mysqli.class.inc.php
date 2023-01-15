@@ -31,11 +31,11 @@ class DBAPI
         $charset = '',
         $connection_method = 'SET CHARACTER SET'
     ) {
-        $this->config['host'] = $host ? $host : $GLOBALS['database_server'];
-        $this->config['dbase'] = $dbase ? $dbase : $GLOBALS['dbase'];
-        $this->config['user'] = $uid ? $uid : $GLOBALS['database_user'];
-        $this->config['pass'] = $pwd ? $pwd : $GLOBALS['database_password'];
-        $this->config['charset'] = $charset ? $charset : $GLOBALS['database_connection_charset'];
+        $this->config['host'] = $host ?: $GLOBALS['database_server'];
+        $this->config['dbase'] = $dbase ?: $GLOBALS['dbase'];
+        $this->config['user'] = $uid ?: $GLOBALS['database_user'];
+        $this->config['pass'] = $pwd ?: $GLOBALS['database_password'];
+        $this->config['charset'] = $charset ?: $GLOBALS['database_connection_charset'];
         $this->config['connection_method'] = $this->_dbconnectionmethod = (isset($GLOBALS['database_connection_method']) ? $GLOBALS['database_connection_method'] : $connection_method);
         $this->config['table_prefix'] = ($pre !== null) ? $pre : $GLOBALS['table_prefix'];
     }
