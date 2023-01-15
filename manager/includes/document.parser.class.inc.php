@@ -4556,26 +4556,45 @@ class DocumentParser
     public function runSnippet($snippetName, $params = [])
     {
         if (isset ($this->snippetCache[$snippetName])) {
-            $snippet = $this->snippetCache[$snippetName];
-            $properties = !empty($this->snippetCache[$snippetName . "Props"]) ? $this->snippetCache[$snippetName . "Props"] : '';
-        } else { // not in cache so let's check the db
-            $sql = "SELECT ss.`name`, ss.`snippet`, ss.`properties`, sm.properties as `sharedproperties` FROM " . $this->getFullTableName("site_snippets") . " as ss LEFT JOIN " . $this->getFullTableName('site_modules') . " as sm on sm.guid=ss.moduleguid WHERE ss.`name`='" . $this->db->escape($snippetName) . "'  AND ss.disabled=0;";
-            $result = $this->db->query($sql);
-            if ($this->db->getRecordCount($result) == 1) {
-                $row = $this->db->getRow($result);
-                $snippet = $this->snippetCache[$snippetName] = $row['snippet'];
-                $mergedProperties = array_merge($this->parseProperties($row['properties']), $this->parseProperties($row['sharedproperties']));
-                $properties = $this->snippetCache[$snippetName . "Props"] = json_encode($mergedProperties);
-            } else {
-                $snippet = $this->snippetCache[$snippetName] = "return false;";
-                $properties = $this->snippetCache[$snippetName . "Props"] = '';
-            }
+            $parameters = $this->parseProperties(
+                $this->snippetCache[$snippetName . 'Props'] ?? '',
+                $snippetName,
+                'snippet'
+            );
+            return $this->evalSnippet(
+                $this->snippetCache[$snippetName],
+                array_merge($parameters, $params)
+            );
         }
-        // load default params/properties
+
+        $result = $this->db->select(
+            "snippet.`name`, snippet.`snippet`, snippet.`properties`, module.properties as `sharedproperties`",
+            [
+                sprintf('%s as snippet', $this->getFullTableName("site_snippets")),
+                sprintf(
+                    'LEFT JOIN %s as module on module.guid=snippet.moduleguid',
+                    $this->getFullTableName('site_modules')
+                )
+            ],
+            "snippet.`name`='" . $this->db->escape($snippetName) . "'  AND snippet.disabled=0"
+        );
+        if ($this->db->getRecordCount($result) != 1) {
+            $this->snippetCache[$snippetName] = 'return false;';
+            $this->snippetCache[$snippetName . 'Props'] = '';
+            return $this->evalSnippet('return false;', []);
+        }
+
+        $row = $this->db->getRow($result);
+        $snippet = $this->snippetCache[$snippetName] = $row['snippet'];
+        $mergedProperties = array_merge(
+            $this->parseProperties($row['properties']),
+            $this->parseProperties($row['sharedproperties'])
+        );
+        $properties = json_encode($mergedProperties);
+        $this->snippetCache[$snippetName . 'Props'] = $properties;
+
         $parameters = $this->parseProperties($properties, $snippetName, 'snippet');
         $parameters = array_merge($parameters, $params);
-
-        // run snippet
         return $this->evalSnippet($snippet, $parameters);
     }
 
