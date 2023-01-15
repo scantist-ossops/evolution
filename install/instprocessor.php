@@ -215,7 +215,7 @@ $confph['site_sessionname']   = $site_sessionname;
 $configString = file_get_contents('config.inc.tpl');
 $configString = parse($configString, $confph);
 
-$filename = '../'.MGR_DIR.'/includes/config.inc.php';
+$filename = __DIR__ . '/../' . MGR_DIR . '/includes/config.inc.php';
 $configFileFailed = false;
 if (@ !$handle = fopen($filename, 'w')) {
     $configFileFailed = true;
@@ -254,7 +254,7 @@ if ($installMode == 0) {
     $ds = mysqli_query($sqlParser->conn, "SELECT setting_name,setting_value FROM $dbase.`" . $table_prefix . "system_settings` WHERE setting_name='site_id'");
     if ($ds) {
         $r = mysqli_fetch_assoc($ds);
-        $siteid = $r['setting_value'];
+        $siteid = $r['setting_value'] ?? '';
         if ($siteid == '' || $siteid = 'MzGeQ2faT4Dw06+U49x3') {
             $siteid = uniqid('');
             mysqli_query($sqlParser->conn, "REPLACE INTO $dbase.`" . $table_prefix . "system_settings` (setting_name,setting_value) VALUES('site_id','$siteid')");
