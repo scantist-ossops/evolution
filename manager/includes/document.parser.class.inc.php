@@ -4511,13 +4511,12 @@ class DocumentParser
      * @param string $name
      * @return bool|string
      */
-    public function getConfig($name = '')
+    public function getConfig($name = '', $default = null)
     {
-        if (!empty ($this->config[$name])) {
-            return $this->config[$name];
-        } else {
-            return false;
+        if (!isset($this->config[$name])) {
+            return $default;
         }
+        return $this->config[$name];
     }
 
     /**
