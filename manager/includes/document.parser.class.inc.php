@@ -7052,7 +7052,7 @@ class DocumentParser
             return false;
         }
 
-        if (!$file_path || !is_file($file_path)) {
+        if (!is_file($file_path)) {
             return false;
         }
 
