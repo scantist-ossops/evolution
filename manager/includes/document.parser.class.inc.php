@@ -148,7 +148,6 @@ class DocumentParser
     public $pluginCache = [];
     public $aliasListing;
     public $lockedElements = null;
-    public $tmpCache = [];
     private $version = [];
     public $extensions = [];
     public $cacheKey = null;
@@ -3271,10 +3270,11 @@ class DocumentParser
      */
     public function getChildIds($id, $depth = 10, $children = [])
     {
+        static $cache = null;
 
         $cacheKey = md5(print_r(func_get_args(), true));
-        if (isset($this->tmpCache[__FUNCTION__][$cacheKey])) {
-            return $this->tmpCache[__FUNCTION__][$cacheKey];
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
         }
 
         if ($this->config['aliaslistingfolder'] == 1  || (isset($this->config['full_aliaslisting']) && $this->config['full_aliaslisting'] == 1)) {
@@ -3299,7 +3299,7 @@ class DocumentParser
                     $children = $this->getChildIds($idx, $depth, $children);
                 }
             }
-            $this->tmpCache[__FUNCTION__][$cacheKey] = $children;
+            $cache[$cacheKey] = $children;
             return $children;
 
         } else {
@@ -3330,7 +3330,7 @@ class DocumentParser
                     }
                 }
             }
-            $this->tmpCache[__FUNCTION__][$cacheKey] = $children;
+            $cache[$cacheKey] = $children;
             return $children;
 
         }
@@ -5443,8 +5443,10 @@ class DocumentParser
      */
     public function getUserInfo($uid)
     {
-        if (isset($this->tmpCache[__FUNCTION__][$uid])) {
-            return $this->tmpCache[__FUNCTION__][$uid];
+        static $cache = null;
+
+        if (isset($cache[$uid])) {
+            return $cache[$uid];
         }
 
         $from = '[+prefix+]manager_users mu INNER JOIN [+prefix+]user_attributes mua ON mua.internalkey=mu.id';
@@ -5452,7 +5454,7 @@ class DocumentParser
         $rs = $this->db->select('mu.username, mu.password, mua.*', $from, $where, '', 1);
 
         if (!$this->db->getRecordCount($rs)) {
-            return $this->tmpCache[__FUNCTION__][$uid] = false;
+            return $cache[$uid] = false;
         }
 
         $row = $this->db->getRow($rs);
@@ -5460,7 +5462,7 @@ class DocumentParser
             $row['usertype'] = 'manager';
         }
 
-        $this->tmpCache[__FUNCTION__][$uid] = $row;
+        $cache[$uid] = $row;
 
         return $row;
     }

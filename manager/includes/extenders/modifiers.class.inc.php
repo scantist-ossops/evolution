@@ -12,10 +12,6 @@ class MODIFIERS {
      */
     public $vars = array();
     /**
-     * @var array
-     */
-    public $tmpCache = array();
-    /**
      * @var
      */
     public $bt;
@@ -229,10 +225,11 @@ class MODIFIERS {
 
     public function parsePhx($key,$value,$modifiers)
     {
+        static $cache = null;
         $modx = evolutionCMS();
         $lastKey = '';
-        $cacheKey = md5(sprintf('parsePhx#%s#%s#%s',$key,$value,print_r($modifiers,true)));
-        if(isset($this->tmpCache[$cacheKey])) return $this->tmpCache[$cacheKey];
+        $cacheKey = md5(print_r(func_get_args(), true));
+        if(isset($cache[$cacheKey])) return $cache[$cacheKey];
         if(empty($modifiers)) return '';
 
         foreach($modifiers as $m)
@@ -246,11 +243,11 @@ class MODIFIERS {
             $modifiers[] = array('cmd'=>'else','opt'=>'0');
         }
 
-        foreach($modifiers as $i=>$a)
+        foreach($modifiers as $a)
         {
             $value = $this->Filter($key,$value, $a['cmd'], $a['opt']);
         }
-        $this->tmpCache[$cacheKey] = $value;
+        $cache[$cacheKey] = $value;
         return $value;
     }
 
