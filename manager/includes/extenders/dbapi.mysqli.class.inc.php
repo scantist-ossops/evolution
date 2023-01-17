@@ -115,7 +115,6 @@ class DBAPI
 
     /**
      * @param array|string $s
-     * @param int $safeCount
      * @return array|string
      */
     public function escape($s)
