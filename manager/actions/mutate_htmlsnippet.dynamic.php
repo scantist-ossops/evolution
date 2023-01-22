@@ -25,7 +25,7 @@ $tbl_site_htmlsnippets = $modx->getFullTableName('site_htmlsnippets');
 
 // check to see the snippet editor isn't locked
 if ($lockedEl = $modx->elementIsLocked(3, $id)) {
-    $modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $lockedEl['username'], $_lang['chunk']));
+    $modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $modx->htmlspecialchars($lockedEl['username']), $_lang['chunk']));
 }
 // end check for lock
 
@@ -47,7 +47,7 @@ if (isset($_REQUEST['id']) && $_REQUEST['id'] != '' && is_numeric($_REQUEST['id'
     $content['name'] = $_REQUEST['itemname'];
 } else {
     $_SESSION['itemname'] = $_lang["new_htmlsnippet"];
-    $content['category'] = (int)$_REQUEST['catid'];
+    if (!empty($content['category'])) $content['category'] = (int)$_REQUEST['catid'];
 }
 
 if ($modx->manager->hasFormValues()) {
@@ -57,7 +57,7 @@ if ($modx->manager->hasFormValues()) {
 if (isset($_POST['which_editor'])) {
     $which_editor = $_POST['which_editor'];
 } else {
-    $which_editor = $content['editor_name'] != 'none' ? $content['editor_name'] : 'none';
+	$which_editor = isset($content['editor_name']) ? $content['editor_name'] : 'none';
 }
 
 $content = array_merge($content, $_POST);
@@ -97,7 +97,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
             }, duplicate: function() {
                 if (confirm('<?= $_lang['confirm_duplicate_record'] ?>') === true) {
                     documentDirty = false;
-                    document.location.href = "index.php?id=<?= $_REQUEST['id'] ?>&a=97";
+                    document.location.href = "index.php?id=<?= !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : '' ?>&a=97";
                 }
             }, delete: function() {
                 if (confirm('<?= $_lang['confirm_delete_htmlsnippet'] ?>') === true) {
@@ -132,11 +132,11 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 
         ?>
         <input type="hidden" name="a" value="79" />
-        <input type="hidden" name="id" value="<?= $_REQUEST['id'] ?>" />
+        <input type="hidden" name="id" value="<?= !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : '' ?>" />
         <input type="hidden" name="mode" value="<?= $modx->manager->action ?>" />
 
         <h1>
-            <i class="fa fa-th-large"></i><?= ($content['name'] ? $content['name'] . '<small>(' . $content['id'] . ')</small>' : $_lang['new_htmlsnippet']) ?><i class="fa fa-question-circle help"></i>
+            <i class="fa fa-th-large"></i><?= isset($content['name']) ? $modx->htmlspecialchars($content['name']) . '<small>(' . $content['id'] . ')</small>' : $_lang['new_htmlsnippet'] ?><i class="fa fa-question-circle help"></i>
         </h1>
 
         <?= $_style['actionbuttons']['dynamic']['element'] ?>
@@ -158,10 +158,10 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                         <label class="col-md-3 col-lg-2"><?= $_lang['htmlsnippet_name'] ?></label>
                         <div class="col-md-9 col-lg-10">
                             <div class="form-control-name clearfix">
-                                <input name="name" type="text" maxlength="100" value="<?= $modx->htmlspecialchars($content['name']) ?>" class="form-control form-control-lg" onchange="documentDirty=true;" />
+                                <input name="name" type="text" maxlength="100" value="<?= isset($content['name']) ? $modx->htmlspecialchars($content['name']) : "" ?>" class="form-control form-control-lg" onchange="documentDirty=true;" />
                                 <?php if ($modx->hasPermission('save_role')): ?>
                                     <label class="custom-control" title="<?= $_lang['lock_htmlsnippet'] . "\n" . $_lang['lock_htmlsnippet_msg'] ?>" tooltip>
-                                        <input name="locked" type="checkbox" value="on"<?= ($content['locked'] == 1 || $content['locked'] == 'on' ? ' checked="checked"' : '') ?> />
+                                        <input name="locked" type="checkbox" value="on"<?= (isset($content['locked']) && ($content['locked'] == 1 || $content['locked'] == 'on') ? ' checked="checked"' : '') ?> />
                                         <i class="fa fa-lock"></i>
                                     </label>
                                 <?php endif; ?>
@@ -175,7 +175,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                     <div class="row form-row">
                         <label class="col-md-3 col-lg-2"><?= $_lang['htmlsnippet_desc'] ?></label>
                         <div class="col-md-9 col-lg-10">
-                            <input name="description" type="text" maxlength="255" value="<?= $modx->htmlspecialchars($content['description']) ?>" class="form-control" onchange="documentDirty=true;" />
+                            <input name="description" type="text" maxlength="255" value="<?= isset($content['description']) ? $modx->htmlspecialchars($content['description']) : '' ?>" class="form-control" onchange="documentDirty=true;" />
                         </div>
                     </div>
                     <div class="row form-row">
@@ -186,7 +186,11 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                                 <?php
                                 include_once(MODX_MANAGER_PATH . 'includes/categories.inc.php');
                                 foreach (getCategories() as $n => $v) {
-                                    echo "\t\t\t\t" . '<option value="' . $v['id'] . '"' . ($content['category'] == $v['id'] || (empty($content['category']) && $_POST['categoryid'] == $v['id']) ? ' selected="selected"' : '') . '>' . $modx->htmlspecialchars($v['category']) . "</option>\n";
+                                	$selected = '';
+                                	if ( isset($content['category']) ) {
+                                		$selected = ($content['category'] == $v['id'] || (empty($content['category']) && isset($_POST['categoryid']) && $_POST['categoryid'] == $v['id'])) ? ' selected="selected"' : '';
+                                	}
+                                    echo "\t\t\t\t" . '<option value="' . $v['id'] . '"' . $selected . '>' . $modx->htmlspecialchars($v['category']) . "</option>\n";
                                 }
                                 ?>
                             </select>
@@ -200,7 +204,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                     </div>
                     <?php if ($_SESSION['mgrRole'] == 1): ?>
                         <div class="form-row">
-                            <label><input name="disabled" type="checkbox" value="on"<?= ($content['disabled'] == 1 ? ' checked="checked"' : '') ?> /> <?= ($content['disabled'] == 1 ? "<span class='text-danger'>" . $_lang['disabled'] . "</span>" : $_lang['disabled']) ?></label>
+                            <label><input name="disabled" type="checkbox" value="on"<?= (!empty($content['disabled']) ? ' checked="checked"' : '') ?> /> <?= (!empty($content['disabled']) ? "<span class='text-danger'>" . $_lang['disabled'] . "</span>" : $_lang['disabled']) ?></label>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -224,7 +228,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 				</span>
                 </div>
                 <div class="section-editor clearfix">
-                    <textarea dir="ltr" class="phptextarea" id="post" name="post" rows="20" onChange="documentDirty=true;"><?= isset($content['post']) ? $modx->htmlspecialchars($content['post']) : $modx->htmlspecialchars($content['snippet']) ?></textarea>
+                    <textarea dir="ltr" class="phptextarea" id="post" name="post" rows="20" onChange="documentDirty=true;"><?= isset($content['post']) ? $modx->htmlspecialchars($content['post']) : (isset($content['snippet']) ? $modx->htmlspecialchars($content['snippet']) : '') ?></textarea>
                 </div>
                 <!-- HTML text editor end -->
             </div>

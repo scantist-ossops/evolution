@@ -14,10 +14,16 @@ if(!defined('MGR_DIR') && is_dir("{$base_path}manager")) {
 	define('MGR_DIR','manager');
 }
 require_once("lang.php");
+require_once 'functions.php';
 
 $output = $_lang["status_checking_database"];
 $h = explode(':', $host, 2);
-if (!$conn = mysqli_connect($h[0], $uid, $pwd,'', isset($h[1]) ? $h[1] : null)) {
+try {
+    $conn = mysqli_connect($h[0], $uid, $pwd,'', $h[1] ?? null);
+} catch (Exception $e) {
+    $conn = false;
+}
+if (!$conn) {
     $output .= '<span id="database_fail" style="color:#FF0000;">'.$_lang['status_failed'].'</span>';
 }
 else {
@@ -26,20 +32,28 @@ else {
     $tableprefix = mysqli_real_escape_string($conn, $_POST['tableprefix']);
     $database_collation = mysqli_real_escape_string($conn, $_POST['database_collation']);
     $database_connection_method = mysqli_real_escape_string($conn, $_POST['database_connection_method']);
-
-    if (!@ mysqli_select_db($conn, $database_name)) {
+    try {
+        $result = mysqli_select_db($conn, $database_name);
+    } catch (Exception $e) {
+        $result = false;
+    }
+    if (!$result) {
         // create database
         $database_charset = substr($database_collation, 0, strpos($database_collation, '_'));
         $query = "CREATE DATABASE `".$database_name."` CHARACTER SET ".$database_charset." COLLATE ".$database_collation.";";
-
-        if (! mysqli_query($conn, $query)){
+        try {
+            $result = mysqli_query($conn, $query);
+        } catch (Exception $e) {
+            $result = false;
+        }
+        if (!$result){
             $output .= '<span id="database_fail" style="color:#FF0000;">'.$_lang['status_failed_could_not_create_database'].'</span>';
         }
         else {
             $output .= '<span id="database_pass" style="color:#80c000;">'.$_lang['status_passed_database_created'].'</span>';
         }
     }
-    elseif (($installMode == 0) && (mysqli_query($conn, "SELECT COUNT(*) FROM {$database_name}.`{$tableprefix}site_content`"))) {
+    elseif (($installMode == 0) && checkIssetTable($conn, "`$database_name`.`{$tableprefix}site_content`")) {
         $output .= '<span id="database_fail" style="color:#FF0000;">'.$_lang['status_failed_table_prefix_already_in_use'].'</span>';
     }
     elseif (($database_connection_method != 'SET NAMES') && ($rs = mysqli_query($conn, "show variables like 'collation_database'")) && ($row = mysqli_fetch_row($rs)) && ($row[1] != $database_collation)) {

@@ -27,7 +27,7 @@ class synccache
     {
         $modx = evolutionCMS();
 
-        $this->request_time = $_SERVER['REQUEST_TIME'] + $modx->config['server_offset_time'];
+        $this->request_time = $_SERVER['REQUEST_TIME'] + ($modx->config['server_offset_time'] ?? 0);
     }
 
     /**
@@ -83,7 +83,7 @@ class synccache
         $modx = evolutionCMS();
         if (empty($this->aliases)) {
             $f = "id, IF(alias='', id, alias) AS alias, parent, alias_visible";
-            $rs = $modx->db->select($f, '[+prefix+]site_content', 'deleted=0');
+            $rs = $modx->db->select($f, '[+prefix+]site_content', 'deleted=0 and isfolder=1');
             while ($row = $modx->db->getRow($rs)) {
                 $docid = $row['id'];
                 $this->aliases[$docid] = $row['alias'];
@@ -265,7 +265,7 @@ class synccache
         }
 
         if (!isset($config['full_aliaslisting']) || $config['full_aliaslisting'] != 1) {
-            if ($config['aliaslistingfolder'] == 1) {
+            if (!empty($config['aliaslistingfolder'])) {
                 $f['id'] = 'c.id';
                 $f['alias'] = "IF( c.alias='', c.id, c.alias)";
                 $f['parent'] = 'c.parent';
@@ -302,13 +302,6 @@ class synccache
                 $content .= '$d[\'' . $key . '\']=' . $docid . ';';
                 $content .= '$m[]=array(' . $doc['parent'] . '=>' . $docid . ');';
             }
-
-            // get content types
-            $rs = $modx->db->select('id, contentType', '[+prefix+]site_content', "contentType!='text/html'");
-            $content .= '$c=&$this->contentTypes;';
-            while ($doc = $modx->db->getRow($rs)) {
-                $content .= '$c[\'' . $doc['id'] . '\']=\'' . $doc['contentType'] . '\';';
-            }
         }
 
         if (!isset($config['disable_chunk_cache']) || $config['disable_chunk_cache'] != 1) {
@@ -332,7 +325,7 @@ class synccache
                     $content .= '$s[\'' . $key . '\']=\'return false;\';';
                 } else {
                     $value = trim($row['snippet']);
-                    if ($modx->config['minifyphp_incache']) {
+                    if (!empty($modx->config['minifyphp_incache'])) {
                         $value = $this->php_strip_whitespace($value);
                     }
                     $content .= '$s[\'' . $key . '\']=\'' . $this->escapeSingleQuotes($value) . '\';';
@@ -357,7 +350,7 @@ class synccache
             while ($row = $modx->db->getRow($rs)) {
                 $key = $modx->db->escape($row['name']);
                 $value = trim($row['plugincode']);
-                if ($modx->config['minifyphp_incache']) {
+                if (!empty($modx->config['minifyphp_incache'])) {
                     $value = $this->php_strip_whitespace($value);
                 }
                 $content .= '$p[\'' . $key . '\']=\'' . $this->escapeSingleQuotes($value) . '\';';
@@ -409,7 +402,7 @@ class synccache
         }
 
         if (!is_file($this->cachePath . '/.htaccess')) {
-            file_put_contents($this->cachePath . '/.htaccess', "order deny,allow\ndeny from all\n");
+            file_put_contents($this->cachePath . '/.htaccess', "<ifModule mod_authz_core.c>\nRequire all denied\n</ifModule>\n<ifModule !mod_authz_core.c>\norder deny,allow\ndeny from all\n</ifModule>\n");
         }
 
         // invoke OnCacheUpdate event

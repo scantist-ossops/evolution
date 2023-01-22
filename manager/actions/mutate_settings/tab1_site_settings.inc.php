@@ -62,7 +62,7 @@ table.sysSettings tr.noborder td {border:none;}
       </select>
     </th>
     <td> <textarea name="site_unavailable_message" id="site_unavailable_message_textarea" style="width:100%; height: 120px;"><?php echo $site_unavailable_message_view; ?></textarea>
-        <input type="hidden" name="siteunavailable_message_default" id="siteunavailable_message_default_hidden" value="<?php echo addslashes($_lang['siteunavailable_message_default']);?>" />
+        <input type="hidden" name="siteunavailable_message_default" id="siteunavailable_message_default_hidden" value="<?php echo $manager_language;?>" />
   <div class="comment"><?php echo $_lang['siteunavailable_message'];?></div>
     </td>
   </tr>
@@ -83,12 +83,12 @@ table.sysSettings tr.noborder td {border:none;}
 
         $currentCategory = '';
                         while ($row = $modx->db->getRow($rs)) {
-            $thisCategory = $row['category'];
+            $thisCategory = $modx->htmlspecialchars($row['category']);
             if($thisCategory == null) {
                 $thisCategory = $_lang['no_category'];
             }
             if($thisCategory != $currentCategory) {
-                if($closeOptGroup) {
+                if($closeOptGroup ?? false) {
                     echo "\t\t\t\t\t</optgroup>\n";
                 }
                 echo "\t\t\t\t\t<optgroup label=\"$thisCategory\">\n";
@@ -100,10 +100,10 @@ table.sysSettings tr.noborder td {border:none;}
             $selectedtext = $row['id'] == $default_template ? ' selected="selected"' : '';
             if ($selectedtext) {
                 $oldTmpId = $row['id'];
-                $oldTmpName = $row['templatename'];
+                $oldTmpName = $modx->htmlspecialchars($row['templatename']);
             }
 
-            echo "\t\t\t\t\t".'<option value="'.$row['id'].'"'.$selectedtext.'>'.$row['templatename']."</option>\n";
+            echo "\t\t\t\t\t".'<option value="'.$row['id'].'"'.$selectedtext.'>'.$modx->htmlspecialchars($row['templatename'])."</option>\n";
             $currentCategory = $thisCategory;
         }
         if($thisCategory != '') {
@@ -136,16 +136,6 @@ table.sysSettings tr.noborder td {border:none;}
           <?php echo wrap_label('DLTemplate',  form_radio('chunk_processor', 'DLTemplate'));?>
       </td>
     </tr>
-    <tr>
-      <th><?php echo $_lang['enable_mootools'] ?><br><small>[(enable_mootools)]</small></th>
-      <td>
-        <?php echo wrap_label($_lang['yes'],form_radio('enable_mootools', 1));?><br />
-        <?php echo wrap_label($_lang['no'], form_radio('enable_mootools', 0));?>
-        <div class="comment">
-            <?php echo $_lang['enable_mootools_message']; ?>          
-        </div>
-      </td>
-      </tr>
     <tr>
     <tr>
       <th><?php echo $_lang['enable_at_syntax_title'] ?><br><small>[(enable_at_syntax)]</small></th>

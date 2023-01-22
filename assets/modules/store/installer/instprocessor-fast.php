@@ -19,13 +19,13 @@ require_once($modulePath."/lang/russian-UTF8.inc.php");
 $_SESSION['test'] = 1;
 install_sessionCheck();
 $moduleName = "MODX";
+include MODX_MANAGER_PATH . 'includes/version.inc.php';
 $moduleVersion = $modx_branch.' '.$modx_version;
 $moduleRelease = $modx_release_date;
 $moduleSQLBaseFile = "setup.sql";
 $moduleSQLDataFile = "setup.data.sql";
-
+$installPath = MODX_BASE_PATH .'assets/cache/store/install';
 if (is_file($installPath.'/'.$moduleSQLBaseFile)){ $moduleSQLDataFile = $moduleSQLBaseFile; }
-
 
 $moduleChunks = array (); // chunks - array : name, description, type - 0:file or 1:content, file or content
 $moduleTemplates = array (); // templates - array : name, description, type - 0:file or 1:content, file or content
@@ -98,7 +98,7 @@ $table_prefix = $modx->db->config['table_prefix'];
 $setupPath = $modulePath;
 include "{$setupPath}/setup.info.php";
 include "sqlParser.class.php";
-$sqlParser = new SqlParser($adminname, $adminemail, $adminpass, $database_connection_charset, $managerlanguage, $database_connection_method, $auto_template_logic);
+$sqlParser = new SqlParser();
 $sqlParser->mode = "upd";
 $sqlParser->ignoreDuplicateErrors = true;
 
@@ -295,8 +295,8 @@ if (count($moduleModules )>0) {
 
                 // Create the category if it does not already exist
                 $category = getCreateDbCategory($category, $sqlParser);
-
-                $module = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2));
+                $tmp = preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2);
+                $module = end($tmp);
                 // remove installer docblock
                 $module = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $module, 1);
                 $module = $modx->db->escape($module);
@@ -325,7 +325,6 @@ if (count($moduleModules )>0) {
 // Install Plugins
 if (count($modulePlugins )>0) {
     echo "<h3>" . $_lang['plugins'] . ":</h3> ";
-    $selPlugs = $_POST['plugin'];
     foreach ($modulePlugins as $k=>$modulePlugin) {
         $installSample = in_array('sample', $modulePlugin[8]) && $installData == 1;
        // if(in_array($k, $selPlugs) || $installSample) {
@@ -354,8 +353,8 @@ if (count($modulePlugins )>0) {
 
                 // Create the category if it does not already exist
                 $category = getCreateDbCategory($category, $sqlParser);
-
-                $plugin = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2));
+                $tmp = preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2);
+                $plugin = end($tmp);
                 // remove installer docblock
                 $plugin = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $plugin, 1);
                 $plugin = $modx->db->escape($plugin);
@@ -436,7 +435,7 @@ if (count($moduleSnippets ) > 0) {
     $selSnips = $_POST['snippet'];
     foreach ($moduleSnippets as $k=>$moduleSnippet) {
 
-        $installSample = in_array('sample', $moduleSnippet[5]) && $installData == 1;
+        $installSample = in_array('sample', $moduleSnippet[5] ?? []) && $installData == 1;
         //if(in_array($k, $selSnips) || $installSample) {
             $name = $modx->db->escape($moduleSnippet[0]);
             $desc = $modx->db->escape($moduleSnippet[1]);
@@ -449,8 +448,8 @@ if (count($moduleSnippets ) > 0) {
 
                 // Create the category if it does not already exist
                 $category = getCreateDbCategory($category, $sqlParser);
-
-                $snippet = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent)));
+                $tmp = preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2);
+                $snippet = end($tmp);
                 // remove installer docblock
                 $snippet = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $snippet, 1);
                 $snippet = $modx->db->escape($snippet);

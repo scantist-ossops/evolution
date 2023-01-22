@@ -1263,9 +1263,6 @@ $_lang["bkmgr_restore_confirm"] = 'Вы уверены, что хотите во
 $_lang["bkmgr_snapshot_nothing"] = 'Нет резервных копий';
 
 $_lang["files.dynamic.php1"] = 'Создать файл';
-$_lang["files.dynamic.php2"] = 'files.dynamic.php2';
-$_lang["files.dynamic.php3"] = 'files.dynamic.php3';
-$_lang["files.dynamic.php4"] = 'files.dynamic.php4';
 $_lang["files.dynamic.php5"] = 'Файл не может быть дублирован.';
 $_lang["files.dynamic.php6"] = 'Файл или директория не могут быть переименованы.';
 $_lang["files_dynamic_new_folder_name"] = 'Укажите новое имя для папки:';
@@ -1353,6 +1350,7 @@ $_lang["error_double_action"]         = "Двойное действие (GET & 
 $_lang["error_no_id"]                 = "Не верно указан ID в вашем запросе!";
 $_lang["error_id_nan"]                = "ID переданного запроса пуст!";
 $_lang["error_no_parent"]             = "Не удалось найти имя родительского документа!";
+$_lang["error_parent_deleted"]        = "Не удалось выполнить, потому что родитель отмечен как удаленный!";
 $_lang["error_many_results"]          = "Слишком много результатов возвращается из базы данных!";
 $_lang["error_no_results"]            = "Результаты из базы данных не вернулись или вернулись не полностью!";
 $_lang["error_no_user_selected"]      = "Не указан получатель этого сообщения!";

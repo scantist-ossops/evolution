@@ -98,6 +98,14 @@ class site_contentDocLister extends DocLister
                 }
             }
         }
+        /**
+         * @var $extUser user_DL_Extender
+         */
+        if ($extUser = $this->getExtender('user')) {
+            $extUser->init($this, array('fields' => $this->getCFGDef("userFields", "")));
+            foreach ($this->_docs as &$item)
+                $item = $extUser->setUserData($item); //[+user.id.createdby+], [+user.fullname.publishedby+], [+dl.user.publishedby+]....
+        }
         if (1 == $this->getCFGDef('tree', '0')) {
             $this->treeBuild('id', 'parent');
         }
@@ -123,13 +131,6 @@ class site_contentDocLister extends DocLister
             $sysPlh = $this->renameKeyArr($this->_plh, $this->getCFGDef("sysKey", "dl"));
             if (count($this->_docs) > 0) {
                 /**
-                 * @var $extUser user_DL_Extender
-                 */
-                if ($extUser = $this->getExtender('user')) {
-                    $extUser->init($this, array('fields' => $this->getCFGDef("userFields", "")));
-                }
-
-                /**
                  * @var $extSummary summary_DL_Extender
                  */
                 $extSummary = $this->getExtender('summary');
@@ -142,10 +143,6 @@ class site_contentDocLister extends DocLister
                 $this->skippedDocs = 0;
                 foreach ($this->_docs as $item) {
                     $this->renderTPL = $tpl;
-                    if ($extUser) {
-                        $item = $extUser->setUserData($item); //[+user.id.createdby+], [+user.fullname.publishedby+], [+dl.user.publishedby+]....
-                    }
-
                     $item['summary'] = $extSummary ? $this->getSummary($item, $extSummary, 'introtext', 'content') : '';
 
                     $item = array_merge(
@@ -180,9 +177,9 @@ class site_contentDocLister extends DocLister
                         $_date = is_numeric($item[$date]) && $item[$date] == (int)$item[$date] ? $item[$date] : strtotime($item[$date]);
                         if ($_date !== false) {
                             $_date = $_date + $this->modx->config['server_offset_time'];
-                            $dateFormat = $this->getCFGDef('dateFormat', '%d.%b.%y %H:%M');
+                            $dateFormat = $this->getCFGDef('dateFormat', 'd.m.Y H:i');
                             if ($dateFormat) {
-                                $item['date'] = strftime($dateFormat, $_date);
+                                $item['date'] = date($dateFormat, $_date);
                             }
                         }
                     }
@@ -268,9 +265,9 @@ class site_contentDocLister extends DocLister
                     $_date = is_numeric($row[$date]) && $row[$date] == (int)$row[$date] ? $row[$date] : strtotime($row[$date]);
                     if ($_date !== false) {
                         $_date = $_date + $this->modx->config['server_offset_time'];
-                        $dateFormat = $this->getCFGDef('dateFormat', '%d.%b.%y %H:%M');
+                        $dateFormat = $this->getCFGDef('dateFormat', 'd.m.Y H:i');
                         if ($dateFormat) {
-                            $row['date'] = strftime($dateFormat, $_date);
+                            $row['date'] = date($dateFormat, $_date);
                         }
                     }
                 }

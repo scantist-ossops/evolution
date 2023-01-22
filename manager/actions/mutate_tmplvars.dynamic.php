@@ -20,7 +20,7 @@ $tbl_documentgroup_names = $modx->getFullTableName('documentgroup_names');
 
 // check to see the snippet editor isn't locked
 if($lockedEl = $modx->elementIsLocked(2, $id)) {
-	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $lockedEl['username'], $_lang['tmplvar']));
+	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $modx->htmlspecialchars($lockedEl['username']), $_lang['tmplvar']));
 }
 // end check for lock
 
@@ -44,7 +44,7 @@ if(isset($_GET['id'])) {
 	$content['name'] = $_REQUEST['itemname'];
 } else {
 	$_SESSION['itemname'] = $_lang["new_tmplvars"];
-	$content['category'] = (int)$_REQUEST['catid'];
+	if (!empty($_REQUEST['catid'])) $content['category'] = (int)$_REQUEST['catid'];
 }
 
 if($modx->manager->hasFormValues()) {
@@ -52,6 +52,8 @@ if($modx->manager->hasFormValues()) {
 }
 
 $content = array_merge($content, $_POST);
+$content['type'] = $content['type'] ?? '';
+$content['display'] = $content['display'] ?? '';
 
 // Add lock-element JS-Script
 $lockElementId = $id;
@@ -96,7 +98,7 @@ if(is_array($evtOut)) {
 		duplicate: function() {
 			if(confirm("<?= $_lang['confirm_duplicate_record'] ?>") === true) {
 				documentDirty = false;
-				document.location.href = "index.php?id=<?= $_REQUEST['id'] ?>&a=304";
+				document.location.href = "index.php?id=<?= !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : '' ?>&a=304";
 			}
 		},
 		delete: function() {
@@ -283,15 +285,15 @@ if(is_array($evtOut)) {
 		echo implode("", $evtOut);
 	}
 	?>
-	<input type="hidden" name="id" value="<?= $content['id'] ?>">
+	<input type="hidden" name="id" value="<?= !empty($content['id']) ? (int)$content['id'] : '' ?>">
 	<input type="hidden" name="a" value="302">
 	<input type="hidden" name="or" value="<?= $origin ?>">
 	<input type="hidden" name="oid" value="<?= $originId ?>">
 	<input type="hidden" name="mode" value="<?= $modx->manager->action ?>">
-	<input type="hidden" name="params" value="<?= $modx->htmlspecialchars($content['display_params']) ?>">
+	<input type="hidden" name="params" value="<?= !empty($content['display_params']) ? $modx->htmlspecialchars($content['display_params']) : '' ?>">
 
 	<h1>
-		<i class="fa fa-list-alt"></i><?= ($content['name'] ? $content['name'] . '<small>(' . $content['id'] . ')</small>' : $_lang['new_tmplvars']) ?><i class="fa fa-question-circle help"></i>
+		<i class="fa fa-list-alt"></i><?= isset($content['name']) ? $modx->htmlspecialchars($content['name']) . '<small>(' . $content['id'] . ')</small>' : $_lang['new_tmplvars'] ?><i class="fa fa-question-circle help"></i>
 	</h1>
 
 	<?= $_style['actionbuttons']['dynamic']['element'] ?>
@@ -313,10 +315,10 @@ if(is_array($evtOut)) {
 					<label class="col-md-3 col-lg-2"><?= $_lang['tmplvars_name'] ?></label>
 					<div class="col-md-9 col-lg-10">
 						<div class="form-control-name clearfix">
-							<input name="name" type="text" maxlength="50" value="<?= $modx->htmlspecialchars($content['name']) ?>" class="form-control form-control-lg" onchange="documentDirty=true;" />
+							<input name="name" type="text" maxlength="50" value="<?= isset($content['name']) ? $modx->htmlspecialchars($content['name']) : "" ?>" class="form-control form-control-lg" onchange="documentDirty=true;" />
 							<?php if($modx->hasPermission('save_role')): ?>
 								<label class="custom-control" title="<?= $_lang['lock_tmplvars'] . "\n" . $_lang['lock_tmplvars_msg'] ?>" tooltip>
-									<input name="locked" type="checkbox"<?= ($content['locked'] == 1 ? ' checked="checked"' : '') ?> />
+									<input name="locked" type="checkbox"<?= (isset($content['locked']) && $content['locked'] == 1 ? ' checked="checked"' : '') ?> />
 									<i class="fa fa-lock"></i>
 								</label>
 							<?php endif; ?>
@@ -328,13 +330,13 @@ if(is_array($evtOut)) {
 				<div class="row form-row">
 					<label class="col-md-3 col-lg-2"><?= $_lang['tmplvars_caption'] ?></label>
 					<div class="col-md-9 col-lg-10">
-						<input name="caption" type="text" maxlength="80" value="<?= $modx->htmlspecialchars($content['caption']) ?>" class="form-control" onchange="documentDirty=true;" />
+						<input name="caption" type="text" maxlength="80" value="<?= isset($content['caption']) ? $modx->htmlspecialchars($content['caption']) : "" ?>" class="form-control" onchange="documentDirty=true;" />
 					</div>
 				</div>
 				<div class="row form-row">
 					<label class="col-md-3 col-lg-2"><?= $_lang['tmplvars_description'] ?></label>
 					<div class="col-md-9 col-lg-10">
-						<input name="description" type="text" maxlength="255" value="<?= $modx->htmlspecialchars($content['description']) ?>" class="form-control" onChange="documentDirty=true;">
+						<input name="description" type="text" maxlength="255" value="<?= isset($content['description']) ? $modx->htmlspecialchars($content['description']) : "" ?>" class="form-control" onChange="documentDirty=true;">
 					</div>
 				</div>
 				<div class="row form-row">
@@ -345,7 +347,9 @@ if(is_array($evtOut)) {
 							<?php
 							include_once(MODX_MANAGER_PATH . 'includes/categories.inc.php');
 							foreach(getCategories() as $n => $v) {
-								echo "<option value='" . $v['id'] . "'" . ($content["category"] == $v["id"] ? " selected='selected'" : "") . ">" . $modx->htmlspecialchars($v["category"]) . "</option>";
+								$selected = '';
+								if ( !empty($content['category']) ) $selected = ($content["category"] == $v["id"]) ? " selected='selected'" : '';
+								echo "<option value='" . $v['id'] . "'" . $selected . ">" . $modx->htmlspecialchars($v["category"]) . "</option>";
 							}
 							?>
 						</select>
@@ -400,7 +404,7 @@ if(is_array($evtOut)) {
 						<small class="form-text text-muted"><?= $_lang['tmplvars_binding_msg'] ?></small>
 					</label>
 					<div class="col-md-9 col-lg-10">
-						<textarea name="elements" maxlength="65535" rows="4" class="form-control" onchange="documentDirty=true;"><?= $modx->htmlspecialchars($content['elements']) ?></textarea>
+						<textarea name="elements" maxlength="65535" rows="4" class="form-control" onchange="documentDirty=true;"><?= isset($content['elements']) ? $modx->htmlspecialchars($content['elements']) : "" ?></textarea>
 					</div>
 				</div>
 				<div class="row form-row">
@@ -408,7 +412,7 @@ if(is_array($evtOut)) {
 						<small class="form-text text-muted"><?= $_lang['tmplvars_binding_msg'] ?></small>
 					</label>
 					<div class="col-md-9 col-lg-10">
-						<textarea name="default_text" class="form-control" rows="4" onchange="documentDirty=true;"><?= $modx->htmlspecialchars($content['default_text']) ?></textarea>
+						<textarea name="default_text" class="form-control" rows="4" onchange="documentDirty=true;"><?= isset($content['default_text']) ? $modx->htmlspecialchars($content['default_text']) : "" ?></textarea>
 					</div>
 				</div>
 				<div class="row form-row">
@@ -466,7 +470,7 @@ if(is_array($evtOut)) {
 					$row['category'] = stripslashes($row['category']); //pixelchutes
 					if($preCat !== $row['category']) {
 						$tplList .= $insideUl ? '</ul>' : '';
-						$tplList .= '<li><strong>' . $row['category'] . ($row['catid'] != '' ? ' <small>(' . $row['catid'] . ')</small>' : '') . '</strong><ul>';
+						$tplList .= '<li><strong>' . $modx->htmlspecialchars($row['category']) . ($row['catid'] != '' ? ' <small>(' . $row['catid'] . ')</small>' : '') . '</strong><ul>';
 						$insideUl = 1;
 					}
 
@@ -474,7 +478,7 @@ if(is_array($evtOut)) {
 						$checked = true;
 					} elseif(isset($_GET['tpl']) && $_GET['tpl'] == $row['id']) {
 						$checked = true;
-					} elseif($id == 0 && is_array($_POST['template'])) {
+					} elseif($id == 0 && isset($_POST['template']) && is_array($_POST['template'])) {
 						$checked = in_array($row['id'], $_POST['template']);
 					} else {
 						$checked = $row['tmplvarid'];
@@ -482,7 +486,7 @@ if(is_array($evtOut)) {
 					$selectable = !$row['selectable'] ? ' class="disabled"' : '';
 					$checked = $checked ? ' checked="checked"' : '';
 					$tplId = '&nbsp;<small>(' . $row['id'] . ')</small>';
-					$desc = !empty($row['tpldescription']) ? ' - ' . $row['tpldescription'] : '';
+					$desc = !empty($row['tpldescription']) ? ' - ' . $modx->htmlspecialchars($row['tpldescription']) : '';
 
 					$tplInfo = array();
 					if($row['tpllocked']) {
@@ -493,7 +497,7 @@ if(is_array($evtOut)) {
 					}
 					$tplInfo = !empty($tplInfo) ? ' <em>(' . implode(', ', $tplInfo) . ')</em>' : '';
 
-					$tplList .= sprintf('<li><label%s><input name="template[]" value="%s" type="checkbox" %s onchange="documentDirty=true;"> %s%s%s%s</label></li>', $selectable, $row['id'], $checked, $row['templatename'], $tplId, $desc, $tplInfo);
+					$tplList .= sprintf('<li><label%s><input name="template[]" value="%s" type="checkbox" %s onchange="documentDirty=true;"> %s%s%s%s</label></li>', $selectable, $row['id'], $checked, $modx->htmlspecialchars($row['templatename']), $tplId, $desc, $tplInfo);
 					$tplList .= '</li>';
 
 					$preCat = $row['category'];
@@ -552,7 +556,7 @@ if(is_array($evtOut)) {
 								if($checked) {
 									$notPublic = true;
 								}
-								$chks .= "<li><label><input type='checkbox' name='docgroups[]' value='" . $row['id'] . "' " . ($checked ? "checked='checked'" : '') . " onclick=\"makePublic(false)\" /> " . $row['name'] . "</label></li>";
+								$chks .= "<li><label><input type='checkbox' name='docgroups[]' value='" . $row['id'] . "' " . ($checked ? "checked='checked'" : '') . " onclick=\"makePublic(false)\" /> " . $modx->htmlspecialchars($row['name']) . "</label></li>";
 							} else {
 								if($checked) {
 									echo "<input type='hidden' name='docgroups[]'  value='" . $row['id'] . "' />";

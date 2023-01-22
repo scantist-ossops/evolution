@@ -19,9 +19,9 @@ $modx->sid = session_id();
 $modx->loadExtension("ManagerAPI");
 
 $_lang = array();
-include_once MODX_MANAGER_PATH . '/includes/lang/english.inc.php';
+include MODX_MANAGER_PATH . '/includes/lang/english.inc.php';
 if ($modx->config['manager_language'] != 'english') {
-    include_once MODX_MANAGER_PATH . '/includes/lang/' . $modx->config['manager_language'] . '.inc.php';
+    include MODX_MANAGER_PATH . '/includes/lang/' . $modx->config['manager_language'] . '.inc.php';
 }
 include_once MODX_MANAGER_PATH . '/media/style/' . $modx->config['manager_theme'] . '/style.php';
 
@@ -496,7 +496,10 @@ if (isset($action)) {
                 $menuindex = isset($_REQUEST['menuindex']) && is_scalar($_REQUEST['menuindex']) ? $_REQUEST['menuindex'] : 0;
 
                 // set parent
-                if ($id && $parent >= 0) {
+                $parentNotDeleted =  $modx->db->getValue($modx->db->select('id', $modx->getFullTableName('site_content'), "`id`={$parent} AND `deleted`=0"));
+                if ($parent > 0 && !$parentNotDeleted) {
+                    $json['errors'] = $_lang["error_parent_deleted"];
+                } elseif ($id && $parent >= 0) {
 
                     // find older parent
                     $parentOld = $modx->db->getValue($modx->db->select('parent', $modx->getFullTableName('site_content'), 'id=' . $id));

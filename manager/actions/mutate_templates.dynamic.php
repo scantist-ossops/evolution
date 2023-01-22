@@ -24,7 +24,7 @@ $tbl_site_templates = $modx->getFullTableName('site_templates');
 
 // check to see the snippet editor isn't locked
 if($lockedEl = $modx->elementIsLocked(1, $id)) {
-	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $lockedEl['username'], $_lang['template']));
+	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $modx->htmlspecialchars($lockedEl['username']), $_lang['template']));
 }
 // end check for lock
 
@@ -109,7 +109,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 	<input type="hidden" name="mode" value="<?= $modx->manager->action ?>">
 
 	<h1>
-		<i class="fa fa-newspaper-o"></i><?= (isset($content['templatename']) ? $content['templatename'] . '<small>(' . $content['id'] . ')</small>' : $_lang['new_template']) ?><i class="fa fa-question-circle help"></i>
+		<i class="fa fa-newspaper-o"></i><?= (isset($content['templatename']) ? $modx->htmlspecialchars($content['templatename']) . '<small>(' . $content['id'] . ')</small>' : $_lang['new_template']) ?><i class="fa fa-question-circle help"></i>
 	</h1>
 
 	<?= $_style['actionbuttons']['dynamic']['element'] ?>
@@ -141,7 +141,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 								<input name="templatename" type="text" maxlength="100" value="<?= (isset($content['templatename']) ? $modx->htmlspecialchars($content['templatename']) : '') ?>" class="form-control form-control-lg" onchange="documentDirty=true;">
 								<?php if($modx->hasPermission('save_role')): ?>
 									<label class="custom-control" title="<?= $_lang['lock_template'] . "\n" . $_lang['lock_template_msg'] ?>" tooltip>
-										<input name="locked" type="checkbox"<?= ($content['locked'] == 1 ? ' checked="checked"' : '') ?> />
+										<input name="locked" type="checkbox"<?= (!empty($content['locked']) ? ' checked="checked"' : '') ?> />
 										<i class="fa fa-lock"></i>
 									</label>
 								<?php endif; ?>
@@ -153,7 +153,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 					<div class="row form-row">
 						<label class="col-md-3 col-lg-2"><?= $_lang['template_desc'] ?></label>
 						<div class="col-md-9 col-lg-10">
-							<input name="description" type="text" maxlength="255" value="<?= $modx->htmlspecialchars($content['description']) ?>" class="form-control" onchange="documentDirty=true;">
+							<input name="description" type="text" maxlength="255" value="<?= isset($content['description']) ? $modx->htmlspecialchars($content['description']) : '' ?>" class="form-control" onchange="documentDirty=true;">
 						</div>
 					</div>
 					<div class="row form-row">
@@ -173,7 +173,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 					<div class="row form-row">
 						<label class="col-md-3 col-lg-2"><?= $_lang['new_category'] ?></label>
 						<div class="col-md-9 col-lg-10">
-							<input name="newcategory" type="text" maxlength="45" value="<?= isset($content['newcategory']) ? $content['newcategory'] : '' ?>" class="form-control" onchange="documentDirty=true;">
+							<input name="newcategory" type="text" maxlength="45" value="<?= isset($content['newcategory']) ? (int)$content['newcategory'] : '' ?>" class="form-control" onchange="documentDirty=true;">
 						</div>
 					</div>
 				</div>
@@ -190,7 +190,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 				<span><?= $_lang['template_code'] ?></span>
 			</div>
 			<div class="section-editor clearfix">
-				<textarea dir="ltr" name="post" class="phptextarea" rows="20" onChange="documentDirty=true;"><?= (isset($content['post']) ? $modx->htmlspecialchars($content['post']) : $modx->htmlspecialchars($content['content'])) ?></textarea>
+				<textarea dir="ltr" name="post" class="phptextarea" rows="20" onChange="documentDirty=true;"><?= isset($content['post']) && is_scalar($content['post']) ? $modx->htmlspecialchars($content['post']) : (isset($content['content']) ? $modx->htmlspecialchars($content['content']) : '') ?></textarea>
 			</div>
 			<!-- HTML text editor end -->
 
@@ -218,7 +218,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 			}
 
 			// Catch checkboxes if form not validated
-			if(isset($_POST['assignedTv'])) {
+			if(isset($_POST['assignedTv']) && is_array($_POST['assignedTv'])) {
 				$selectedTvs = array();
 				foreach($_POST['assignedTv'] as $tvid) {
 					if(isset($unselectedTvs[$tvid])) {
@@ -250,9 +250,9 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 				if($total > 0) {
 					$tvList .= '<ul>';
 					foreach($selectedTvs as $row) {
-						$desc = !empty($row['tvdescription']) ? '&nbsp;&nbsp;<small>(' . $row['tvdescription'] . ')</small>' : '';
+						$desc = !empty($row['tvdescription']) ? '&nbsp;&nbsp;<small>(' . $modx->htmlspecialchars($row['tvdescription']) . ')</small>' : '';
 						$locked = $row['tvlocked'] ? ' <em>(' . $_lang['locked'] . ')</em>' : "";
-						$tvList .= sprintf('<li><label><input name="assignedTv[]" value="%s" type="checkbox" checked="checked" onchange="documentDirty=true;jQuery(\'#tvsDirty\').val(\'1\');"> %s <small>(%s)</small> - %s%s</label>%s <a href="index.php?id=%s&a=301&or=%s&oid=%s">%s</a></li>', $row['tvid'], $row['tvname'], $row['tvid'], $row['tvcaption'], $desc, $locked, $row['tvid'], $modx->manager->action, $id, $_lang['edit']);
+						$tvList .= sprintf('<li><label><input name="assignedTv[]" value="%s" type="checkbox" checked="checked" onchange="documentDirty=true;jQuery(\'#tvsDirty\').val(\'1\');"> %s <small>(%s)</small> - %s%s</label>%s <a href="index.php?id=%s&a=301&or=%s&oid=%s">%s</a></li>', $row['tvid'], $modx->htmlspecialchars($row['tvname']), $row['tvid'], $modx->htmlspecialchars($row['tvcaption']), $desc, $locked, $row['tvid'], $modx->manager->action, $id, $_lang['edit']);
 					}
 					$tvList .= '</ul>';
 
@@ -272,13 +272,13 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 					$row['category'] = stripslashes($row['category']); //pixelchutes
 					if($preCat !== $row['category']) {
 						$tvList .= $insideUl ? '</ul>' : '';
-						$tvList .= '<li><strong>' . $row['category'] . ($row['catid'] != '' ? ' <small>(' . $row['catid'] . ')</small>' : '') . '</strong><ul>';
+						$tvList .= '<li><strong>' . $modx->htmlspecialchars($row['category']) . ($row['catid'] != '' ? ' <small>(' . $row['catid'] . ')</small>' : '') . '</strong><ul>';
 						$insideUl = 1;
 					}
 
-					$desc = !empty($row['tvdescription']) ? '&nbsp;&nbsp;<small>(' . $row['tvdescription'] . ')</small>' : '';
+					$desc = !empty($row['tvdescription']) ? '&nbsp;&nbsp;<small>(' . $modx->htmlspecialchars($row['tvdescription']) . ')</small>' : '';
 					$locked = $row['tvlocked'] ? ' <em>(' . $_lang['locked'] . ')</em>' : "";
-					$tvList .= sprintf('<li><label><input name="assignedTv[]" value="%s" type="checkbox" onchange="documentDirty=true;jQuery(\'#tvsDirty\').val(\'1\');"> %s <small>(%s)</small> - %s%s</label>%s <a href="index.php?id=%s&a=301&or=%s&oid=%s">%s</a></li>', $row['tvid'], $row['tvname'], $row['tvid'], $row['tvcaption'], $desc, $locked, $row['tvid'], $modx->manager->action, $id, $_lang['edit']);
+					$tvList .= sprintf('<li><label><input name="assignedTv[]" value="%s" type="checkbox" onchange="documentDirty=true;jQuery(\'#tvsDirty\').val(\'1\');"> %s <small>(%s)</small> - %s%s</label>%s <a href="index.php?id=%s&a=301&or=%s&oid=%s">%s</a></li>', $row['tvid'], $modx->htmlspecialchars($row['tvname']), $row['tvid'], $modx->htmlspecialchars($row['tvcaption']), $desc, $locked, $row['tvid'], $modx->manager->action, $id, $_lang['edit']);
 					$tvList .= '</li>';
 
 					$preCat = $row['category'];

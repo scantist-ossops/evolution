@@ -26,13 +26,14 @@ $tbl_system_eventnames = $modx->getFullTableName('system_eventnames');
 
 // check to see the plugin isn't locked
 if ($lockedEl = $modx->elementIsLocked(5, $id)) {
-    $modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $lockedEl['username'], $_lang['plugin']));
+    $modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $modx->htmlspecialchars($lockedEl['username']), $_lang['plugin']));
 }
 // end check for lock
 
 // Lock plugin for other users to edit
 $modx->lockElement(5, $id);
 
+$content = array();
 if (isset($_GET['id'])) {
     $rs = $modx->db->select('*', $tbl_site_plugins, "id='{$id}'");
     $content = $modx->db->getRow($rs);
@@ -46,7 +47,7 @@ if (isset($_GET['id'])) {
     $content['properties'] = str_replace("&", "&amp;", $content['properties']);
 } else {
     $_SESSION['itemname'] = $_lang["new_plugin"];
-    $content['category'] = (int)$_REQUEST['catid'];
+    if ( !empty($_REQUEST['catid']) ) $content['category'] = (int)$_REQUEST['catid'];
 }
 
 if ($modx->manager->hasFormValues()) {
@@ -81,7 +82,7 @@ function bold($cond = false)
         }, duplicate: function() {
             if (confirm('<?= $_lang['confirm_duplicate_record'] ?>') === true) {
                 documentDirty = false;
-                document.location.href = "index.php?id=<?= $_REQUEST['id'] ?>&a=105";
+                document.location.href = "index.php?id=<?= !empty($_REQUEST['id']) ? $_REQUEST['id'] : '' ?>&a=105";
             }
         }, delete: function() {
             if (confirm('<?= $_lang['confirm_delete_plugin'] ?>') === true) {
@@ -481,11 +482,11 @@ function bold($cond = false)
 
 <form name="mutate" method="post" action="index.php" enctype="multipart/form-data">
     <input type="hidden" name="a" value="103">
-    <input type="hidden" name="id" value="<?= $content['id'] ?>">
+    <input type="hidden" name="id" value="<?= !empty($content['id']) ? $content['id'] : '' ?>">
     <input type="hidden" name="mode" value="<?= $modx->manager->action ?>">
 
     <h1>
-        <i class="fa fa-plug"></i><?= ($content['name'] ? $content['name'] . '<small>(' . $content['id'] . ')</small>' : $_lang['new_plugin']) ?><i class="fa fa-question-circle help"></i>
+        <i class="fa fa-plug"></i><?= ($content['name'] ? $modx->htmlspecialchars($content['name']) . '<small>(' . $content['id'] . ')</small>' : $_lang['new_plugin']) ?><i class="fa fa-question-circle help"></i>
     </h1>
 
     <?= $_style['actionbuttons']['dynamic']['element'] ?>
@@ -512,7 +513,7 @@ function bold($cond = false)
                                 <input name="name" type="text" maxlength="100" value="<?= $modx->htmlspecialchars($content['name']) ?>" class="form-control form-control-lg" onchange="documentDirty=true;" />
                                 <?php if ($modx->hasPermission('save_role')): ?>
                                 <label class="custom-control" title="<?= $_lang['lock_plugin'] . "\n" . $_lang['lock_plugin_msg'] ?>" tooltip>
-                                    <input name="locked" type="checkbox" value="on"<?= ($content['locked'] == 1 ? ' checked="checked"' : '') ?> />
+                                    <input name="locked" type="checkbox" value="on"<?= (isset($content['locked']) && $content['locked'] == 1 ? ' checked="checked"' : '') ?> />
                                     <i class="fa fa-lock"></i>
                                 </label>
                                 <?php endif; ?>
@@ -526,7 +527,7 @@ function bold($cond = false)
                     <div class="row form-row">
                         <label class="col-md-3 col-lg-2"><?= $_lang['plugin_desc'] ?></label>
                         <div class="col-md-9 col-lg-10">
-                            <input name="description" type="text" maxlength="255" value="<?= $content['description'] ?>" class="form-control" onchange="documentDirty=true;" />
+                            <input name="description" type="text" maxlength="255" value="<?= isset($content['description']) ? $modx->htmlspecialchars($content['description']) : '' ?>" class="form-control" onchange="documentDirty=true;" />
                         </div>
                     </div>
                     <div class="row form-row">
@@ -537,7 +538,9 @@ function bold($cond = false)
                                 <?php
                                 include_once(MODX_MANAGER_PATH . 'includes/categories.inc.php');
                                 foreach (getCategories() as $n => $v) {
-                                    echo '<option value="' . $v['id'] . '"' . ($content["category"] == $v["id"] ? ' selected="selected"' : '') . '>' . $modx->htmlspecialchars($v["category"]) . "</option>";
+                                	$selected = '';
+									if ( !empty($content['category']) ) $selected = ($content["category"] == $v["id"]) ? ' selected="selected"' : '';
+                                    echo '<option value="' . $v['id'] . '"' . $selected . '>' . $modx->htmlspecialchars($v["category"]) . "</option>";
                                 }
                                 ?>
                             </select>
@@ -553,7 +556,7 @@ function bold($cond = false)
                 <?php if ($modx->hasPermission('save_role')): ?>
                 <div class="form-group">
                     <div class="form-row">
-                        <label><input name="disabled" type="checkbox" value="on"<?= ($content['disabled'] == 1 ? ' checked="checked"' : '') ?> /> <?= ($content['disabled'] == 1 ? "<span class='text-danger'>" . $_lang['plugin_disabled'] . "</span>" : $_lang['plugin_disabled']) ?></label>
+                        <label><input name="disabled" type="checkbox" value="on"<?= (!empty($content['disabled']) ? ' checked="checked"' : '') ?> /> <?= (!empty($content['disabled']) ? "<span class='text-danger'>" . $_lang['plugin_disabled'] . "</span>" : $_lang['plugin_disabled']) ?></label>
                     </div>
                     <div class="form-row">
                         <label>
@@ -600,7 +603,7 @@ function bold($cond = false)
                             <select name="moduleguid" class="form-control" onchange="documentDirty=true;">
                                 <option>&nbsp;</option>
                                 <?php
-                                $ds = $modx->db->select('sm.id,sm.name,sm.guid', $modx->getFullTableName("site_modules") . " sm 
+                                $ds = $modx->db->select('sm.id,sm.name,sm.guid', $modx->getFullTableName("site_modules") . " sm
 								INNER JOIN " . $modx->getFullTableName("site_module_depobj") . " smd ON smd.module=sm.id AND smd.type=30
 								INNER JOIN " . $modx->getFullTableName("site_plugins") . " sp ON sp.id=smd.resource", "smd.resource='{$id}' AND sm.enable_sharedparams='1'", 'sm.name');
                                 while ($row = $modx->db->getRow($ds)) {
@@ -618,7 +621,7 @@ function bold($cond = false)
             </div>
             <!-- HTML text editor start -->
             <div class="section-editor clearfix">
-                <textarea dir="ltr" name="properties" class="phptextarea" rows="20" onChange="showParameters(this);documentDirty=true;"><?= $content['properties'] ?></textarea>
+                <textarea dir="ltr" name="properties" class="phptextarea" rows="20" onChange="showParameters(this);documentDirty=true;"><?= isset($content['properties']) ? $content['properties'] : '' ?></textarea>
             </div>
             <!-- HTML text editor end -->
         </div>

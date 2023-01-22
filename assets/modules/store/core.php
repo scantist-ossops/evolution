@@ -22,13 +22,13 @@ case 'exituser':
 case 'install':
 case 'install_file':
 	if (is_dir(MODX_BASE_PATH . 'assets/cache/store/')) $Store->removeFolder(MODX_BASE_PATH . 'assets/cache/store/');
-	$id = (int) $_REQUEST['cid'];
+	$id = (int)($_REQUEST['cid'] ?? 0);
 	@mkdir("../assets/cache/store", 0777);
 	@mkdir("../assets/cache/store/tmp_install", 0777);
 	@mkdir("../assets/cache/store/install", 0777);
 
 	if($action == 'install') {
-		$file = $_POST['file']==''? $_GET['file'] : $_POST['file'];
+		$file = empty($_POST['file']) ? ($_GET['file'] ?? '') : $_POST['file'];
 		if ($file!='%url%' && $file!='' && $file!=' '){
 			$url = $file;
 		} else {
@@ -200,8 +200,6 @@ class Store{
 			}
 	}
 
-
-
 	public function removeFolder($path){
 		$dir = realpath($path);
 		if ( !is_dir($dir)) return;
@@ -220,9 +218,11 @@ class Store{
 		}
 		rmdir($dir);
 	}
+
 	public static function copyFolder($src, $dest) {
-		$path = realpath($src);
+        $path = realpath($src);
 		$dest = realpath($dest);
+        if (!is_dir($path) || !is_dir($dest)) return;
 		$objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
 		foreach($objects as $name => $object)
 		{

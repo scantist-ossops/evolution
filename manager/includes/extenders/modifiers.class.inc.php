@@ -12,10 +12,6 @@ class MODIFIERS {
      */
     public $vars = array();
     /**
-     * @var array
-     */
-    public $tmpCache = array();
-    /**
      * @var
      */
     public $bt;
@@ -229,10 +225,11 @@ class MODIFIERS {
 
     public function parsePhx($key,$value,$modifiers)
     {
+        static $cache = null;
         $modx = evolutionCMS();
         $lastKey = '';
-        $cacheKey = md5(sprintf('parsePhx#%s#%s#%s',$key,$value,print_r($modifiers,true)));
-        if(isset($this->tmpCache[$cacheKey])) return $this->tmpCache[$cacheKey];
+        $cacheKey = md5(print_r(func_get_args(), true));
+        if(isset($cache[$cacheKey])) return $cache[$cacheKey];
         if(empty($modifiers)) return '';
 
         foreach($modifiers as $m)
@@ -246,11 +243,11 @@ class MODIFIERS {
             $modifiers[] = array('cmd'=>'else','opt'=>'0');
         }
 
-        foreach($modifiers as $i=>$a)
+        foreach($modifiers as $a)
         {
             $value = $this->Filter($key,$value, $a['cmd'], $a['opt']);
         }
-        $this->tmpCache[$cacheKey] = $value;
+        $cache[$cacheKey] = $value;
         return $value;
     }
 
@@ -678,14 +675,11 @@ class MODIFIERS {
             case 'dateformat':
                 if(empty($opt)) $opt = $modx->toDateFormat(null, 'formatOnly');
                 if(!preg_match('@^[0-9]+$@',$value)) $value = strtotime($value);
-                if(strpos($opt,'%')!==false)
-                    return strftime($opt,0+$value);
-                else
-                    return date($opt,0+$value);
+                return date($opt,0+$value);
             case 'time':
-                if(empty($opt)) $opt = '%H:%M';
+                if(empty($opt)) $opt = 'H:i';
                 if(!preg_match('@^[0-9]+$@',$value)) $value = strtotime($value);
-                return strftime($opt,0+$value);
+                return date($opt,0+$value);
             case 'strtotime':
                 return strtotime($value);
             #####  mathematical function

@@ -50,7 +50,7 @@ if (!empty($_COOKIE['MODX_themeMode'])) {
  */
 $prte = (isset($_POST['which_editor']) ? $_POST['which_editor'] : '');
 $srte = ($modx->config['use_editor'] ? $modx->config['which_editor'] : 'none');
-$xrte = $content['richtext'];
+$xrte = $content['richtext'] ?? 0;
 $tvMode = false;
 $limitedHeight = false;
 /*
@@ -58,7 +58,7 @@ $limitedHeight = false;
  */
 switch($modx->Event->name) {
 	case 'OnTempFormRender'   :
-		$object_name = $content['templatename'];
+		$object_name = $content['templatename'] ?? '';
 		$rte = ($prte ? $prte : 'none');
 		break;
 	case 'OnChunkFormRender'  :
@@ -98,13 +98,13 @@ switch($modx->Event->name) {
 		}
 		break;
 	case 'OnDocFormRender'     :
-		if($content['type'] == 'reference') {
+		if(isset($content['type']) && $content['type'] == 'reference') {
 			return;
 		}
 		$textarea_name = 'ta';
-		$object_name = $content['pagetitle'];
+		$object_name = $content['pagetitle'] ?? '';
 		$xrte = (('htmlmixed' == $mode) ? $xrte : 0);
-		$rte = ($prte ? $prte : ($content['id'] ? ($xrte ? $srte : 'none') : $srte));
+		$rte = ($prte ? $prte : (!empty($content['id']) ? ($xrte ? $srte : 'none') : $srte));
 		$contentType = $content['contentType'];
 		/*
 		* Switch contentType for doc
@@ -168,7 +168,7 @@ if(('none' == $rte) && $mode && !defined('INIT_CODEMIRROR')) {
     <script src="{$_CM_URL}cm/mode/{$lang}-compressed.js"></script>
     {$emmet}{$search}
 	<script src="{$_CM_URL}cm/addon-compressed.js"></script>
-	    
+
     <script type="text/javascript">
         // Add mode MODX for syntax highlighting. Dfsed on $mode
         CodeMirror.defineMode("MODx-{$mode}", function(config, parserConfig) {
@@ -238,7 +238,7 @@ if(('none' == $rte) && $mode && !defined('INIT_CODEMIRROR')) {
                         stream.match("@file", true, true) ||
                         stream.match("@code", true, true)
                     ) {
-                        return "modxBinding";                   
+                        return "modxBinding";
                     }
                     if (stream.match("!]")) {
                         return "modxSnippetNoCache";
@@ -342,7 +342,7 @@ if(('none' == $rte) && $mode && $elements !== NULL) {
 			$setHeight = '';
 		};
 
-		$object_id = md5($evt->name . '-' . $content['id'] . '-' . $el);
+		$object_id = md5($modx->event->name . '-' . ($content['id'] ?? 0) . '-' . $el);
 
 		$output .= "
 			<script>

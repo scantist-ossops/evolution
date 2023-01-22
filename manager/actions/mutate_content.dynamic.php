@@ -4,8 +4,8 @@ if( ! defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
 }
 
 /********************/
-$sd = isset($_REQUEST['dir']) ? '&dir=' . $_REQUEST['dir'] : '&dir=DESC';
-$sb = isset($_REQUEST['sort']) ? '&sort=' . $_REQUEST['sort'] : '&sort=createdon';
+$sd = isset($_REQUEST['dir']) && is_scalar($_REQUEST['dir']) ? '&dir=' . $_REQUEST['dir'] : '&dir=DESC';
+$sb = isset($_REQUEST['sort'])  && is_scalar($_REQUEST['dir']) ? '&sort=' . $_REQUEST['sort'] : '&sort=createdon';
 $pg = isset($_REQUEST['page']) ? '&page=' . (int) $_REQUEST['page'] : '';
 $add_path = $sd . $sb . $pg;
 /*******************/
@@ -69,7 +69,7 @@ if($modx->manager->action == 27) {
 
 // check to see if resource isn't locked
 if($lockedEl = $modx->elementIsLocked(7, $id)) {
-	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $lockedEl['username'], $_lang['resource']));
+	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $modx->htmlspecialchars($lockedEl['username']), $_lang['resource']));
 }
 // end check for lock
 
@@ -78,7 +78,7 @@ $modx->lockElement(7, $id);
 
 // get document groups for current user
 $docgrp = '';
-if($_SESSION['mgrDocgroups']) {
+if(!empty($_SESSION['mgrDocgroups'])) {
 	$docgrp = implode(',', $_SESSION['mgrDocgroups']);
 }
 
@@ -99,7 +99,7 @@ if(!empty ($id)) {
 	$content = array();
 
 	if(isset($_REQUEST['newtemplate'])) {
-		$content['template'] = $_REQUEST['newtemplate'];
+		$content['template'] = (int)$_REQUEST['newtemplate'];
 	} else {
 		$content['template'] = getDefaultTemplate();
 	}
@@ -118,7 +118,7 @@ if(isset($_REQUEST['newtemplate'])) {
 // sottwell 02-09-2006
 if($formRestored == true) {
 	$content = array_merge($content, $_POST);
-	$content['content'] = $_POST['ta'];
+	$content['content'] = isset($_POST['ta']) && is_scalar($_POST['ta']) ? $_POST['ta'] : '';
 	if(empty ($content['pub_date'])) {
 		unset ($content['pub_date']);
 	} else {
@@ -132,12 +132,12 @@ if($formRestored == true) {
 }
 
 // increase menu index if this is a new document
-if(!isset ($_REQUEST['id'])) {
+if(empty($_REQUEST['id']) ) {
 	if(!isset ($modx->config['auto_menuindex'])) {
 		$modx->config['auto_menuindex'] = 1;
 	}
 	if($modx->config['auto_menuindex']) {
-		$pid = 0;
+		$pid = (int)($_REQUEST['pid'] ?? 0);
 		$rs = $modx->db->select('count(*)', $tbl_site_content, "parent='{$pid}'");
 		$content['menuindex'] = $modx->db->getValue($rs);
 	} else {
@@ -145,7 +145,7 @@ if(!isset ($_REQUEST['id'])) {
 	}
 }
 
-if(isset ($_POST['which_editor'])) {
+if(isset ($_POST['which_editor']) && is_scalar($_POST['which_editor'])) {
 	$modx->config['which_editor'] = $_POST['which_editor'];
 }
 
@@ -561,6 +561,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 		$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : '';
 		$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'createdon';
 		$page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : '';
+        $out = '';
 		/*************************/
 
 		?>
@@ -577,7 +578,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 		<fieldset id="create_edit">
 
 			<h1>
-				<i class="fa fa-pencil-square-o"></i><?php if(isset($_REQUEST['id'])) {
+				<i class="fa fa-pencil-square-o"></i><?php if(!empty($_REQUEST['id'])) {
 					echo html_escape(iconv_substr($content['pagetitle'], 0, 50, $modx->config['modx_charset']), $modx->config['modx_charset']) . (iconv_strlen($content['pagetitle'], $modx->config['modx_charset']) > 50 ? '...' : '') . '<small>(' . (int)$_REQUEST['id'] . ')</small>';
 				} else {
 				    if ($modx->manager->action == '4') {
@@ -595,7 +596,8 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 			<?php
 			// breadcrumbs
 			if($modx->config['use_breadcrumbs']) {
-				$temp = array();
+				$out = '';
+                $temp = array();
 				$title = isset($content['pagetitle']) ? $content['pagetitle'] : $_lang['create_resource_title'];
 
 				if(isset($_REQUEST['id']) && $content['parent'] != 0) {
@@ -746,13 +748,13 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 													if($closeOptGroup) {
 														echo "\t\t\t\t\t</optgroup>\n";
 													}
-													echo "\t\t\t\t\t<optgroup label=\"$thisCategory\">\n";
+													echo "\t\t\t\t\t<optgroup label=\"{$modx->htmlspecialchars($thisCategory)}\">\n";
 													$closeOptGroup = true;
 												}
 
 												$selectedtext = ($row['id'] == $content['template']) ? ' selected="selected"' : '';
 
-												echo "\t\t\t\t\t" . '<option value="' . $row['id'] . '"' . $selectedtext . '>' . $row['templatename'] . " (".$row['id'].")</option>\n";
+												echo "\t\t\t\t\t" . '<option value="' . $row['id'] . '"' . $selectedtext . '>' . $modx->htmlspecialchars($row['templatename']) . " (".$row['id'].")</option>\n";
 												$currentCategory = $thisCategory;
 											}
 											if($thisCategory != '') {
@@ -788,7 +790,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 										<i class="<?= $_style["icons_tooltip"] ?>" data-tooltip="<?= $_lang['resource_opt_show_menu_help'] ?>"></i>
 									</td>
 									<td>
-										<input name="hidemenucheck" type="checkbox" class="checkbox" <?= (isset($content['hidemenu']) && $content['hidemenu'] != 1 ? 'checked="checked"' : '') ?> onclick="changestate(document.mutate.hidemenu);" /><input type="hidden" name="hidemenu" class="hidden" value="<?= (isset($content['hidemenu']) && $content['hidemenu'] == 1 ? 1 : 0) ?>" />
+										<input name="hidemenucheck" type="checkbox" class="checkbox" <?= (!isset($content['hidemenu']) || $content['hidemenu'] != 1 ? 'checked="checked"' : '') ?> onclick="changestate(document.mutate.hidemenu);" /><input type="hidden" name="hidemenu" class="hidden" value="<?= (isset($content['hidemenu']) && $content['hidemenu'] == 1 ? 1 : 0) ?>" />
 									</td>
 								</tr>
 								<tr>
@@ -799,13 +801,13 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 									<td valign="top">
 										<?php
 										$parentlookup = false;
-										if(isset ($_REQUEST['id'])) {
+										if(!empty ($_REQUEST['id'])) {
 											if($content['parent'] == 0) {
 												$parentname = $site_name;
 											} else {
 												$parentlookup = $content['parent'];
 											}
-										} elseif(isset ($_REQUEST['pid'])) {
+										} elseif(!empty ($_REQUEST['pid'])) {
 											if($_REQUEST['pid'] == 0) {
 												$parentname = $site_name;
 											} else {
@@ -966,7 +968,9 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 
                                     $i = $ii = 0;
                                     $tab = '';
+                                    $split = 0;
                                     foreach ($tvsArray as $row) {
+                                    	$row['category_id'] = $row['category_id'] ?? 0;
                                         if ($group_tvs && $row['category_id'] != 0) {
                                             $ii = 0;
                                             if ($tab !== $row['category_id']) {
@@ -974,7 +978,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                                                     if ($i === 0) {
                                                         $templateVariablesOutput .= '
                             <div class="tab-section" id="tabTV_' . $row['category_id'] . '">
-                                <div class="tab-header">' . $row['category'] . '</div>
+                                <div class="tab-header">' . $modx->htmlspecialchars($row['category']) . '</div>
                                 <div class="tab-body tmplvars">
                                     <table>' . "\n";
                                                     } else {
@@ -982,9 +986,9 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                                     </table>
                                 </div>
                             </div>
-                            
+
                             <div class="tab-section" id="tabTV_' . $row['category_id'] . '">
-                                <div class="tab-header">' . $row['category'] . '</div>
+                                <div class="tab-header">' . $modx->htmlspecialchars($row['category']) . '</div>
                                 <div class="tab-body tmplvars">
                                     <table>';
                                                     }
@@ -992,9 +996,9 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                                                     if ($i === 0) {
                                                         $templateVariablesOutput .= '
                             <div id="tabTV_' . $row['category_id'] . '" class="tab-page tmplvars">
-                                <h2 class="tab">' . $row['category'] . '</h2>
+                                <h2 class="tab">' . $modx->htmlspecialchars($row['category']) . '</h2>
                                 <script type="text/javascript">tpTemplateVariables.addTabPage(document.getElementById(\'tabTV_' . $row['category_id'] . '\'));</script>
-                                
+
                                 <div class="tab-body tmplvars">
                                     <table>';
                                                     } else {
@@ -1002,11 +1006,11 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                                     </table>
                                 </div>
                             </div>
-                            
+
                             <div id="tabTV_' . $row['category_id'] . '" class="tab-page tmplvars">
-                                <h2 class="tab">' . $row['category'] . '</h2>
+                                <h2 class="tab">' . $modx->htmlspecialchars($row['category']) . '</h2>
                                 <script type="text/javascript">tpTemplateVariables.addTabPage(document.getElementById(\'tabTV_' . $row['category_id'] . '\'));</script>
-                                
+
                                 <div class="tab-body tmplvars">
                                     <table>';
                                                     }
@@ -1014,18 +1018,18 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                                                     if ($i === 0) {
                                                         $templateVariablesOutput .= '
                                 <div id="tabTV_' . $row['category_id'] . '" class="tab-page tmplvars">
-                                    <h2 class="tab">' . $row['category'] . '</h2>
+                                    <h2 class="tab">' . $modx->htmlspecialchars($row['category']) . '</h2>
                                     <script type="text/javascript">tpSettings.addTabPage(document.getElementById(\'tabTV_' . $row['category_id'] . '\'));</script>
                                     <table>';
                                                     } else {
                                                         $templateVariablesOutput .= '
                                     </table>
                                 </div>
-                                
+
                                 <div id="tabTV_' . $row['category_id'] . '" class="tab-page tmplvars">
-                                    <h2 class="tab">' . $row['category'] . '</h2>
+                                    <h2 class="tab">' . $modx->htmlspecialchars($row['category']) . '</h2>
                                     <script type="text/javascript">tpSettings.addTabPage(document.getElementById(\'tabTV_' . $row['category_id'] . '\'));</script>
-                                    
+
                                     <table>';
                                                     }
                                                 }
@@ -1072,13 +1076,13 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
                                             $tvPBV = $row['value'];
                                         }
 
-                                        $tvDescription = (!empty($row['description'])) ? '<br /><span class="comment">' . $row['description'] . '</span>' : '';
+                                        $tvDescription = (!empty($row['description'])) ? '<br /><span class="comment">' . $modx->htmlspecialchars($row['description']) . '</span>' : '';
                                         $tvInherited = (substr($tvPBV, 0, 8) == '@INHERIT') ? '<br /><span class="comment inherited">(' . $_lang['tmplvars_inherited'] . ')</span>' : '';
-                                        $tvName = $modx->hasPermission('edit_template') ? '<br/><small class="protectedNode">[*' . $row['name'] . '*]</small>' : '';
+                                        $tvName = $modx->hasPermission('edit_template') ? '<br/><small class="protectedNode">[*' . $modx->htmlspecialchars($row['name']) . '*]</small>' : '';
 
                                         $templateVariablesTmp .= '
                                         <tr>
-                                            <td><span class="warning">' . $row['caption'] . $tvName . '</span>' . $tvDescription . $tvInherited . '</td>
+                                            <td><span class="warning">' . $modx->htmlspecialchars($row['caption']) . $tvName . '</span>' . $tvDescription . $tvInherited . '</td>
                                             <td><div style="position:relative;' . ($row['type'] == 'date' ? '' : '') . '">' . renderFormElement($row['type'], $row['id'], $row['default_text'], $row['elements'], $tvPBV, '', $row, $tvsArray) . '</div></td>
                                         </tr>';
 
@@ -1462,7 +1466,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 							} else {
 								++$permissions_no;
 							}
-							$permissions[] = "\t\t" . '<li>' . $inputHTML . '<label for="' . $inputId . '">' . $row['name'] . '</label></li>';
+							$permissions[] = "\t\t" . '<li>' . $inputHTML . '<label for="' . $inputId . '">' . $modx->htmlspecialchars($row['name']) . '</label></li>';
 						}
 						// if mgr user doesn't have access to any of the displayable permissions, forget about them and make doc public
 						if($_SESSION['mgrRole'] != 1 && ($permissions_yes == 0 && $permissions_no > 0)) {
@@ -1544,6 +1548,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 		storeCurTemplate();
 	</script>
 <?php
+$richtexteditorIds = $richtexteditorIds ?? 0;
 if(((isset($content['richtext']) && $content['richtext'] == 1) || $modx->manager->action == '4' || $modx->manager->action == '72') && $use_editor == 1) {
 	if(is_array($richtexteditorIds)) {
 		foreach($richtexteditorIds as $editor => $elements) {

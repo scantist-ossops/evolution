@@ -1360,6 +1360,7 @@ $_lang["error_double_action"]         = "Double action (GET & POST) posted!";
 $_lang["error_no_id"]                 = "ID not passed in request!";
 $_lang["error_id_nan"]                = "ID passed in request is NaN!";
 $_lang["error_no_parent"]             = "Couldn't find parent document's name!";
+$_lang["error_parent_deleted"]        = "Failed because resource parent is deleted!";
 $_lang["error_many_results"]          = "Too many results returned from database!";
 $_lang["error_no_results"]            = "Not enough/ no results returned from database!";
 $_lang["error_no_user_selected"]      = "No user selected as recipient of this message!";
@@ -1517,8 +1518,6 @@ $_lang['manager_menu_position_title'] = 'Main menu position';
 $_lang['manager_menu_position_top'] = 'top';
 $_lang['manager_menu_position_left'] = 'left';
 
-$_lang['invalid_event_response'] = 'The %s event has ivalid output';
+$_lang['invalid_event_response'] = 'The %s event has invalid output';
 
 $_lang['chunk_processor'] = 'Chunks processing class';
-$_lang['enable_mootools'] = 'Enable Mootools in manager';
-$_lang['enable_mootools_message'] = 'Load Mootools.js in manager for backward compatibility';

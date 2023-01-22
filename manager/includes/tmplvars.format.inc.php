@@ -101,8 +101,8 @@ function getTVDisplayFormat($name, $value, $format, $paramstring = "", $tvtype =
 					$value = 'now';
 				}
 				$timestamp = getUnixtimeFromDateString($value);
-				$p = $params['format'] ? $params['format'] : "%A %d, %B %Y";
-				$o = strftime($p, $timestamp);
+				$p = $params['format'] ? $params['format'] : "l d, F Y";
+				$o = date($p, $timestamp);
 			} else {
 				$value = '';
 			}
@@ -113,7 +113,7 @@ function getTVDisplayFormat($name, $value, $format, $paramstring = "", $tvtype =
 			$o = '';
 			$countValue = count($value);
 			for($i = 0; $i < $countValue; $i++) {
-				list($name, $url) = is_array($value[$i]) ? $value[$i] : explode("==", $value[$i]);
+				list($name, $url) = is_array($value[$i]) ? $value[$i] : array_merge(explode("==", $value[$i]), ['']);
 				if(!$url) {
 					$url = $name;
 				}

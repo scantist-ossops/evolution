@@ -43,7 +43,7 @@ function createGUID() {
 
 // check to see the module editor isn't locked
 if($lockedEl = $modx->elementIsLocked(6, $id)) {
-	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $lockedEl['username'], $_lang['module']));
+	$modx->webAlertAndQuit(sprintf($_lang['lock_msg'], $modx->htmlspecialchars($lockedEl['username']), $_lang['module']));
 }
 // end check for lock
 
@@ -84,7 +84,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 			}
 		}
 		documentDirty = false;
-		window.location.href = "index.php?id=<?= $_REQUEST['id']?>&a=113";
+		window.location.href = "index.php?id=<?= !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : '' ?>&a=113";
 	}
 
 	var actions = {
@@ -97,7 +97,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 		duplicate: function() {
 			if(confirm("<?= $_lang['confirm_duplicate_record'] ?>") === true) {
 				documentDirty = false;
-				document.location.href = "index.php?id=<?= $_REQUEST['id'] ?>&a=111";
+				document.location.href = "index.php?id=<?= !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : '' ?>&a=111";
 			}
 		},
 		delete: function() {
@@ -111,7 +111,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 			document.location.href = 'index.php?a=106';
 		},
 		run: function() {
-			document.location.href = "index.php?id=<?= $_REQUEST['id'] ?>&a=112";
+			document.location.href = "index.php?id=<?= !empty($_REQUEST['id']) ? (int)$_REQUEST['id'] : '' ?>&a=112";
 		}
 	};
 
@@ -455,11 +455,11 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 	$internal = array();
 	?>
     <input type="hidden" name="a" value="109">
-	<input type="hidden" name="id" value="<?= $content['id'] ?>">
+	<input type="hidden" name="id" value="<?= !empty($content['id']) ? (int)$content['id'] : '' ?>">
 	<input type="hidden" name="mode" value="<?= $modx->manager->action ?>">
 
 	<h1>
-		<i class="<?= ($content['icon'] != '' ? $content['icon'] : $_style['icons_module']) ?>"></i><?= ($content['name'] ? $content['name'] . '<small>(' . $content['id'] . ')</small>' : $_lang['new_module']) ?><i class="fa fa-question-circle help"></i>
+		<i class="<?= isset($content['icon']) ? $modx->htmlspecialchars($content['icon']) : $_style['icons_module'] ?>"></i><?= (!empty($content['name']) ? $modx->htmlspecialchars($content['name']) . '<small>(' . $content['id'] . ')</small>' : $_lang['new_module']) ?><i class="fa fa-question-circle help"></i>
 	</h1>
 
 	<?= $_style['actionbuttons']['dynamic']['element'] ?>
@@ -483,10 +483,10 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 						<label class="col-md-3 col-lg-2"><?= $_lang['module_name'] ?></label>
 						<div class="col-md-9 col-lg-10">
 							<div class="form-control-name clearfix">
-								<input name="name" type="text" maxlength="100" value="<?= $modx->htmlspecialchars($content['name']) ?>" class="form-control form-control-lg" onchange="documentDirty=true;" />
+								<input name="name" type="text" maxlength="100" value="<?= !empty($content['name']) ? $modx->htmlspecialchars($content['name']) : '' ?>" class="form-control form-control-lg" onchange="documentDirty=true;" />
 								<?php if($modx->hasPermission('save_role')): ?>
 									<label class="custom-control" title="<?= $_lang['lock_module'] . "\n" . $_lang['lock_module_msg'] ?>" tooltip>
-										<input name="locked" type="checkbox"<?= ($content['locked'] == 1 ? ' checked="checked"' : '') ?> />
+										<input name="locked" type="checkbox"<?= (isset($content['locked']) && $content['locked'] == 1 ? ' checked="checked"' : '') ?> />
 										<i class="fa fa-lock"></i>
 									</label>
 								<?php endif; ?>
@@ -498,7 +498,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 					<div class="row form-row">
 						<label class="col-md-3 col-lg-2"><?= $_lang['module_desc'] ?></label>
 						<div class="col-md-9 col-lg-10">
-							<input name="description" type="text" maxlength="255" value="<?= $content['description'] ?>" class="form-control" onchange="documentDirty=true;" />
+							<input name="description" type="text" maxlength="255" value="<?= !empty($content['description']) ? $modx->htmlspecialchars($content['description']) : '' ?>" class="form-control" onchange="documentDirty=true;" />
 						</div>
 					</div>
 					<div class="row form-row">
@@ -509,7 +509,9 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 								<?php
 								include_once(MODX_MANAGER_PATH . 'includes/categories.inc.php');
 								foreach(getCategories() as $n => $v) {
-									echo "\t\t\t" . '<option value="' . $v['id'] . '"' . ($content['category'] == $v['id'] ? ' selected="selected"' : '') . '>' . $modx->htmlspecialchars($v['category']) . "</option>\n";
+									$selected = '';
+									if ( !empty($content['category']) ) $selected = $content['category'] == $v['id'] ? ' selected="selected"' : '';
+									echo "\t\t\t" . '<option value="' . $v['id'] . '"' . $selected . '>' . $modx->htmlspecialchars($v['category']) . "</option>\n";
 								}
 								?>
 							</select>
@@ -527,21 +529,21 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 						</label>
 						<div class="col-md-9 col-lg-10">
 							<div class="input-group">
-								<input type="text" maxlength="255" name="icon" value="<?= $content['icon'] ?>" class="form-control" onchange="documentDirty=true;" />
+								<input type="text" maxlength="255" name="icon" value="<?= !empty($content['icon']) ? $modx->htmlspecialchars($content['icon']) : '' ?>" class="form-control" onchange="documentDirty=true;" />
 							</div>
 						</div>
 					</div>
 					<div class="row form-row">
-						<label class="col-md-3 col-lg-2" for="enable_resource"><input name="enable_resource" id="enable_resource" title="<?= $_lang['enable_resource'] ?>" type="checkbox"<?= ($content['enable_resource'] == 1 ? ' checked="checked"' : '') ?> onclick="documentDirty=true;" /> <span title="<?= $_lang['enable_resource'] ?>"><?= $_lang["element"] ?></span></label>
+						<label class="col-md-3 col-lg-2" for="enable_resource"><input name="enable_resource" id="enable_resource" title="<?= $_lang['enable_resource'] ?>" type="checkbox"<?= (!empty($content['enable_resource']) ? ' checked="checked"' : '') ?> onclick="documentDirty=true;" /> <span title="<?= $_lang['enable_resource'] ?>"><?= $_lang["element"] ?></span></label>
 						<div class="col-md-9 col-lg-10">
-							<input name="resourcefile" type="text" maxlength="255" value="<?= $content['resourcefile'] ?>" class="form-control" onchange="documentDirty=true;" />
+							<input name="resourcefile" type="text" maxlength="255" value="<?= !empty($content['resourcefile']) ? $content['resourcefile'] : '' ?>" class="form-control" onchange="documentDirty=true;" />
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="form-row">
-						<label for="disabled"><input name="disabled" id="disabled" type="checkbox" value="on"<?= ($content['disabled'] == 1 ? ' checked="checked"' : '') ?> />
-							<?= ($content['disabled'] == 1 ? '<span class="text-danger">' . $_lang['module_disabled'] . '</span>' : $_lang['module_disabled']) ?></label>
+						<label for="disabled"><input name="disabled" id="disabled" type="checkbox" value="on"<?= (isset($content['disabled']) && $content['disabled'] == 1 ? ' checked="checked"' : '') ?> />
+							<?= (!empty($content['disabled']) ? '<span class="text-danger">' . $_lang['module_disabled'] . '</span>' : $_lang['module_disabled']) ?></label>
 					</div>
 					<div class="form-row">
 						<label for="parse_docblock">
@@ -556,7 +558,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 				<span><?= $_lang['module_code'] ?></span>
 			</div>
 			<div class="section-editor clearfix">
-				<textarea dir="ltr" class="phptextarea" name="post" rows="20" wrap="soft" onchange="documentDirty=true;"><?= (isset($content['post']) ? $modx->htmlspecialchars($content['post']) : $modx->htmlspecialchars($content['modulecode'])) ?></textarea>
+				<textarea dir="ltr" class="phptextarea" name="post" rows="20" wrap="soft" onchange="documentDirty=true;"><?= (isset($content['post']) ? $modx->htmlspecialchars($content['post']) : (!empty($content['modulecode']) ? $modx->htmlspecialchars($content['modulecode']) : '' )) ?></textarea>
 			</div>
 			<!-- PHP text editor end -->
 		</div>
@@ -590,7 +592,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 					</div>
 					<div class="row form-row">
 						<label class="col-md-3 col-lg-2" for="enable_sharedparams">
-							<input name="enable_sharedparams" id="enable_sharedparams" type="checkbox"<?= ($content['enable_sharedparams'] == 1 ? ' checked="checked"' : '') ?> onclick="documentDirty=true;" /> <?= $_lang['enable_sharedparams'] ?></label>
+							<input name="enable_sharedparams" id="enable_sharedparams" type="checkbox"<?= (isset($content['enable_sharedparams']) && $content['enable_sharedparams'] == 1 ? ' checked="checked"' : '') ?> onclick="documentDirty=true;" /> <?= $_lang['enable_sharedparams'] ?></label>
 						<div class="col-md-9 col-lg-10">
 							<small class="form-text text-muted"><?= $_lang['enable_sharedparams_msg'] ?></small>
 						</div>
@@ -602,7 +604,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 			</div>
 			<!-- HTML text editor start -->
 			<div class="section-editor clearfix">
-				<textarea dir="ltr" name="properties" class="phptextarea" rows="20" wrap="soft" onChange="showParameters(this);documentDirty=true;"><?= $content['properties'] ?></textarea>
+				<textarea dir="ltr" name="properties" class="phptextarea" rows="20" wrap="soft" onChange="showParameters(this);documentDirty=true;"><?= !empty($content['properties']) ? $content['properties'] : '' ?></textarea>
 			</div>
 			<!-- HTML text editor end -->
 		</div>
@@ -618,7 +620,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 							<i class="<?= $_style["actions_save"] ?>"></i> <?= $_lang['manage_depends'] ?></a>
 					</div>
 					<?php
-					$ds = $modx->db->select("smd.id, COALESCE(ss.name,st.templatename,sv.name,sc.name,sp.name,sd.pagetitle) AS name, 
+					$ds = $modx->db->select("smd.id, COALESCE(ss.name,st.templatename,sv.name,sc.name,sp.name,sd.pagetitle) AS name,
 					CASE smd.type
 						WHEN 10 THEN 'Chunk'
 						WHEN 20 THEN 'Document'
@@ -626,8 +628,8 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 						WHEN 40 THEN 'Snippet'
 						WHEN 50 THEN 'Template'
 						WHEN 60 THEN 'TV'
-					END AS type", "{$tbl_site_module_depobj} AS smd 
-						LEFT JOIN {$tbl_site_htmlsnippets} AS sc ON sc.id = smd.resource AND smd.type = 10 
+					END AS type", "{$tbl_site_module_depobj} AS smd
+						LEFT JOIN {$tbl_site_htmlsnippets} AS sc ON sc.id = smd.resource AND smd.type = 10
 						LEFT JOIN {$tbl_site_content} AS sd ON sd.id = smd.resource AND smd.type = 20
 						LEFT JOIN {$tbl_site_plugins} AS sp ON sp.id = smd.resource AND smd.type = 30
 						LEFT JOIN {$tbl_site_snippets} AS ss ON ss.id = smd.resource AND smd.type = 40
@@ -643,6 +645,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 					$grd->altItemClass = 'gridAltItem';
 					$grd->columns = $_lang['element_name'] . " ," . $_lang['type'];
 					$grd->fields = "name,type";
+                    $grd->colTypes = "template:[+e.value+]";
 					echo $grd->render();
 					?>
 				</div>
@@ -696,7 +699,7 @@ require_once(MODX_MANAGER_PATH . 'includes/active_user_locks.inc.php');
 							if($checked) {
 								$notPublic = true;
 							}
-							$chks .= '<label><input type="checkbox" name="usrgroups[]" value="' . $row['id'] . '"' . ($checked ? ' checked="checked"' : '') . ' onclick="makePublic(false)" /> ' . $row['name'] . "</label><br />\n";
+							$chks .= '<label><input type="checkbox" name="usrgroups[]" value="' . $row['id'] . '"' . ($checked ? ' checked="checked"' : '') . ' onclick="makePublic(false)" /> ' . $modx->htmlspecialchars($row['name']) . "</label><br />\n";
 						} else {
 							if($checked) {
 								$chks = '<input type="hidden" name="usrgroups[]"  value="' . $row['id'] . '" />' . "\n" . $chks;

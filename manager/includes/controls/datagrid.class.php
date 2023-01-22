@@ -279,9 +279,9 @@ class DataGrid {
 					$value = strtotime($value);
 				}
 				if(!$type_format) {
-					$type_format = "%A %d, %B %Y";
+					$type_format = "l d, F Y";
 				}
-				$value = strftime($type_format, $value);
+				$value = date($type_format, $value);
 				break;
 
 			case "boolean":
@@ -298,11 +298,12 @@ class DataGrid {
 
 			case "template":
 				// replace [+value+] first
-				$value = str_replace("[+value+]", $value, $type_format);
+				$value = str_replace(["[+value+]", "[+e.value+]"], [$value, htmlspecialchars($value)], $type_format);
+
 				// replace other [+fields+]
 				if(strpos($value, "[+") !== false) {
 					foreach($row as $k => $v) {
-						$value = str_replace("[+$k+]", $v, $value);
+						$value = str_replace(["[+$k+]", "[+e.$k+]"], [$v, htmlspecialchars($v)], $value);
 					}
 				}
 				break;

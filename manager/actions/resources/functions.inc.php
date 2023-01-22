@@ -204,7 +204,7 @@ function prepareElementRowPh($row, $resourceTable, $resources) {
 		} else {
 			$title = $modx->parseText($_lang["lock_element_locked_by"], array(
 				'element_type' => $_lang["lock_element_type_" . $lockElementType],
-				'username' => $rowLock['username'],
+				'username' => $modx->htmlspecialchars($rowLock['username']),
 				'lasthit_df' => $rowLock['lasthit_df']
 			));
 			if($modx->hasPermission('remove_locks')) {
