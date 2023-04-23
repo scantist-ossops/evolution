@@ -41,8 +41,8 @@ Composer uses this information to search for the right set of files in package
 key, or in [Packagist.org](https://packagist.org), the default package repository.
 In the above example, since no other repository has been registered in the
 `composer.json` file, it is assumed that the `monolog/monolog` package is registered
-on Packagist.org. (See more about Packagist [below](#packagist), or read more
-about repositories [here](05-repositories.md)).
+on Packagist.org. (Read more [about Packagist](#packagist), and
+[about repositories](05-repositories.md)).
 
 ### Package names
 
@@ -51,7 +51,7 @@ will be identical - the vendor name only exists to prevent naming clashes. For
 example, it would allow two different people to create a library named `json`.
 One might be named `igorw/json` while the other might be `seldaek/json`.
 
-Read more about publishing packages and package naming [here](02-libraries.md).
+Read more about [publishing packages and package naming](02-libraries.md).
 (Note that you can also specify "platform packages" as dependencies, allowing
 you to require certain versions of server software. See
 [platform packages](#platform-packages) below.)
@@ -92,7 +92,7 @@ versions, how versions relate to each other, and on version constraints.
 To initially install the defined dependencies for your project, you should run the
 [`update`](03-cli.md#update-u) command.
 
-```sh
+```shell
 php composer.phar update
 ```
 
@@ -148,7 +148,7 @@ So after fetching new changes from your VCS repository it is recommended to run
 a Composer `install` to make sure the vendor directory is up in sync with your
 `composer.lock` file.
 
-```sh
+```shell
 php composer.phar install
 ```
 
@@ -160,7 +160,7 @@ the latest versions of your dependencies. To update to the latest versions, use 
 versions (according to your `composer.json` file) and update the lock file
 with the new versions.
 
-```sh
+```shell
 php composer.phar update
 ```
 
@@ -170,7 +170,7 @@ php composer.phar update
 
 If you only want to install, upgrade or remove one dependency, you can explicitly list it as an argument:
 
-```sh
+```shell
 php composer.phar update monolog/monolog [...]
 ```
 
@@ -243,13 +243,13 @@ Composer will register a [PSR-4](https://www.php-fig.org/psr/psr-4/) autoloader
 for the `Acme` namespace.
 
 You define a mapping from namespaces to directories. The `src` directory would
-be in your project root, on the same level as `vendor` directory is. An example
+be in your project root, on the same level as the `vendor` directory. An example
 filename would be `src/Foo.php` containing an `Acme\Foo` class.
 
 After adding the [`autoload`](04-schema.md#autoload) field, you have to re-run
 this command:
 
-```sh
+```shell
 php composer.phar dump-autoload
 ```
 

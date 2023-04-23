@@ -11,6 +11,10 @@ static method) or any command-line executable command. Scripts are useful
 for executing a package's custom code or package-specific commands during
 the Composer execution process.
 
+As of Composer 2.5 scripts can also be Symfony Console Command classes,
+which allows you to easily run them including passing options. This is
+however not recommended for handling events.
+
 > **Note:** Only scripts defined in the root package's `composer.json` are
 > executed. If a dependency of the root package specifies its own scripts,
 > Composer does not execute those additional scripts.
@@ -46,7 +50,9 @@ Composer fires the following named events during its execution process:
 ### Installer Events
 
 - **pre-operations-exec**: occurs before the install/upgrade/.. operations
-  are executed when installing a lock file.
+  are executed when installing a lock file. Plugins that need to hook into
+  this event will need to be installed globally to be usable, as otherwise
+  they would not be loaded yet when a fresh install of a project happens.
 
 ### Package Events
 
@@ -71,7 +77,7 @@ Composer fires the following named events during its execution process:
   manipulate the `InputInterface` object's options and arguments to tweak
   a command's behavior.
 - **pre-pool-create**: occurs before the Pool of packages is created, and lets
-  you filter the list of packages which is going to enter the Solver.
+  you filter the list of packages that is going to enter the Solver.
 
 > **Note:** Composer makes no assumptions about the state of your dependencies
 > prior to `install` or `update`. Therefore, you should not specify scripts
@@ -92,8 +98,8 @@ For any given event:
 - Scripts execute in the order defined when their corresponding event is fired.
 - An array of scripts wired to a single event can contain both PHP callbacks
 and command-line executable commands.
-- PHP classes containing defined callbacks must be autoloadable via Composer's
-autoload functionality.
+- PHP classes and commands containing defined callbacks must be autoloadable
+via Composer's autoload functionality.
 - Callbacks can only autoload classes from psr-0, psr-4 and classmap
 definitions. If a defined callback relies on functions defined outside of a
 class, the callback itself is responsible for loading the file containing these
@@ -166,7 +172,7 @@ class MyClass
 `COMPOSER_DEV_MODE` will be added to the environment. If the command was run
 with the `--no-dev` flag, this variable will be set to 0, otherwise it will be
 set to 1. The variable is also available while `dump-autoload` runs, and it
-will be set to same as the last `install` or `update` was run in.
+will be set to the same as the last `install` or `update` was run in.
 
 ## Event classes
 
@@ -192,7 +198,7 @@ objects:
 
 If you would like to run the scripts for an event manually, the syntax is:
 
-```sh
+```shell
 php composer.phar run-script [--dev] [--no-dev] script
 ```
 
@@ -215,7 +221,9 @@ running `composer test`:
 ```json
 {
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "do-something": "MyVendor\\MyClass::doSomething"
+        "my-cmd": "MyVendor\\MyCommand"
     }
 }
 ```
@@ -224,10 +232,62 @@ Similar to the `run-script` command you can give additional arguments to scripts
 e.g. `composer test -- --filter <pattern>` will pass `--filter <pattern>` along
 to the `phpunit` script.
 
+Using a PHP method via `composer do-something arg` lets you execute a
+`static function doSomething(\Composer\Script\Event $event)` and `arg` becomes
+available in `$event->getArguments()`. This however does not let you easily pass
+custom options in the form of `--flags`.
+
+Using a [symfony/console](https://packagist.org/packages/symfony/console) `Command`
+class you can define and access arguments and options more easily.
+
+For example with the command below you can then simply call `composer my-cmd
+--arbitrary-flag` without even the need for a `--` separator. To be detected
+as symfony/console commands the class name must end with `Command` and extend
+symfony's `Command` class. Also note that this will run using Composer's built-in
+symfony/console version which may not match the one you have required in your
+project, and may change between Composer minor releases. If you need more
+safety guarantees you should rather use your own binary file that runs your own
+symfony/console version in isolation in its own process then.
+
+```php
+<?php
+
+namespace MyVendor;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class MyCommand extends Command
+{
+    protected function configure(): void
+    {
+        $this->setDefinition([
+            new InputOption('arbitrary-flag', null, InputOption::VALUE_NONE, 'Example flag'),
+            new InputArgument('foo', InputArgument::OPTIONAL, 'Optional arg'),
+        ]);
+    }
+
+    public function execute(InputInterface $input, OutputInterface $output): int
+    {
+        if ($input->getOption('arbitrary-flag')) {
+            $output->writeln('The flag was used')
+        }
+
+        return 0;
+    }
+}
+```
+
 > **Note:** Before executing scripts, Composer's bin-dir is temporarily pushed
 > on top of the PATH environment variable so that binaries of dependencies
 > are directly accessible. In this example no matter if the `phpunit` binary is
 > actually in `vendor/bin/phpunit` or `bin/phpunit` it will be found and executed.
+
+
+## Managing the process timeout
 
 Although Composer is not intended to manage long-running processes and other
 such aspects of PHP projects, it can sometimes be handy to disable the process
@@ -268,14 +328,14 @@ composer.json configuration:
 It's also possible to set the global environment variable to disable the timeout
 of all following scripts in the current terminal environment:
 
-```
+```shell
 export COMPOSER_PROCESS_TIMEOUT=0
 ```
 
 To disable the timeout of a single script call, you must use the `run-script` composer
 command and specify the `--timeout` parameter:
 
-```
+```shell
 php composer.phar run-script --timeout=0 test
 ```
 
@@ -300,10 +360,10 @@ You can also refer a script and pass it new arguments:
 
 ```json
 {
-  "scripts": {
-    "tests": "phpunit",
-    "testsVerbose": "@tests -vvv"
-  }
+    "scripts": {
+        "tests": "phpunit",
+        "testsVerbose": "@tests -vvv"
+    }
 }
 ```
 

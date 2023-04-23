@@ -34,7 +34,7 @@ separated by `/`. Examples:
 * monolog/monolog
 * igorw/event-source
 
-The name must be lowercased and consist of words separated by `-`, `.` or `_`.
+The name must be lowercase and consist of words separated by `-`, `.` or `_`.
 The complete name should match `^[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]?|-{0,2})[a-z0-9]+)*$`.
 
 The `name` property is required for published packages (libraries).
@@ -119,6 +119,10 @@ Examples:
 - redis
 - templating
 
+> **Note**: Some special keywords trigger `composer require` without the
+> `--dev` option to prompt users if they would like to add these packages to
+> `require-dev` instead of `require`. These are: `dev`, `testing`, `static analysis`.
+
 Optional.
 
 ### homepage
@@ -171,15 +175,15 @@ An Example:
 ```
 
 For a package, when there is a choice between licenses ("disjunctive license"),
-multiple can be specified as array.
+multiple can be specified as an array.
 
 An Example for disjunctive licenses:
 
 ```json
 {
     "license": [
-       "LGPL-2.1-only",
-       "GPL-3.0-or-later"
+        "LGPL-2.1-only",
+        "GPL-3.0-or-later"
     ]
 }
 ```
@@ -203,7 +207,7 @@ Each author object can have following properties:
 
 * **name:** The author's name. Usually their real name.
 * **email:** The author's email address.
-* **homepage:** An URL to the author's website.
+* **homepage:** URL to the author's website.
 * **role:** The author's role in the project (e.g. developer or translator)
 
 An example:
@@ -381,8 +385,8 @@ Example:
 
 ```json
 {
-    "require" : {
-        "php" : ">=7.4",
+    "require": {
+        "php": ">=7.4",
         "ext-mbstring": "*"
     }
 }
@@ -646,6 +650,17 @@ Example:
 }
 ```
 
+Files autoload rules are included whenever `vendor/autoload.php` is included, right after
+the autoloader is registered. The order of inclusion depends on package dependencies so that
+if package A depends on B, files in package B will be included first to ensure package B is fully
+initialized and ready to be used when files from package A are included.
+
+If two packages have the same amount of dependents or no dependencies, the order is alphabetical.
+
+Files from the root package are always loaded last, and you cannot use files autoloading
+yourself to override functions from your dependencies. If you want to achieve that we recommend
+you include your own functions *before* including Composer's `vendor/autoload.php`.
+
 #### Exclude files from classmaps
 
 If you want to exclude some files or folders from the classmap you can use the `exclude-from-classmap` property.
@@ -675,7 +690,7 @@ for more details on how to reduce this impact.
 
 ### autoload-dev <span>([root-only](04-schema.md#root-package))</span>
 
-This section allows to define autoload rules for development purposes.
+This section allows defining autoload rules for development purposes.
 
 Classes needed to run the test suite should not be included in the main autoload
 rules to avoid polluting the autoloader in production and when other people use
@@ -846,16 +861,16 @@ override packages from it.
 Using JSON object notation is also possible. However, JSON key/value pairs
 are to be considered unordered so consistent behaviour cannot be guaranteed.
 
- ```json
+```json
 {
     "repositories": {
-         "foo": {
-             "type": "composer",
-             "url": "http://packages.foo.com"
-         }
+        "foo": {
+            "type": "composer",
+            "url": "http://packages.foo.com"
+        }
     }
 }
- ```
+```
 
 ### config <span>([root-only](04-schema.md#root-package))</span>
 
@@ -884,8 +899,8 @@ Optional.
 
 ### bin
 
-A set of files that should be treated as binaries and symlinked into the `bin-dir`
-(from config).
+A set of files that should be treated as binaries and made available
+into the `bin-dir` (from config).
 
 See [Vendor Binaries](articles/vendor-binaries.md) for more details.
 
@@ -941,9 +956,9 @@ It can be boolean or a package name/URL pointing to a recommended alternative.
 
 Examples:
 
-Use `"abandoned": true` to indicates this package is abandoned.
-Use `"abandoned": "monolog/monolog"` to indicates this package is abandoned, and the
-recommended alternative is  `monolog/monolog`.
+Use `"abandoned": true` to indicate this package is abandoned.
+Use `"abandoned": "monolog/monolog"` to indicate this package is abandoned, and that
+the recommended alternative is `monolog/monolog`.
 
 Defaults to false.
 
@@ -962,7 +977,7 @@ version of the parent branch or at least master or something.
 
 To handle non-numeric named branches as versions instead of searching for a parent branch
 with a valid version or special branch name like master, you can set patterns for branch
-names, that should be handled as dev version branches.
+names that should be handled as dev version branches.
 
 This is really helpful when you have dependencies using "self.version", so that not dev-master,
 but the same branch is installed (in the example: latest-testing).

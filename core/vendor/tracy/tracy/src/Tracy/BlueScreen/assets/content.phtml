@@ -19,10 +19,12 @@ namespace Tracy;
  * @var ?string $headersFile
  * @var ?int $headersLine
  * @var ?array $obStatus
+ * @var \Generator[] $generators
+ * @var \Fiber[] $fibers
  */
 ?>
 <tracy-div id="tracy-bs" itemscope>
-	<a id="tracy-bs-toggle" href="#" class="tracy-toggle"></a>
+	<a id="tracy-bs-toggle" href="#" class="tracy-toggle">&#xfeff;</a>
 	<div class="tracy-bs-main">
 <?php $ex = $exception; $exceptions = []; ?>
 <?php require __DIR__ . '/section-exception.phtml' ?>
