@@ -58,7 +58,7 @@ class PoFileLoader extends FileLoader
      *
      * Items with an empty id are ignored.
      */
-    protected function loadResource(string $resource): array
+    protected function loadResource(string $resource)
     {
         $stream = fopen($resource, 'r');
 

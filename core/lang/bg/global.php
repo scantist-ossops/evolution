@@ -16,7 +16,7 @@
 $modx_lang_attribute = 'bg'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'MODX is a <a href="http://modx.com/" target="_blank">PHP Application Framework and Content Management System</a> licensed under the <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'MODX is a <a href="https://evo.im/" target="_blank">PHP Application Framework and Content Management System</a> licensed under the <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'За Системата MODX';
 $_lang["access_permission_denied"] = 'Нямате Права за Достъп за този Документ.';
 $_lang["access_permission_parent_denied"] = 'Нямате Права да създавате Документ тук!';
@@ -182,7 +182,7 @@ $_lang["create_resource_title"] = 'Create Resource';
 $_lang["create_weblink_here"] = 'Създайте препратка тук';
 $_lang["createdon"] = 'Дата на създаване';
 $_lang["credits"] = 'Екипът на MODX';
-$_lang["credits_shouts_msg"] = '<p>MODX is managed and maintained at <a href="http://modx.com/" target="_blank">modx.com</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>MODX is managed and maintained at <a href="https://evo.im/" target="_blank">modx.com</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Тук можете да добавите типовете потребителско съдържание, които могат да бъдат използвани във Вашите документи. За да добавите нов запис, въведете типа на съдържанието в текстовото поле и след това щракнете на бутона \'Добавяне\'.';
 $_lang["custom_contenttype_title"] = 'Потребителски типове съдържание:';
 $_lang["database_charset"] = 'Кодова таблица на базата от данни';
@@ -604,7 +604,7 @@ $_lang["password_method"] = 'Метод за оповестяване на но�
 $_lang["password_method_email"] = 'Изпрати новата парола на емейл адрес.';
 $_lang["password_method_screen"] = 'Покажи новата парола на екран.';
 $_lang["password_msg"] = 'Новата парола на <b>:username</b> е <b>:password</b><br>';
-$_lang["php_version_check"] = 'MODX е съвместим с PHP версия 5.6.0 и по-високи. Ъпгрейдвайте PHP инсталацията си!';
+$_lang["php_version_check"] = 'MODX е съвместим с PHP версия 7.4 и по-високи. Ъпгрейдвайте PHP инсталацията си!';
 $_lang["plugin"] = 'Плъгин';
 $_lang["plugin_code"] = 'Код на плъгина (php)';
 $_lang["plugin_config"] = 'Конфигурация на плъгин';
@@ -784,10 +784,10 @@ $_lang["role_view_logs"] = 'Преглед на системните логов�
 $_lang["role_view_unpublished"] = 'Преглед на непубликувани документи';
 $_lang["role_web_access_persmissions"] = 'Права за уеб достъп';
 $_lang["role_web_user_management"] = 'Управление на уеб потребителите';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Въвеждане на URL адрес за MODX Новините.';
 $_lang["rss_url_news_title"] = 'RSS на Новините';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Въвеждане на URL адрес за MODX Сигурността.';
 $_lang["rss_url_security_title"] = 'RSS на Сигурността';
 $_lang["run_module"] = 'Стартиране на модул';
@@ -1218,5 +1218,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

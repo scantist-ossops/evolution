@@ -16,7 +16,7 @@
 $modx_lang_attribute = 'it'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'EVO è un <a href="http://evo.im/" target="_blank">Framework PHP e Sistema di Gestione dei Contenuti (CMS)</a> distribuito con licenza <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'EVO è un <a href="https://evo.im/" target="_blank">Framework PHP e Sistema di Gestione dei Contenuti (CMS)</a> distribuito con licenza <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'Cos\'è EVO';
 $_lang["access_permission_denied"] = 'Non avete i permessi per accedere alla Risorsa.';
 $_lang["access_permission_parent_denied"] = 'Non avete il permesso di creare o spostare qui una Risorsa! Scegliete un\'altra destinazione.';
@@ -194,7 +194,7 @@ $_lang["create_weblink_here"] = 'Crea un Link Web';
 $_lang["createdon"] = 'Data di creazione';
 $_lang["create_new"] = 'Crea nuovo';
 $_lang["credits"] = 'Crediti';
-$_lang["credits_shouts_msg"] = '<p>EVO è gestito e mantenuto da <a href="http://evo.im/" target="_blank">evo.im</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>EVO è gestito e mantenuto da <a href="https://evo.im/" target="_blank">evo.im</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Qui potete impostare il \'content type\' delle Risorse pubblicate. Per aggiungere un nuovo \'content type\' inseritelo nel campo e fate clic sul pulsante \'Aggiungi\'.';
 $_lang["custom_contenttype_title"] = 'Tipo di Contenuto personalizzato:';
 $_lang["database_charset"] = 'Set di Caratteri del Database';
@@ -646,7 +646,7 @@ $_lang["password_method"] = 'Come volete notificare la nuova password all\'utent
 $_lang["password_method_email"] = 'Invia la nuova password per e-mail.';
 $_lang["password_method_screen"] = 'Mostra la nuova password sullo schermo.';
 $_lang["password_msg"] = 'La nuova password per <b>:username</b> è <b>:password</b>.';
-$_lang["php_version_check"] = 'EVO è compatibile con PHP versione 5.6.0 o superiore. Il vostro server usa la versione %s%. Si prega di aggiornare l\'installazione di PHP!';
+$_lang["php_version_check"] = 'EVO è compatibile con PHP versione 7.4 o superiore. Il vostro server usa la versione %s%. Si prega di aggiornare l\'installazione di PHP!';
 $_lang["plugin"] = 'Plugin';
 $_lang["plugins"] = 'Plugins';
 $_lang["plugin_code"] = 'Codice del Plugin (PHP)';
@@ -836,10 +836,10 @@ $_lang["role_view_logs"] = 'Visualizza i log di sistema';
 $_lang["role_view_unpublished"] = 'Vedi le Risorse non pubblicate';
 $_lang["role_web_access_persmissions"] = 'Permessi di accesso Web';
 $_lang["role_web_user_management"] = 'Gestione utente web';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = '<b>Inserire l\'URL per il Feed RSS Novità EVO.</b>';
 $_lang["rss_url_news_title"] = 'Feed RSS Novità EVO:';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Inserire l\'URL per il Feed RSS Avvisi di Protezione EVO.';
 $_lang["rss_url_security_title"] = 'Feed RSS Avvisi di Protezione EVO:';
 $_lang["run_module"] = 'Esegui Modulo';
@@ -1466,5 +1466,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

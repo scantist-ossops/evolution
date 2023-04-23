@@ -89,6 +89,8 @@ class SiteContent extends Eloquent\Model
     const CREATED_AT = 'createdon';
     const UPDATED_AT = 'editedon';
     const DELETED_AT = 'deletedon';
+    const DELETED = 'deleted';
+
     protected $dateFormat = 'U';
 
     const CHILDREN_RELATION_NAME = 'children';
@@ -535,6 +537,26 @@ class SiteContent extends Eloquent\Model
     public function getParentIdColumn()
     {
         return 'parent';
+    }
+
+    /**
+     * Get the name of the "deleted" column.
+     *
+     * @return string
+     */
+    public function getDeletedColumn()
+    {
+        return defined('static::DELETED') ? static::DELETED : 'deleted';
+    }
+
+    /**
+     * Get the fully qualified "deleted" column.
+     *
+     * @return string
+     */
+    public function getQualifiedDeletedColumn()
+    {
+        return $this->qualifyColumn($this->getDeletedColumn());
     }
 
     /**
@@ -2041,6 +2063,24 @@ class SiteContent extends Eloquent\Model
         return $query->where('published', '1')->where('deleted', '0');
     }
 
+    public function scopeWithoutProtected($query)
+    {
+        $query->leftJoin('document_groups', 'document_groups.document', '=', 'site_content.id');
+        $query->where(function($query){
+            $docgrp = EvolutionCMS()->getUserDocGroups();
+            if (EvolutionCMS()->isFrontend()) {
+                $query->where('privateweb', 0);
+            } else {
+                $query->whereRaw("1 = {$_SESSION['mgrRole']}");
+                $query->orWhere('site_content.privatemgr', 0);
+            }
+            if ($docgrp) {
+                $query->orWhereIn('document_groups.document_group', $docgrp);
+            }
+        });
+
+        return $query;
+    }
 
     public function scopeWithTVs($query, $tvList = array(), $sep = ':', $tree = false)
     {

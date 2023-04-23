@@ -16,7 +16,7 @@
 $modx_lang_attribute = 'es'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'EVO es un <a href="http://evo.im/" target="_blank">Sistema de Administración de Contenido y Esquema de PHP</a> bajo licencia <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'EVO es un <a href="https://evo.im/" target="_blank">Sistema de Administración de Contenido y Esquema de PHP</a> bajo licencia <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'Acerca de Evolution';
 $_lang["access_permission_denied"] = 'No tienes los permisos correctos para este documento.';
 $_lang["access_permission_parent_denied"] = '¡No tienes permiso para crear o mover un documento aquí! Por favor elije otro lugar.';
@@ -194,7 +194,7 @@ $_lang["create_weblink_here"] = 'Crear enlace web aquí';
 $_lang["createdon"] = 'Fecha de creación';
 $_lang["create_new"] = 'Create new';
 $_lang["credits"] = 'Créditos';
-$_lang["credits_shouts_msg"] = '<p>EVO es administrado y mantenido en <a href="http://evo.im/" target="_blank">evo.im</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>EVO es administrado y mantenido en <a href="https://evo.im/" target="_blank">evo.im</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Aquí puedes añadir tipos de contenido personalizados para ser usados en tus documentos. Para añadir una nueva entrada, ingresa el tipo de contenido y presione el botón de \'Añadir\'.';
 $_lang["custom_contenttype_title"] = 'Tipos de contenido personalizados:';
 $_lang["database_charset"] = 'Conjunto de Caracteres de la Base de Datos';
@@ -646,7 +646,7 @@ $_lang["password_method"] = 'Método de notificación de contraseña';
 $_lang["password_method_email"] = 'Enviar la contraseña nueva por email.';
 $_lang["password_method_screen"] = 'Mostrar la contraseña nueva en la pantalla.';
 $_lang["password_msg"] = 'La contraseña nueva para <b>:username</b> es <b>:password</b>.';
-$_lang["php_version_check"] = 'EVO es compatible con PHP Versión 5.0.0 y superior.  Por favor ¡actualiza tu instalación de PHP!';
+$_lang["php_version_check"] = 'EVO es compatible con PHP Versión 7.4 y superior.  Por favor ¡actualiza tu instalación de PHP!';
 $_lang["plugin"] = 'Plugin';
 $_lang["plugins"] = 'Plugins';
 $_lang["plugin_code"] = 'Código de plugin(php)';
@@ -1193,7 +1193,7 @@ $_lang["pwd_hash_algo_message"] = 'Password hash algorithm.';
 $_lang["enable_bindings_title"] = 'Enable @Bindings commands';
 $_lang["enable_bindings_message"] = 'Prevents the execution of PHP functions through TV @Bindings. Useful if you have Manager users who should not be able to create PHP code but need to be able to create or edit TVs. The output of any TV with an @Binding will be "@Bindings disabled".';
 $_lang["enable_filter_title"] = 'Habilitar filtros';
-$_lang["enable_filter_message"] = 'Filters allow you to manipulate the way data is presented or parsed in a tag. They allow you to modify values from inside your templates. This is analogous to PHx. <a href="https://github.com/modxcms/evolution/issues/623" target="ext_help">More info</a>'; // todo: change link to documentation 
+$_lang["enable_filter_message"] = 'Filters allow you to manipulate the way data is presented or parsed in a tag. They allow you to modify values from inside your templates. This is analogous to PHx. <a href="https://github.com/modxcms/evolution/issues/623" target="ext_help">More info</a>'; // todo: change link to documentation
 $_lang["enable_filter_phx_warning"] = 'Cuando está habilitada PHx plugin, incorporado en los filtros están desactivados por defecto';
 
 $_lang["enable_at_syntax_title"] = 'Habilitar &lt;@SYNTAX&gt;';
@@ -1456,5 +1456,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

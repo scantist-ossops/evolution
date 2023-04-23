@@ -6,9 +6,8 @@
             mraTrans = {!! json_encode($mraTranslations, JSON_UNESCAPED_UNICODE) !!};
     </script>
     <script src="media/script/jquery.quicksearch.js"></script>
-    <script src="media/script/jquery.nucontextmenu.js"></script>
     <script src="media/script/bootstrap/js/bootstrap.min.js"></script>
-    <script src="actions/resources/functions.js"></script>
+    <script src="media/script/resources-functions.js"></script>
 @endpush
 
 @section('content')

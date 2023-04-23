@@ -42,7 +42,7 @@ $errors = 0;
 
 
 // check PHP version
-define('PHP_MIN_VERSION', '7.3.0');
+define('PHP_MIN_VERSION', '7.4.0');
 $phpMinVersion = PHP_MIN_VERSION; // Maybe not necessary. For backward compatibility
 echo '<p>' . $_lang['checking_php_version'];
 // -1 if left is less, 0 if equal, +1 if left is higher
@@ -330,7 +330,7 @@ if (is_writable("../assets/cache")) {
     f_owc("../assets/cache/installProc.inc.php", '<?php $installStartTime = ' . time() . '; ?>');
 }
 
-if ($installMode > 0 && $_POST['installdata'] == "1") {
+if ($installMode > 0 && isset($_POST['installdata']) && $_POST['installdata'] == "1") {
     echo '<p class="notes"><strong>' . $_lang['sample_web_site'] . ':</strong> ' . $_lang['sample_web_site_note'] . '</p>';
 }
 

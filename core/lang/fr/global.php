@@ -19,7 +19,7 @@
 $modx_lang_attribute = 'fr'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'MODX est un <a href="http://modx.com/" target="_blank">Système de Gestion de Contenu et un Framework applicatif PHP</a> placé sous licence <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'MODX est un <a href="https://evo.im/" target="_blank">Système de Gestion de Contenu et un Framework applicatif PHP</a> placé sous licence <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'À propos de MODX';
 $_lang["access_permission_denied"] = 'Vous n\'avez pas les autorisations nécessaires pour modifier cette Ressource.';
 $_lang["access_permission_parent_denied"] = 'Vous n\'avez pas l\'autorisation de créer ou de déplacer une Ressource ici! Veuillez choisir une autre destination.';
@@ -185,7 +185,7 @@ $_lang["create_resource_title"] = 'Créer une Ressource';
 $_lang["create_weblink_here"] = 'Créer un Lien Web ici';
 $_lang["createdon"] = 'Date de création';
 $_lang["credits"] = 'Crédits';
-$_lang["credits_shouts_msg"] = '<p>MODX est développé et maintenu par <a href="http://modx.com/" target="_blank">modx.com</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>MODX est développé et maintenu par <a href="https://evo.im/" target="_blank">modx.com</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Vous pouvez ajouter ici des types de contenu personnalisés pour vos Ressources. Pour ajouter un nouveau type, saisissez-le dans le champ, puis cliquez sur le bouton «Ajouter».';
 $_lang["custom_contenttype_title"] = 'Types de contenu personnalisés:';
 $_lang["database_charset"] = 'Jeu de caractères de la base de données';
@@ -607,7 +607,7 @@ $_lang["password_method"] = 'Méthode de notification du mot de passe';
 $_lang["password_method_email"] = 'Envoyer le nouveau mot de passe par email.';
 $_lang["password_method_screen"] = 'Afficher le nouveau mot de passe à l\'écran.';
 $_lang["password_msg"] = 'Le nouveau mot de passe de <b>:username</b> est <b>:password</b><br>';
-$_lang["php_version_check"] = 'MODX est compatible avec PHP version 5.6.0 ou ultérieure. Veuillez mettre à jour votre installation de PHP!';
+$_lang["php_version_check"] = 'MODX est compatible avec PHP version 7.4 ou ultérieure. Veuillez mettre à jour votre installation de PHP!';
 $_lang["plugin"] = 'Plugin';
 $_lang["plugin_code"] = 'Code source du Plugin (php)';
 $_lang["plugin_config"] = 'Réglages du Plugin';
@@ -787,10 +787,10 @@ $_lang["role_view_logs"] = 'Afficher les historiques du système';
 $_lang["role_view_unpublished"] = 'Visualiser les Ressources non publiées';
 $_lang["role_web_access_persmissions"] = 'Autorisations d\'accès web';
 $_lang["role_web_user_management"] = 'Gestion des Utilisateurs Web';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Entrez l\'URL du flux pour les actualités MODX.';
 $_lang["rss_url_news_title"] = 'Flux RSS des actualités';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Entrez l\'URL du flux pour les bulletins de sécurité MODX.';
 $_lang["rss_url_security_title"] = 'Flux RSS des bulletins de sécurité';
 $_lang["run_module"] = 'Lancer le Module';
@@ -1188,5 +1188,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

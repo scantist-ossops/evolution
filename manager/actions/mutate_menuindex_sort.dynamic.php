@@ -2,11 +2,11 @@
 if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
     die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the EVO Content Manager instead of accessing this file directly.");
 }
-if (!$modx->hasPermission('edit_document') || !$modx->hasPermission('save_document')) {
-    $modx->webAlertAndQuit($_lang["error_no_privileges"]);
+if (!EvolutionCMS()->hasPermission('edit_document') || !EvolutionCMS()->hasPermission('save_document')) {
+    EvolutionCMS()->webAlertAndQuit($_lang["error_no_privileges"]);
 }
 
-$id = isset($_REQUEST['id']) ? (int)$_REQUEST['id'] : null;
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $reset = isset($_POST['reset']) && $_POST['reset'] == 'true' ? 1 : 0;
 $items = isset($_POST['list']) ? $_POST['list'] : '';
 $ressourcelist = '';
@@ -14,12 +14,12 @@ $updateMsg = '';
 
 // check permissions on the document
 $udperms = new EvolutionCMS\Legacy\Permissions();
-$udperms->user = $modx->getLoginUserID('mgr');
+$udperms->user = EvolutionCMS()->getLoginUserID('mgr');
 $udperms->document = $id;
 $udperms->role = $_SESSION['mgrRole'];
 
 if (!$udperms->checkPermissions()) {
-    $modx->webAlertAndQuit($_lang["access_permission_denied"]);
+    EvolutionCMS()->webAlertAndQuit($_lang["access_permission_denied"]);
 }
 
 if (isset($_POST['listSubmitted'])) {
@@ -30,7 +30,7 @@ if (isset($_POST['listSubmitted'])) {
             $docid = ltrim($value, 'item_');
             $key = $reset ? 0 : $key;
             if (is_numeric($docid)) {
-                \EvolutionCMS\Models\SiteContent::where('id', $docid)->update(array('menuindex' => $key));
+                \EvolutionCMS\Models\SiteContent::where('id', $docid)->withTrashed()->update(['menuindex' => $key]);
             }
         }
     }
@@ -40,16 +40,25 @@ $disabled = 'true';
 $pagetitle = '';
 $ressourcelist = '';
 if ($id !== null) {
+    try {
+        $doc = \EvolutionCMS\Models\SiteContent::query()->withTrashed()->findOrFail($id);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        $modx->webAlertAndQuit($_lang["access_permission_denied"]);
+    }
+    $pagetitle = $doc->pagetitle;
 
-    $pagetitle = \EvolutionCMS\Models\SiteContent::query()->find($id)->pagetitle;
-
-    $mgrRole = (isset ($_SESSION['mgrRole']) && (string)$_SESSION['mgrRole'] === '1') ? '1' : '0';
+    $mgrRole = (isset ($_SESSION['mgrRole']) && (string) $_SESSION['mgrRole'] === '1') ? '1' : '0';
     $resources = \EvolutionCMS\Models\SiteContent::query()
-        ->select('site_content.id', 'site_content.pagetitle', 'site_content.parent', 'site_content.menuindex', 'site_content.published', 'site_content.hidemenu', 'site_content.deleted', 'site_content.isfolder')
+        ->withTrashed()
+        ->select('site_content.id', 'site_content.pagetitle', 'site_content.parent', 'site_content.menuindex',
+            'site_content.published', 'site_content.hidemenu', 'site_content.deleted', 'site_content.isfolder')
         ->leftJoin('document_groups', 'document_groups.document', '=', 'site_content.id')
         ->where('site_content.parent', $id)
         ->orderBy('menuindex', 'ASC')
-        ->groupBy(['site_content.id', 'site_content.pagetitle', 'site_content.parent', 'site_content.menuindex', 'site_content.published', 'site_content.hidemenu', 'site_content.deleted', 'site_content.isfolder']);
+        ->groupBy([
+            'site_content.id', 'site_content.pagetitle', 'site_content.parent', 'site_content.menuindex',
+            'site_content.published', 'site_content.hidemenu', 'site_content.deleted', 'site_content.isfolder'
+        ]);
     if ($mgrRole != 1) {
         if (is_array($_SESSION['mgrDocgroups']) && count($_SESSION['mgrDocgroups']) > 0) {
             $resources = $resources->where(function ($q) {
@@ -77,7 +86,7 @@ if ($id !== null) {
     }
 }
 
-$pagetitle = empty($id) ? $modx->getConfig('site_name') : $pagetitle;
+$pagetitle = empty($id) ? EvolutionCMS()->getConfig('site_name') : $pagetitle;
 ?>
 
 <script type="text/javascript">
@@ -153,14 +162,14 @@ $pagetitle = empty($id) ? $modx->getConfig('site_name') : $pagetitle;
 </script>
 
 <h1>
-    <i class="<?= $_style['icon_sort_num_asc'] ?>"></i><?= ($pagetitle ? $modx->getPhpCompat()->entities($pagetitle) . '<small>(' . $id . ')</small>' : $_lang['sort_menuindex']) ?>
+    <i class="<?= $_style['icon_sort_num_asc'] ?>"></i><?= ($pagetitle ? EvolutionCMS()->getPhpCompat()->entities($pagetitle) . '<small>(' . $id . ')</small>' : $_lang['sort_menuindex']) ?>
 </h1>
 
 <?= ManagerTheme::getStyle('actionbuttons.dynamic.save') ?>
 
 <div class="tab-page">
     <div class="container container-body">
-        <b><?= $modx->getPhpCompat()->entities($pagetitle) ?> (<?= $id ?>)</b>
+        <b><?= EvolutionCMS()->getPhpCompat()->entities($pagetitle) ?> (<?= $id ?>)</b>
         <?php
         if ($ressourcelist) {
             ?>

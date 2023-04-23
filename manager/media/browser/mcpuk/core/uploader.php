@@ -325,7 +325,7 @@ class uploader
 
             $property = \EvolutionCMS\Models\SitePlugin::query()->where('name', 'TransAlias')->where('disabled', 0)->first();
             if (!is_null($property)) {
-                $properties = $modx->parseProperties($property->properties, 'TransAlias', 'plugin');
+                $properties = EvolutionCMS()->parseProperties($property->properties, 'TransAlias', 'plugin');
             } else {
                 $properties = NULL;
             }
@@ -535,7 +535,10 @@ class uploader
             $img = $image;
 
         $orientation = 1;
-
+        if (function_exists("exif_read_data")) {
+            $orientation = @exif_read_data($file);
+            $orientation = isset($orientation['Orientation']) ? $orientation['Orientation'] : 1;
+        }
 
         // IMAGE WILL NOT BE RESIZED WHEN NO WATERMARK AND SIZE IS ACCEPTABLE
         if ((
@@ -692,15 +695,29 @@ class uploader
         require "lang/{$langCode}.php";
         setlocale(LC_ALL, $lang['_locale']);
         $this->charset = $lang['_charset'];
-        $this->dateTimeFull = $lang['_dateTimeFull'];
-        $this->dateTimeMid = $lang['_dateTimeMid'];
-        $this->dateTimeSmall = $lang['_dateTimeSmall'];
+        $this->dateTimeFull = $this->convertDateFormat($lang['_dateTimeFull']);
+        $this->dateTimeMid = $this->convertDateFormat($lang['_dateTimeMid']);
+        $this->dateTimeSmall = $this->convertDateFormat($lang['_dateTimeSmall']);
         unset($lang['_locale']);
         unset($lang['_charset']);
         unset($lang['_dateTimeFull']);
         unset($lang['_dateTimeMid']);
         unset($lang['_dateTimeSmall']);
         $this->labels = $lang;
+    }
+
+    protected function convertDateFormat($format)
+    {
+        $replace = [
+            '%d' => 'd', '%a' => 'D', '%e' => 'j', '%A' => 'l', '%u' => 'N', '%w' => 'w', '%j' => 'z',
+            '%V' => 'W',
+            '%B' => 'F', '%m' => 'm', '%b' => 'M',
+            '%G' => 'o', '%Y' => 'Y', '%y' => 'y',
+            '%P' => 'a', '%p' => 'A', '%l' => 'g', '%I' => 'h', '%H' => 'H', '%M' => 'i', '%S' => 's',
+            '%z' => 'O', '%Z' => 'T',
+            '%s' => 'U'
+        ];
+        return strtr((string)$format, $replace);
     }
 
     /**
@@ -791,5 +808,3 @@ class uploader
 ";
     }
 }
-
-?>

@@ -6,6 +6,36 @@ if (!$modx->hasPermission('save_plugin')) {
     $modx->webAlertAndQuit($_lang['error_no_privileges']);
 }
 
+if (isset($_GET['disabled'])) {
+    $disabled = $_GET['disabled'] == 1 ? 1 : 0;
+    $id = (int)($_REQUEST['id'] ?? 0);
+    // Set the item name for logger
+    try {
+        $plugin = EvolutionCMS\Models\SitePlugin::findOrFail($id);
+        // invoke OnBeforeChunkFormSave event
+        $modx->invokeEvent("OnBeforePluginFormSave", array(
+            "mode" => "upd",
+            "id" => $id
+        ));
+        $_SESSION['itemname'] = $plugin->name;
+        $plugin->update(['disabled' => $disabled]);
+        // invoke OnChunkFormSave event
+        $modx->invokeEvent("OnPluginFormSave", array(
+            "mode" => "upd",
+            "id" => $id
+        ));
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        $modx->webAlertAndQuit($_lang["error_no_id"]);
+    }
+    // empty cache
+    $modx->clearCache('full');
+
+    // finished emptying cache - redirect
+    $header="Location: index.php?a=76&tab=4&r=2";
+    header($header);
+    exit;
+}
+
 $id = (int)$_POST['id'];
 $name = trim($_POST['name']);
 $description = $_POST['description'];
@@ -104,7 +134,7 @@ switch ($_POST['mode']) {
             $header = 'Location: index.php?a=' . $a . '&r=2&stay=' . $_POST['stay'];
             header($header);
         } else {
-            $header = 'Location: index.php?a=76&r=2';
+            $header = 'Location: index.php?a=76&tab=4&r=2';
             header($header);
         }
         break;
@@ -160,7 +190,7 @@ switch ($_POST['mode']) {
             header($header);
         } else {
             $modx->unlockElement(5, $id);
-            $header = 'Location: index.php?a=76&r=2';
+            $header = 'Location: index.php?a=76&tab=4&r=2';
             header($header);
         }
         break;

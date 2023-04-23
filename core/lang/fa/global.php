@@ -16,7 +16,7 @@ $modx_textdir = 'rtl'; // uncomment this line for RTL langauges
 $modx_lang_attribute = 'fa'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'مادایکس یک <a href="http://modx.com/" target="_blank">سیستم مدیریت محتوای ساختار یافته و پیشرفته  توسط PHP میباشد</a> که  تحت لیسانس <a href="../assets/docs/license.txt">GNU-GPL</a> منتشر شده است';
+$_lang["about_msg"] = 'مادایکس یک <a href="https://evo.im/" target="_blank">سیستم مدیریت محتوای ساختار یافته و پیشرفته  توسط PHP میباشد</a> که  تحت لیسانس <a href="../assets/docs/license.txt">GNU-GPL</a> منتشر شده است';
 $_lang["about_title"] = 'درباره مادایکس';
 $_lang["access_permission_denied"] = 'شما دسترسی لازم را برای این پرونده ندارید.';
 $_lang["access_permission_parent_denied"] = 'شما اجازه یا دسترسی ایجاد یا انتقال پرونده ای جدید در این مکان را ندارید!. لطفا مکان دیگری را انتخاب کنید.';
@@ -182,7 +182,7 @@ $_lang["create_resource_title"] = 'Create Resource';
 $_lang["create_weblink_here"] = 'ایجاد وب لینک در اینجا';
 $_lang["createdon"] = 'تاریخ ایجاد';
 $_lang["credits"] = 'امکانات و قابلیتهای استفاده شده';
-$_lang["credits_shouts_msg"] = '<p>MODX is managed and maintained at <a href="http://modx.com/" target="_blank">modx.com</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>MODX is managed and maintained at <a href="https://evo.im/" target="_blank">modx.com</a>.</p>';
 $_lang["custom_contenttype_message"] = 'در اینجا شما میتوانید انواع مختلف و مخصوص از محتوا را اضافه کنید تا در پرونده های شما از آنها استفاده شوند. برای اضافه کردن ورودی جدید, نوع محتوا را در جعبه ی متنی وارد کنید و سپس روی گزینه ی \'اضافه کردن\' کلیک کنید.';
 $_lang["custom_contenttype_title"] = 'انواع مختلف محتوا:';
 $_lang["database_charset"] = 'کارست بانک اطلاعات';
@@ -604,7 +604,7 @@ $_lang["password_method"] = 'نحوه اطلاع از کلمه ی عبور جد�
 $_lang["password_method_email"] = 'کلمه ی عبور از طریق پست الکترونیک ارسال شود';
 $_lang["password_method_screen"] = 'کلمه ی عبور جدید در صفحه نشان داده شود';
 $_lang["password_msg"] = 'کلمهی عبور جدید برای <b>:password</b> این است: <b>:username</b><br>';
-$_lang["php_version_check"] = 'مادایکس تنها بر روی نسخه ی PHP 5.6.0 و بالاتر اجرا می شود لطفا نسخه ی PHP خود را ارتقاء دهید';
+$_lang["php_version_check"] = 'مادایکس تنها بر روی نسخه ی PHP 7.4 و بالاتر اجرا می شود لطفا نسخه ی PHP خود را ارتقاء دهید';
 $_lang["plugin"] = 'پلاگین';
 $_lang["plugin_code"] = 'کدهای پلاگین یا PHP';
 $_lang["plugin_config"] = 'تنظیمات پلاگین ';
@@ -784,10 +784,10 @@ $_lang["role_view_logs"] = 'مرور ثبت یا لاگ سیستم';
 $_lang["role_view_unpublished"] = 'مرور پرونده های منتشر نشده';
 $_lang["role_web_access_persmissions"] = 'سطوح دسترسی وب';
 $_lang["role_web_user_management"] = 'مدیریت کاربر وب';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'URL منبع آخرین اخبار مادایکس.';
 $_lang["rss_url_news_title"] = 'RSS اخبار';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'URL منبع اخبار امنیتی.';
 $_lang["rss_url_security_title"] = 'RSS امنیتی';
 $_lang["run_module"] = 'اجرای ماژول';
@@ -1218,5 +1218,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

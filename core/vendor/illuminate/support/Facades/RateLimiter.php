@@ -27,6 +27,6 @@ class RateLimiter extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \Illuminate\Cache\RateLimiter::class;
+        return 'Illuminate\Cache\RateLimiter';
     }
 }

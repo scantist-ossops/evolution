@@ -16,7 +16,7 @@
 $modx_lang_attribute = 'cs'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'MODX je <a href="http://modx.com/" target="_blank">PHP Application Framework and Content Management System</a> licencovaný pod <a href="http://www.gnu.cz/article/32/">GNU GPL</a>.';
+$_lang["about_msg"] = 'MODX je <a href="https://evo.im/" target="_blank">PHP Application Framework and Content Management System</a> licencovaný pod <a href="http://www.gnu.cz/article/32/">GNU GPL</a>.';
 $_lang["about_title"] = 'O MODX';
 $_lang["access_permission_denied"] = 'Nemáte potřebná oprávnění pro tento dokument.';
 $_lang["access_permission_parent_denied"] = 'Nemáte oprávnění pro vytvoření nebo přesun dokumentu na toto místo! Vyberte jiné umístění.';
@@ -182,7 +182,7 @@ $_lang["create_resource_title"] = 'Vytvořit dokument';
 $_lang["create_weblink_here"] = 'Zde vytvořit link';
 $_lang["createdon"] = 'Vytvořeno dne:';
 $_lang["credits"] = 'Poděkování';
-$_lang["credits_shouts_msg"] = '<p>MODX je spravován a udržován na <a href="http://modx.com/" target="_blank">modx.com</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>MODX je spravován a udržován na <a href="https://evo.im/" target="_blank">modx.com</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Tady můžete přidat uživatelské typy obsahu užité ve vašich dokumentech. Pro přidání nového vstupu, zadejte typ obsahu v textovém poli, potom klikněte na tlačítko \'Přidat\'.';
 $_lang["custom_contenttype_title"] = 'Uživatelské typy obsahu:';
 $_lang["database_charset"] = 'Znaková sada databáze';
@@ -604,7 +604,7 @@ $_lang["password_method"] = 'Způsob oznámení hesla';
 $_lang["password_method_email"] = 'Poslat nové heslo emailem.';
 $_lang["password_method_screen"] = 'Zobrazit nové heslo na monitoru.';
 $_lang["password_msg"] = 'Nové heslo pro <b>:username</b> je <b>:password</b><br>';
-$_lang["php_version_check"] = 'MODX je kompatibilní jen s verzí PHP 5.6.0 a vyšší. Aktualizujte prosím svou PHP instalaci!';
+$_lang["php_version_check"] = 'MODX je kompatibilní jen s verzí PHP 7.4 a vyšší. Aktualizujte prosím svou PHP instalaci!';
 $_lang["plugin"] = 'Plugin';
 $_lang["plugin_code"] = 'Kód pluginu (php)';
 $_lang["plugin_config"] = 'Nastavení pluginu';
@@ -788,10 +788,10 @@ $_lang["role_view_logs"] = 'Zobrazit systémové výpisy';
 $_lang["role_view_unpublished"] = 'Zobrazit nepublikované dokumenty';
 $_lang["role_web_access_persmissions"] = 'Webová přístupová práva';
 $_lang["role_web_user_management"] = 'Správa návštěvníků';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Zadejte URL adresu pro načítání MODX RSS novinek.';
 $_lang["rss_url_news_title"] = 'RSS novinky';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Zadejte URL adresu pro načítání MODX bezpečnostních zpráv.';
 $_lang["rss_url_security_title"] = 'RSS bezpečnostní zprávy';
 $_lang["run_module"] = 'Spustit modul';
@@ -1222,5 +1222,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

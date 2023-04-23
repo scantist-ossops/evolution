@@ -319,7 +319,7 @@ class Arr
             return $array[$key];
         }
 
-        if (! str_contains($key, '.')) {
+        if (strpos($key, '.') === false) {
             return $array[$key] ?? value($default);
         }
 

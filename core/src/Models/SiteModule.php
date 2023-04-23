@@ -83,6 +83,8 @@ class SiteModule extends Eloquent\Model
         'id' => [
             'actions.edit' => 108,
             'actions.save' => 109,
+            'actions.enable' => 109,
+            'actions.disable' => 109,
             'actions.delete' => 110,
             'actions.duplicate' => 111,
             'actions.run' => 112,
@@ -119,6 +121,18 @@ class SiteModule extends Eloquent\Model
     {
         return evolutionCMS()->getLoginUserID('mgr') !== 1 ?
             $builder->where('locked', '=', 0) : $builder;
+    }
+
+    public function scopeWithoutProtected(Eloquent\Builder $builder)
+    {
+        if ($_SESSION['mgrRole'] != 1 && evolutionCMS()->getConfig('use_udperms')) {
+            $builder->leftJoin('site_module_access', 'site_module_access.module', '=', 'site_modules.id')
+                ->leftJoin('member_groups', 'member_groups.user_group', '=', 'site_module_access.usergroup')
+                ->whereNull('site_module_access.usergroup')
+                ->orWhere('member_groups.member', '=', (int)evolutionCMS()->getLoginUserID('mgr'));
+        }
+
+        return $builder;
     }
 
     public static function getLockedElements()

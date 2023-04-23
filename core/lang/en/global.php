@@ -16,18 +16,18 @@
 $modx_lang_attribute = 'en'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'Evolution CMS is a <a href="http://evo.im/" target="_blank">PHP Application Framework and Content Management System</a> licensed under the <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'Evolution CMS is a <a href="https://evo.im/" target="_blank">PHP Application Framework and Content Management System</a> licensed under the <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'About Evolution CMS';
 $_lang["access_permission_denied"] = 'You do not have the correct permissions for this Resource.';
 $_lang["access_permission_parent_denied"] = 'You do not have permission to create or move a Resource here! Please choose another location.';
 $_lang["access_permissions"] = 'Access permissions';
 $_lang["access_permissions_add_resource_group"] = 'Create a new Resource Group';
 $_lang["access_permissions_add_user_group"] = 'Create a new User Group';
-$_lang["access_permissions_docs_collision"] = 'Because the Web User Groups and Manager User Groups conflict for your Role, this Resource will be public. Contact a site administrator for further help.';
 $_lang["access_permissions_docs_message"] = 'Select which Resource Groups this Resource belongs to';
 $_lang["access_permissions_group_link"] = 'Create a new group link';
 $_lang["access_permissions_introtext"] = 'Manage the User Groups and Resource Groups used for access permissions. To add a user to a User Group, edit the user and select the groups (s)he should be a member of. To add a Resource to a User Group, edit the Resource and select the groups it should belong to.';
 $_lang["access_permissions_link_to_group"] = 'to Resource Group';
+$_lang["access_permissions_context"] = 'in context';
 $_lang["access_permissions_link_user_group"] = 'Link User Group';
 $_lang["access_permissions_links"] = 'User/Resource Group links';
 $_lang["access_permissions_links_tab"] = 'Specify which User Groups are given access (i.e. can edit or create children) to the Resource Groups. To link a Resource Group to a User Group, select the appropriate groups from the drop down menus, and click on \'Submit\'. To remove the link for a certain group, press \'Remove\'. This will immediately remove the link.';
@@ -197,7 +197,7 @@ $_lang["create_weblink_here"] = 'Create Weblink here';
 $_lang["createdon"] = 'Creation date';
 $_lang["create_new"] = 'Create new';
 $_lang["credits"] = 'Credits';
-$_lang["credits_shouts_msg"] = '<p>Evolution CMS is managed and maintained at <a href="http://evo.im/" target="_blank">evo.im</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>Evolution CMS is managed and maintained at <a href="https://evo.im/" target="_blank">evo.im</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Add custom content types for Resources. To add a new entry, enter the content type in the text box then click the \'Add\' button.';
 $_lang["custom_contenttype_title"] = 'Custom content types';
 $_lang["database_charset"] = 'Database Charset';
@@ -404,11 +404,10 @@ $_lang["update_tree_description"] = '<ul>
                    <li> - Closure table database design pattern that makes working with the document tree more convenient and fast </li>
                      <li> - If the data in the tree is updated not through models, then there is a possibility of an incorrect linking of documents in the database </li>
                      <li> - This operation fixes the problem when site_content is not updated through the model (save, create) and the links (Closure table) are not updated </li>
-                     <li> - It is also possible to perform this operation in CLI mode via the \'php artisan closuretable: rebuild \' command </li> 
+                     <li> - It is also possible to perform this operation in CLI mode via the \'php artisan closuretable: rebuild \' command </li>
                      </ul>';
 $_lang["update_tree_danger"] = 'If you have more than 1000 resources, it is better to perform this operation in CLI mode using the \'php artisan closuretable: rebuild command\'';
 $_lang["update_tree_time"] = 'Rebuild tree finished. Documents processed: <b>%s</b><br>Import took <b>%s</b> seconds to complete.';
-$_lang["inbox"] = 'Inbox';
 $_lang["info"] = 'Info';
 $_lang["information"] = 'Information';
 $_lang["inline"] = 'Inline';
@@ -476,8 +475,6 @@ $_lang["login_message"] = 'Please enter your login credentials to start your Man
 $_lang["logo_slogan"] = 'Evolution CMS - \nCreate and do more with less';
 $_lang["logout"] = 'Logout';
 $_lang["long_title"] = 'Long title';
-$_lang["mail_check_timeperiod_message"] = 'How often to check for new mail messages in the Manager, in seconds.';
-$_lang["mail_check_timeperiod_title"] = 'Mail Check Time Period';
 $_lang["manage_depends"] = 'Manage Dependencies';
 $_lang["manage_files"] = 'Manage Files';
 $_lang["manage_htmlsnippets"] = 'Chunks';
@@ -590,8 +587,6 @@ $_lang["no_records_found"] = 'No records found.';
 $_lang["no_results"] = 'No results found';
 $_lang["nologentries_message"] = 'Enter the number of log entries shown per page when you browse the Audit trail.';
 $_lang["nologentries_title"] = 'Number of log entries';
-$_lang["nomessages_message"] = 'Enter the number of messages to show in inbox when viewing messages.';
-$_lang["nomessages_title"] = 'Number of messages';
 $_lang["none"] = 'None';
 $_lang["noresults_message"] = 'Enter the number of results to show in the data grid when viewing listings and search results.';
 $_lang["noresults_title"] = 'Number of Results';
@@ -661,7 +656,7 @@ $_lang["password_method"] = 'Password notification method';
 $_lang["password_method_email"] = 'Send the new password by e-mail.';
 $_lang["password_method_screen"] = 'Show the new password on screen.';
 $_lang["password_msg"] = 'The new password for <b>:username</b> is <b>:password</b><br>';
-$_lang["php_version_check"] = 'Evolution CMS is compatible with PHP version 5.6.0 and higher. This server is using version %s%. Please upgrade your PHP installation!';
+$_lang["php_version_check"] = 'Evolution CMS is compatible with PHP version 7.4 and higher. This server is using version %s%. Please upgrade your PHP installation!';
 $_lang["plugin"] = 'Plugin';
 $_lang["plugins"] = 'Plugins';
 $_lang["plugin_code"] = 'Plugin code (php)';
@@ -766,7 +761,11 @@ $_lang["resources_in_container"] = 'Resources in this Container';
 $_lang["resources_in_container_no"] = 'This Container does not have child-Resources.';
 $_lang["role"] = 'Role';
 $_lang["role_about"] = 'View the about page';
-$_lang["role_access_persmissions"] = 'Access permissions';
+$_lang["manager_access_permissions"] = 'Manager access permission';
+$_lang["manage_groups"] = 'Manage document and user groups';
+$_lang["manage_document_permissions"] = 'Manage document permissions';
+$_lang["manage_module_permissions"] = 'Manage module permissions';
+$_lang["manage_tv_permissions"] = 'Manage TV permissions';
 $_lang["role_actionok"] = 'View action completed screen';
 $_lang["role_assets_images"] = 'Manage assets/images';
 $_lang["role_assets_files"] = 'Manage assets/files';
@@ -853,10 +852,10 @@ $_lang["role_view_logs"] = 'View system logs';
 $_lang["role_view_unpublished"] = 'View Unpublished Resources';
 $_lang["role_web_access_persmissions"] = 'Web access permissions';
 $_lang["role_web_user_management"] = 'Web user management';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Enter the URL for the Evolution CMS News Feed.';
 $_lang["rss_url_news_title"] = 'RSS News Feed';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Enter the URL for the Evolution CMS Security Feed.';
 $_lang["rss_url_security_title"] = 'RSS Security Feed';
 $_lang["run_module"] = 'Run Module';
@@ -1180,6 +1179,7 @@ $_lang["web_access_permissions_user_groups"] = 'User groups';
 $_lang["web_permissions"] = 'Permissions';
 $_lang["web_user_management_msg"] = 'Choose the User you wish to edit. Users are those Users who are allowed to log into the web site and manager';
 $_lang["web_user_management_title"] = 'Users';
+$_lang["web_user_management_select_role"] = 'All roles';
 $_lang["web_user_title"] = 'Create/edit User';
 $_lang["web_users"] = 'Users';
 $_lang["weblink"] = 'Weblink';
@@ -1190,7 +1190,6 @@ $_lang["websignupemail_title"] = 'Web Signup e-mail';
 $_lang["allow_multiple_emails_title"] = 'Duplicate Web User email address';
 $_lang["allow_multiple_emails_message"] = 'Allows Web Users to share the same email address for situations when a member may not have their own email address or there is just one family email address.<br/>Note: Any password reminder and registration logic will need to account for this option if set to yes.';
 $_lang["wednesday"] = 'Wednesday';
-$_lang["welcome_messages"] = 'Your Inbox contains <strong>%d</strong> message(s), of which <strong>%s</strong> are unread.';
 $_lang["welcome_title"] = 'Welcome to your Evolution CMS Content Manager';
 $_lang["which_editor_message"] = 'Select the rich text editor (RTE). You can download and install additional RTEs from the Evolution CMS download page.';
 $_lang["which_editor_title"] = 'Editor to use';
@@ -1314,38 +1313,39 @@ $_lang["mutate_settings.dynamic.php6"] = 'Send mail on Evolution CMS errors';
 $_lang["mutate_settings.dynamic.php7"] = 'not notify';
 $_lang["mutate_settings.dynamic.php8"] = 'A mail with the error source will be sent to [(emailsender)] ([+emailsender+]) if a Evolution CMS error occurs. The details of the error could be seen in the Evolution CMS events log.';
 
-$_lang["error_no_privileges"]         = "You don't have enough privileges for this action!";
+$_lang["error_no_privileges"] = "You don't have enough privileges for this action!";
 $_lang["error_no_optimise_tablename"] = "Table to optimise not found in request!";
 $_lang["error_no_truncate_tablename"] = "Table to truncate not found in request!";
-$_lang["error_double_action"]         = "Double action (GET & POST) posted!";
-$_lang["error_no_id"]                 = "ID not passed in request!";
-$_lang["error_id_nan"]                = "ID passed in request is NaN!";
-$_lang["error_no_parent"]             = "Couldn't find parent document's name!";
-$_lang["error_many_results"]          = "Too many results returned from database!";
-$_lang["error_no_results"]            = "Not enough/ no results returned from database!";
-$_lang["error_no_user_selected"]      = "No user selected as recipient of this message!";
-$_lang["error_no_group_selected"]     = "No group selected as recipient of this message!";
-$_lang["error_movedocument1"]         = "Document cannot be it's own parent!";
-$_lang["error_movedocument2"]         = "Document's ID not passed in request!";
-$_lang["error_movedocument3"]         = "New parent not set in request!";
-$_lang["error_internet_connection"]   = "Server isn't available. Check your internet connection!";
+$_lang["error_double_action"] = "Double action (GET & POST) posted!";
+$_lang["error_no_id"] = "ID not passed in request!";
+$_lang["error_id_nan"] = "ID passed in request is NaN!";
+$_lang["error_parent_deleted"] = "Failed because resource parent is deleted!";
+$_lang["error_no_parent"] = "Couldn't find parent document's name!";
+$_lang["error_many_results"] = "Too many results returned from database!";
+$_lang["error_no_results"] = "Not enough/ no results returned from database!";
+$_lang["error_no_user_selected"] = "No user selected as recipient of this message!";
+$_lang["error_no_group_selected"] = "No group selected as recipient of this message!";
+$_lang["error_movedocument1"] = "Document cannot be it's own parent!";
+$_lang["error_movedocument2"] = "Document's ID not passed in request!";
+$_lang["error_movedocument3"] = "New parent not set in request!";
+$_lang["error_internet_connection"] = "Server isn't available. Check your internet connection!";
 
-$_lang["login_processor_unknown_user"]       = "Incorrect username or password entered!";
-$_lang["login_processor_wrong_password"]     = "Incorrect username or password entered!";
+$_lang["login_processor_unknown_user"] = "Incorrect username or password entered!";
+$_lang["login_processor_wrong_password"] = "Incorrect username or password entered!";
 $_lang["login_processor_many_failed_logins"] = "Due to too many failed logins, you have been blocked!";
-$_lang["login_processor_verified"]           = "User verification required!";
-$_lang["login_processor_blocked1"]           = "You are blocked and cannot log in!";
-$_lang["login_processor_blocked2"]           = "You are blocked and cannot log in! Please try again later.";
-$_lang["login_processor_blocked3"]           = "You are blocked automatic after a specified date and you cannot log in anymore!";
-$_lang["login_processor_bad_code"]           = "The security code you entered didn't validate! Please try to login again!";
-$_lang["login_processor_remotehost_ip"]      = "Your hostname doesn't point back to your IP!";
-$_lang["login_processor_remote_ip"]          = "You are not allowed to login from this location.";
-$_lang["login_processor_date"]               = "You are not allowed to login at this time. Please try again later.";
-$_lang["login_processor_captcha_config"]     = "Captcha is not configured properly.";
+$_lang["login_processor_verified"] = "User verification required!";
+$_lang["login_processor_blocked1"] = "You are blocked and cannot log in!";
+$_lang["login_processor_blocked2"] = "You are blocked and cannot log in! Please try again later.";
+$_lang["login_processor_blocked3"] = "You are blocked automatic after a specified date and you cannot log in anymore!";
+$_lang["login_processor_bad_code"] = "The security code you entered didn't validate! Please try to login again!";
+$_lang["login_processor_remotehost_ip"] = "Your hostname doesn't point back to your IP!";
+$_lang["login_processor_remote_ip"] = "You are not allowed to login from this location.";
+$_lang["login_processor_date"] = "You are not allowed to login at this time. Please try again later.";
+$_lang["login_processor_captcha_config"] = "Captcha is not configured properly.";
 
-$_lang["dp_dayNames"]   = "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']";
+$_lang["dp_dayNames"] = "['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']";
 $_lang["dp_monthNames"] = "['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']";
-$_lang["dp_startDay"]   = "1";
+$_lang["dp_startDay"] = "1";
 
 $_lang["check_all"] = "Select all";
 $_lang["check_none"] = "Select none";
@@ -1359,10 +1359,10 @@ $_lang["reset_sysfiles_checksum_button"] = "Rebuild Checksums";
 $_lang["reset_sysfiles_checksum_alert"] = "Are you sure you want to reset the system files checksums?";
 
 $_lang["file_browser_disabled_msg"] = "The File Browser Feature is not enabled.";
-$_lang["which_browser_default_title"]= "Default File Browser";
-$_lang["which_browser_default_msg"]= "Choose the File Browser you prefer as default. In User-Settings you can choose a Custom Browser per User, or leave it on &quot;default&quot;.";
-$_lang["which_browser_title"]= "File Browser";
-$_lang["which_browser_msg"]= "You can choose a custom File Browser for this user. To use the System´s default Browser, leave it on &quot;Default&quot;.";
+$_lang["which_browser_default_title"] = "Default File Browser";
+$_lang["which_browser_default_msg"] = "Choose the File Browser you prefer as default. In User-Settings you can choose a Custom Browser per User, or leave it on &quot;default&quot;.";
+$_lang["which_browser_title"] = "File Browser";
+$_lang["which_browser_msg"] = "You can choose a custom File Browser for this user. To use the System´s default Browser, leave it on &quot;Default&quot;.";
 $_lang["option_default"] = "Default";
 $_lang["position"] = "Position";
 $_lang["are_you_sure"] = "Are you sure?";
@@ -1377,7 +1377,7 @@ $_lang["extras"] = "Extras";
 $_lang["display_locks"] = "Display Locks";
 $_lang["role_display_locks"] = "Display Locks";
 $_lang["session_timeout"] = "Session Timeout";
-$_lang["session_timeout_msg"] = "Evolution CMS will ping the server as per setting &quot;Mail Check Time Period&quot;. If the last ping exceeds this setting, the associated session will be considered invalid and all related locks will be removed automatically. Set value in minutes (>2min, default 15min).";
+$_lang["session_timeout_msg"] = "Evolution CMS will ping the server, if the last ping exceeds this setting, the associated session will be considered invalid and all related locks will be removed automatically. Set value in minutes (>2min, default 15min).";
 $_lang["unlock_element_id_warning"] = "Are you sure you want to unlock this [+element_type+] (ID [+id+])?";
 $_lang["lock_element_type_1"] = "Template";
 $_lang["lock_element_type_2"] = "Template-Variable";
@@ -1395,18 +1395,18 @@ $_lang["minifyphp_incache_message"] = 'Minify php code (snippets and plugins) an
 
 $_lang["logout_reminder_msg"] = "Reminder: It seems on [+date+] you forgot to logout. Please pay attention in future to do so after your work is finished.";
 
-$_lang["allow_eval_title"]             = "Eval php code in snippet call";
-$_lang["allow_eval_msg"]               = "For developer : Please use \$modx-&gt;safeEval().";
-$_lang["allow_eval_with_scan"]         = "Execute only permitted functions";
+$_lang["allow_eval_title"] = "Eval php code in snippet call";
+$_lang["allow_eval_msg"] = "For developer : Please use \$modx-&gt;safeEval().";
+$_lang["allow_eval_with_scan"] = "Execute only permitted functions";
 $_lang["allow_eval_with_scan_at_post"] = "Execute all. However, at POST, only permitted functions";
-$_lang["allow_eval_everytime_eval"]    = "Unlimited (Use only for debugging)";
-$_lang["allow_eval_dont_eval"]         = "Do not allow all functions";
+$_lang["allow_eval_everytime_eval"] = "Unlimited (Use only for debugging)";
+$_lang["allow_eval_dont_eval"] = "Do not allow all functions";
 
 $_lang["safe_functions_at_eval_title"] = "Functions to allow eval";
-$_lang["safe_functions_at_eval_msg"]   = "Comma separated list";
+$_lang["safe_functions_at_eval_msg"] = "Comma separated list";
 
-$_lang["multiple_sessions_msg"]   = "Information: Multiple active user sessions (total [+total+]) found for user <b>[+username+]</b>.";
-$_lang["iconv_not_available"]     = "It is important to install/enable extension iconv. Please speak to your host if you don´t know how to enable it.";
+$_lang["multiple_sessions_msg"] = "Information: Multiple active user sessions (total [+total+]) found for user <b>[+username+]</b>.";
+$_lang["iconv_not_available"] = "It is important to install/enable extension iconv. Please speak to your host if you don´t know how to enable it.";
 
 $_lang["cm_create_new_category"] = "Create the new category";
 $_lang["cm_category_name"] = "Category name";
@@ -1482,9 +1482,6 @@ $_lang['manager_menu_position_left'] = 'left';
 $_lang['invalid_event_response'] = 'The %s event has ivalid output';
 
 $_lang['chunk_processor'] = 'Chunks processing class';
-$_lang['enable_mootools'] = 'Enable Mootools in manager';
-$_lang['enable_mootools_message'] = 'Load Mootools.js in manager for backward compatibility';
-
 
 $_lang["permission_title"] = 'Create / edit permission';
 $_lang["groups_permission_title"] = 'Create / edit category';
@@ -1495,5 +1492,9 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
+$_lang['disable'] = 'Disable';
+$_lang['enable'] = 'Enable';
 
 return $_lang;

@@ -99,7 +99,7 @@
                                 'class' => 'form-control-lg',
                                 'attributes' => 'onchange="documentDirty=true;" maxlength="100"'
                             ]) .
-                            ($modx->hasPermission('save_role')
+                            (EvolutionCMS()->hasPermission('save_role')
                             ? '<label class="custom-control" data-tooltip="' . ManagerTheme::getLexicon('lock_htmlsnippet') . "\n" . ManagerTheme::getLexicon('lock_htmlsnippet_msg') .'">' .
                             ManagerTheme::view('form.inputElement', [
                                 'type' => 'checkbox',
@@ -142,29 +142,27 @@
                         'attributes' => 'onchange="documentDirty=true;" maxlength="45"'
                     ])
 
-                    @if($_SESSION['mgrRole'] === 1)
-                        <div class="form-row">
-                            <label for="disabled">
-                                @include('manager::form.inputElement', [
-                                    'type' => 'checkbox',
-                                    'name' => 'disabled',
-                                    'value' => 'on',
-                                    'checked' => ($data->disabled === 1)
-                                ])
-                                @if($data->disabled == 1)
-                                    <span class="text-danger">{{ ManagerTheme::getLexicon('disabled') }}</span>
-                                @else
-                                    {{ ManagerTheme::getLexicon('disabled') }}
-                                @endif
-                            </label>
-                        </div>
-                    @endif
+                    <div class="form-row">
+                        <label for="disabled">
+                            @include('manager::form.inputElement', [
+                                'type' => 'checkbox',
+                                'name' => 'disabled',
+                                'value' => 'on',
+                                'checked' => ($data->disabled === 1)
+                            ])
+                            @if($data->disabled == 1)
+                                <span class="text-danger">{{ ManagerTheme::getLexicon('disabled') }}</span>
+                            @else
+                                {{ ManagerTheme::getLexicon('disabled') }}
+                            @endif
+                        </label>
+                    </div>
                 </div>
 
                 <!-- HTML text editor start -->
                 <div class="navbar navbar-editor">
                     <span>{{ ManagerTheme::getLexicon('chunk_code') }}</span>
-                    @if(get_by_key($modx->config, 'use_editor') == 1)
+                    @if(get_by_key(EvolutionCMS()->config, 'use_editor') == 1)
                         <span class="float-right">
                             {{ ManagerTheme::getLexicon('which_editor_title') }}
                             @include('manager::form.selectElement', [
@@ -200,7 +198,7 @@
         <input type="submit" name="save" style="display:none;" />
     </form>
 
-    @if(get_by_key($modx->config, 'use_editor') == 1)
+    @if(get_by_key(EvolutionCMS()->config, 'use_editor') == 1)
         {!! get_by_key($events, 'OnRichTextEditorInit') !!}
     @endif
 @endsection

@@ -16,7 +16,7 @@
 $modx_lang_attribute = 'nl'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'EVO is een <a href="http://evo.im/" target="_blank">PHP Applicatie Framework en Content Management Systeem</a> met de licentie <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'EVO is een <a href="https://evo.im/" target="_blank">PHP Applicatie Framework en Content Management Systeem</a> met de licentie <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'Over Evolution';
 $_lang["access_permission_denied"] = 'U heeft niet de juiste toegangsrechten voor deze Pagina.';
 $_lang["access_permission_parent_denied"] = 'U heeft niet genoeg toegangsrechten om hier een Pagina aan te maken of te verplaatsen! Kies a.u.b. een andere locatie.';
@@ -194,7 +194,7 @@ $_lang["create_weblink_here"] = 'Nieuwe Weblink';
 $_lang["createdon"] = 'Datum aangemaakt';
 $_lang["create_new"] = 'Nieuwe aanmaken';
 $_lang["credits"] = 'Dankwoord';
-$_lang["credits_shouts_msg"] = '<p>EVO wordt beheerd en bijgehouden op <a href="http://evo.im/" target="_blank">evo.im</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>EVO wordt beheerd en bijgehouden op <a href="https://evo.im/" target="_blank">evo.im</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Voeg eigen \'content types\' toe. Vul een nieuw type in en klik op de knop \'Toevoegen\' om een nieuw type toe te voegen';
 $_lang["custom_contenttype_title"] = 'Toegevoegde content types';
 $_lang["database_charset"] = 'Database Karakterset';
@@ -824,10 +824,10 @@ $_lang["role_view_logs"] = 'Systeemlogboek weergeven';
 $_lang["role_view_unpublished"] = 'Bekijk niet gepubliceerde Pagina\'s';
 $_lang["role_web_access_persmissions"] = 'Webtoegangsbeheer';
 $_lang["role_web_user_management"] = 'Webgebruikersbeheer';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Voer de URL in voor de Nieuws Feed.';
 $_lang["rss_url_news_title"] = 'RSS nieuws feed';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Voer de URL in voor de beveiligingsfeed.';
 $_lang["rss_url_security_title"] = 'RSS Beveiliging Feed';
 $_lang["run_module"] = 'Module uitvoeren';
@@ -1417,5 +1417,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

@@ -10,6 +10,36 @@ if (!$modx->hasPermission('save_module')) {
     $use_udperms = 1;
 }
 
+if (isset($_GET['disabled'])) {
+    $disabled = $_GET['disabled'] == 1 ? 1 : 0;
+    $id = (int)($_REQUEST['id'] ?? 0);
+    // Set the item name for logger
+    try {
+        $module = EvolutionCMS\Models\SiteModule::findOrFail($id);
+        // invoke OnBeforeChunkFormSave event
+        $modx->invokeEvent("OnBeforeModFormSave", array(
+            "mode" => "upd",
+            "id" => $id
+        ));
+        $_SESSION['itemname'] = $module->name;
+        $module->update(['disabled' => $disabled]);
+        // invoke OnChunkFormSave event
+        $modx->invokeEvent("OnModFormSave", array(
+            "mode" => "upd",
+            "id" => $id
+        ));
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        $modx->webAlertAndQuit($_lang["error_no_id"]);
+    }
+    // empty cache
+    $modx->clearCache('full');
+
+    // finished emptying cache - redirect
+    $header="Location: index.php?a=76&tab=5&r=2";
+    header($header);
+    exit;
+}
+
 $id = (int)$_POST['id'];
 $name = trim($_POST['name']);
 $description = $_POST['description'];
@@ -20,8 +50,8 @@ $icon = $_POST['icon'];
 $disabled = (isset($_POST['disabled']) && $_POST['disabled'] == 'on') == 'on' ? 1 : 0;
 $wrap = (isset($_POST['wrap']) && $_POST['wrap'] == 'on') == 'on' ? 1 : 0;
 $locked = (isset($_POST['locked']) && $_POST['locked'] == 'on') == 'on' ? 1 : 0;
-$modulecode = $_POST['post'];
-$properties = $_POST['properties'];
+$modulecode = $_POST['post'] ?? '';
+$properties = $_POST['properties'] ?? '';
 $enable_sharedparams = (isset($_POST['enable_sharedparams']) && $_POST['enable_sharedparams'] == 'on') == 'on' ? 1 : 0;
 $guid = $_POST['guid'];
 $parse_docblock = (isset($_POST['parse_docblock']) && $_POST['parse_docblock'] == 'on') == "1" ? '1' : '0';
@@ -117,7 +147,7 @@ switch ($_POST['mode']) {
             $header = "Location: index.php?a=" . $a . "&r=2&stay=" . $_POST['stay'];
             header($header);
         } else {
-            $header = "Location: index.php?a=106&r=2";
+            $header = "Location: index.php?a=76&tab=5&r=2";
             header($header);
         }
         break;
@@ -176,7 +206,7 @@ switch ($_POST['mode']) {
             header($header);
         } else {
             $modx->unlockElement(6, $id);
-            $header = "Location: index.php?a=106&r=2";
+            $header = "Location: index.php?a=76&tab=5&r=2";
             header($header);
         }
         break;

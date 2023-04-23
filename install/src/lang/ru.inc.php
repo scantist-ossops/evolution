@@ -99,7 +99,7 @@ $_lang["errors"] = 'ошибок';
 $_lang["failed"] = 'ОШИБКА!';
 $_lang["guid_set"] = 'GUID ключ';
 $_lang["help"] = 'Помощь!';
-$_lang["help_link"] = 'http://modx.im';
+$_lang["help_link"] = 'https://evo.im/forums.html';
 $_lang["help_title"] = 'Помощь в установке на форумах Evolution CMS';
 $_lang["iagree_box"] = 'Я согласен с условиями <a href="../assets/docs/license.txt" target="_blank">лицензии</a>. С русским переводом текста лицензии можно познакомиться на странице <a href="http://ru.wikipedia.org/wiki/GPL" target="_blank">GNU General Public License</a>.';
 $_lang["install"] = 'Установить';
@@ -122,7 +122,7 @@ $_lang["installing_demo_site"] = 'Установка примера веб-са�
 $_lang["language_code"] = 'ru';
 $_lang["loading"] = 'Загружается...';
 $_lang["modules"] = 'Модули';
-$_lang["modx_footer1"] = '&copy; 2005-[+current_year+] <a href="http://evo.im/" target="_blank" style="color: green; text-decoration:underline">Evolution CMS</a> Content Mangement Framework (CMF) project. Все права защищены. Evolution CMS лицензирован GNU GPL.';
+$_lang["modx_footer1"] = '&copy; 2005-2022 <a href="https://evo.im/" target="_blank" style="color: green; text-decoration:underline">Evolution CMS</a> Content Mangement Framework (CMF) project. Все права защищены. Evolution CMS лицензирован GNU GPL.';
 $_lang["modx_footer2"] = 'Evolution CMS &mdash; свободное программное обеспечение. Мы поощряем вас быть творческими и использовать Evolution CMS как вы считаете целесообразным. Если вы внесете изменения и решите распространять ваш измененный вариант Evolution CMS, то должны сохранять и распространять исходный код бесплатно.';
 $_lang["modx_install"] = 'Evolution CMS &raquo; Установка';
 $_lang["modx_requires_php"] = ', а Evolution CMS необходим PHP [+min_version+] или более поздний';

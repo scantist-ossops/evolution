@@ -170,7 +170,7 @@ class LogManager implements LoggerInterface
      */
     protected function parseTap($tap)
     {
-        return str_contains($tap, ':') ? explode(':', $tap, 2) : [$tap, ''];
+        return Str::contains($tap, ':') ? explode(':', $tap, 2) : [$tap, ''];
     }
 
     /**
@@ -598,7 +598,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function emergency($message, array $context = []): void
+    public function emergency($message, array $context = [])
     {
         $this->driver()->emergency($message, $context);
     }
@@ -613,7 +613,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function alert($message, array $context = []): void
+    public function alert($message, array $context = [])
     {
         $this->driver()->alert($message, $context);
     }
@@ -627,7 +627,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function critical($message, array $context = []): void
+    public function critical($message, array $context = [])
     {
         $this->driver()->critical($message, $context);
     }
@@ -640,7 +640,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function error($message, array $context = []): void
+    public function error($message, array $context = [])
     {
         $this->driver()->error($message, $context);
     }
@@ -655,7 +655,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function warning($message, array $context = []): void
+    public function warning($message, array $context = [])
     {
         $this->driver()->warning($message, $context);
     }
@@ -667,7 +667,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function notice($message, array $context = []): void
+    public function notice($message, array $context = [])
     {
         $this->driver()->notice($message, $context);
     }
@@ -681,7 +681,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function info($message, array $context = []): void
+    public function info($message, array $context = [])
     {
         $this->driver()->info($message, $context);
     }
@@ -693,7 +693,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function debug($message, array $context = []): void
+    public function debug($message, array $context = [])
     {
         $this->driver()->debug($message, $context);
     }
@@ -706,7 +706,7 @@ class LogManager implements LoggerInterface
      * @param  array  $context
      * @return void
      */
-    public function log($level, $message, array $context = []): void
+    public function log($level, $message, array $context = [])
     {
         $this->driver()->log($level, $message, $context);
     }

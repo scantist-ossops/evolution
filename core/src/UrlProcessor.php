@@ -102,15 +102,13 @@ class UrlProcessor
         if ($this->core->getConfig('friendly_urls')) {
             $aliases = $this->getAliases();
             $isFolder = $this->getIsFolders();
-            if ($this->core->getConfig('full_aliaslisting') == 1) {
-                preg_match_all($this->tagPattern, $input, $match);
-                $this->generateAliasListingAll($match['1'], $aliases, $isFolder);
-            } else {
+            preg_match_all($this->tagPattern, $input, $match);
+            if ($this->core->getConfig('full_aliaslisting') != 1) {
                 if (!$this->core->getConfig('aliaslistingfolder')) {
-                    preg_match_all($this->tagPattern, $input, $match);
                     $this->generateAliasListingFolder($match['1'], $aliases, $isFolder);
+                } else {
+                    $this->generateAliasListingAll($match['1'], $aliases, $isFolder);
                 }
-
             }
             $output = $this->replaceUrl($input, $aliases, $isFolder);
         } else {
@@ -285,8 +283,8 @@ class UrlProcessor
         }
         $query = $qOrig;
 
-        $pre = $this->core->getConfig('friendly_url_prefix');
-        $suf = $this->core->getConfig('friendly_url_suffix');
+        $pre = $this->core->getConfig('friendly_url_prefix', '');
+        $suf = $this->core->getConfig('friendly_url_suffix', '');
         $pre = preg_quote($pre, '/');
         $suf = preg_quote($suf, '/');
         if ($pre && preg_match('@^' . $pre . '(.*)$@', $query, $matches)) {
@@ -503,7 +501,7 @@ class UrlProcessor
         $out = false;
         if ($alias !== '') {
             $query = $this->core->getDatabase()->query(
-                "SELECT 
+                "SELECT
                     `sc`.`id` AS `hidden_id`,
                     `children`.`id` AS `child_id`,
                     children.alias AS `child_alias`,
@@ -573,6 +571,7 @@ class UrlProcessor
                         if ($al['isfolder'] === 1 && $this->core->getConfig('make_folders')) {
                             $f_url_suffix = '/';
                         }
+
                         if (isset($al['path']) && $al['path'] != '') {
                             $alPath = $al['path'] . '/';
                         }
@@ -580,10 +579,15 @@ class UrlProcessor
                         if (isset($al['alias'])) {
                             $alias = $al['alias'];
                         }
+
+                        if ($al['alias_visible'] === 0 && $al['isfolder'] === 1) {
+                            $alias = $alPath;
+                        } else {
+                            $alias = $alPath . $f_url_prefix . $alias . $f_url_suffix;
+                        }
                     }
                 }
 
-                $alias = $alPath . $f_url_prefix . $alias . $f_url_suffix;
                 $url = $alias . $args;
             } else {
                 $url = 'index.php?id=' . $id . $args;

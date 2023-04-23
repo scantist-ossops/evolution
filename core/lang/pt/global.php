@@ -16,7 +16,7 @@
 $modx_lang_attribute = 'pt'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'MODX é um <a href=\'http://modx.com/\' target=\'_blank\'>Sistema em PHP para Gestão de Conteúdos</a> (em Inglês).';
+$_lang["about_msg"] = 'MODX é um <a href=\'https://evo.im/\' target=\'_blank\'>Sistema em PHP para Gestão de Conteúdos</a> (em Inglês).';
 $_lang["about_title"] = 'Àcerca do MODX';
 $_lang["access_permission_denied"] = 'Não tem permissão para ver este documento.';
 $_lang["access_permission_parent_denied"] = 'Não tem permissão para criar ou mover um documento para aqui! Por favor escolha outra localização.';
@@ -182,7 +182,7 @@ $_lang["create_resource_title"] = 'Create Resource';
 $_lang["create_weblink_here"] = 'Criar Weblink aqui';
 $_lang["createdon"] = 'Data de criação';
 $_lang["credits"] = 'Créditos';
-$_lang["credits_shouts_msg"] = '<p>MODX é gerenciado e mantido em <a href="http://modx.com/" target="_blank">modx.com</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>MODX é gerenciado e mantido em <a href="https://evo.im/" target="_blank">modx.com</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Aqui pode adicionar tipos de conteúdos personalizados para usar nos seus documentos. Para adicionar uma nova entrada, digite o tipo de conteúdo na caixa de texto e clique no botão \'Adicionar\'.';
 $_lang["custom_contenttype_title"] = 'Tipos de conteúdos personalizados:';
 $_lang["database_charset"] = 'Database Charset';
@@ -604,7 +604,7 @@ $_lang["password_method"] = 'Método de notificação da senha';
 $_lang["password_method_email"] = 'Enviar a nova senha por e-mail.';
 $_lang["password_method_screen"] = 'Mostrar a nova senha no ecran.';
 $_lang["password_msg"] = 'A nova senha para <b>:username</b> é <b>:password</b><br>';
-$_lang["php_version_check"] = 'O MODX é compatível com PHP versão 5.6.0 ou superior. Por favor actualize a sua instalação de PHP!';
+$_lang["php_version_check"] = 'O MODX é compatível com PHP versão 7.4 ou superior. Por favor actualize a sua instalação de PHP!';
 $_lang["plugin"] = 'Plugin';
 $_lang["plugin_code"] = 'Código do Plugin (php)';
 $_lang["plugin_config"] = 'Configuração do Plugin';
@@ -784,10 +784,10 @@ $_lang["role_view_logs"] = 'Ver registos (logs) e relatórios do sistema';
 $_lang["role_view_unpublished"] = 'Ver documentos não publicados';
 $_lang["role_web_access_persmissions"] = 'Permissões de acesso Web';
 $_lang["role_web_user_management"] = 'Gestão de utilizadores web (externos)';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Enter the URL for the MODX News Feed.';
 $_lang["rss_url_news_title"] = 'RSS News Feed';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Enter the URL for the MODX Security Feed.';
 $_lang["rss_url_security_title"] = 'RSS Security Feed';
 $_lang["run_module"] = 'Executar Módulo';
@@ -1218,5 +1218,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

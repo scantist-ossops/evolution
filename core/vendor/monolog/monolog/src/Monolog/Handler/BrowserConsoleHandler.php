@@ -23,6 +23,13 @@ use function trigger_error;
 
 use const E_USER_DEPRECATED;
 
+use function count;
+use function headers_list;
+use function stripos;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
+
 /**
  * Handler sending logs to browser's javascript console with no browser extension required
  *

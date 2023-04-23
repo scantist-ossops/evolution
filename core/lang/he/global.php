@@ -16,7 +16,7 @@ $modx_textdir = 'rtl'; // uncomment this line for RTL langauges
 $modx_lang_attribute = 'he'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'MODX הינה <a href="http://modx.com/" target="_blank">מערכת ניהול תוכן מבוססת PHP</a> תחת רשיון <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'MODX הינה <a href="https://evo.im/" target="_blank">מערכת ניהול תוכן מבוססת PHP</a> תחת רשיון <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'אודות MODX';
 $_lang["access_permission_denied"] = 'אין לך את ההרשאות הנכונות עבור מסמך זה.';
 $_lang["access_permission_parent_denied"] = 'אין לך הרשאה ליצור או להעביר מסמך כאן! אנא בחר מיקום אחר.';
@@ -182,7 +182,7 @@ $_lang["create_resource_title"] = 'Create Resource';
 $_lang["create_weblink_here"] = 'צור קישור כאן';
 $_lang["createdon"] = 'תאריך יצירה';
 $_lang["credits"] = 'קרדיטים';
-$_lang["credits_shouts_msg"] = '<p>MODX is managed and maintained at <a href="http://modx.com/" target="_blank">modx.com</a>.<br /> תרגום לעברית MODX ישראל<a href="http://www.modx.co.il" target="_blank">MODX.co.il</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>MODX is managed and maintained at <a href="https://evo.im/" target="_blank">modx.com</a>.<br /> תרגום לעברית MODX ישראל<a href="http://www.modx.co.il" target="_blank">MODX.co.il</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Here you can add custom content types to be used in your documents. To add a new entry, enter the content type in the text box then click the \'Add\' button.';
 $_lang["custom_contenttype_title"] = 'Custom content types:';
 $_lang["database_charset"] = 'Database Charset';
@@ -604,7 +604,7 @@ $_lang["password_method"] = 'Password notification method';
 $_lang["password_method_email"] = 'Send the new password by e-mail.';
 $_lang["password_method_screen"] = 'Show the new password on screen.';
 $_lang["password_msg"] = 'The new password for <b>:username</b> is <b>:password</b><br>';
-$_lang["php_version_check"] = 'MODX is compatible with PHP version 5.6.0 and higher. Please upgrade your PHP installation!';
+$_lang["php_version_check"] = 'MODX is compatible with PHP version 7.4 and higher. Please upgrade your PHP installation!';
 $_lang["plugin"] = 'התקן';
 $_lang["plugin_code"] = 'קוד התקן (php)';
 $_lang["plugin_config"] = 'הגדרות התקן';
@@ -784,10 +784,10 @@ $_lang["role_view_logs"] = 'הצג לוג מערכת';
 $_lang["role_view_unpublished"] = 'הצג מסמכים שלא פורסמו';
 $_lang["role_web_access_persmissions"] = 'הרשאות גישה';
 $_lang["role_web_user_management"] = 'ניהול חברים';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Enter the URL for the MODX News Feed.';
 $_lang["rss_url_news_title"] = 'RSS News Feed';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Enter the URL for the MODX Security Feed.';
 $_lang["rss_url_security_title"] = 'RSS Security Feed';
 $_lang["run_module"] = 'הרץ מודול';
@@ -1218,5 +1218,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

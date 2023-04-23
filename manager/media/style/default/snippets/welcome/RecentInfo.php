@@ -1,6 +1,6 @@
 <?php
-$enable_filter = $modx->getConfig('enable_filter');
-$modx->setConfig('enable_filter', true);
+$enable_filter = EvolutionCMS()->getConfig('enable_filter');
+EvolutionCMS()->setConfig('enable_filter', true);
 $_style = ManagerTheme::getStyle();
 
 $contents = \EvolutionCMS\Models\SiteContent::query()->orderBy('editedon','DESC')->limit(10);
@@ -22,10 +22,10 @@ $tpl = '<tr>
                 <li><b>[%long_title%]</b>: [+longtitle+]</li>
                 <li><b>[%description%]</b>: [+description+]</li>
                 <li><b>[%resource_summary%]</b>: [+introtext+]</li>
-                <li><b>[%type%]</b>: [+type:is(reference):then([%weblink%]):else([%resource%])+]</li>
+                <li><b>[%type%]</b>: [+doctype+]</li>
                 <li><b>[%resource_alias%]</b>: [+alias+]</li>
-                <li><b>[%page_data_cacheable%]</b>: [+cacheable:is(1):then([%yes%]):else([%no%])+]</li>
-                <li><b>[%resource_opt_show_menu%]</b>: [+hidemenu:is(0):then([%yes%]):else([%no%])+]</li>
+                <li><b>[%page_data_cacheable%]</b>: [+cacheable+]</li>
+                <li><b>[%resource_opt_show_menu%]</b>: [+hidemenu+]</li>
                 <li><b>[%page_data_template%]</b>: [+template:templatename:htmlentities+]</li>
             </ul>
         </div>
@@ -38,9 +38,9 @@ $btntpl['preview_btn'] = '<a [+preview_disabled+]" title="[%preview_resource%]" 
 $output = array();
 foreach ($contents->get()->toArray() as $ph) {
     $docid = $ph['id'];
-    $_ = $modx->getUserInfo($ph['editedby']);
+    $_ = EvolutionCMS()->getUserInfo($ph['editedby']);
     if(isset($_['username']))
-    $ph['username'] = $_['username'];
+        $ph['username'] = $_['username'];
 
     if ($ph['deleted'] == 1) {
         $ph['status'] = 'deleted text-danger';
@@ -50,7 +50,7 @@ foreach ($contents->get()->toArray() as $ph) {
         $ph['status'] = 'published';
     }
 
-    if ($modx->hasPermission('edit_document')) {
+    if (EvolutionCMS()->hasPermission('edit_document')) {
         $ph['edit_btn'] = str_replace('[+id+]', $docid, $btntpl['edit']);
     } else {
         $ph['edit_btn'] = '';
@@ -65,7 +65,7 @@ foreach ($contents->get()->toArray() as $ph) {
         $preview_disabled
     ), $btntpl['preview_btn']);
 
-    if ($modx->hasPermission('delete_document')) {
+    if (EvolutionCMS()->hasPermission('delete_document')) {
         if ($ph['deleted'] == 0) {
             $delete_btn = '<a onclick="return confirm(\'[%confirm_delete_record%]\')" title="[%delete_resource%]" href="index.php?a=6&amp;id=[+id+]" target="main"><i class="'. $_style['icon_trash'] . $_style['icon_size_fix'] . '"></i></a> ';
         } else {
@@ -94,11 +94,13 @@ foreach ($contents->get()->toArray() as $ph) {
     $ph['description'] = $ph['description'] == '' ? '(<i>[%not_set%]</i>)' : entities($ph['description']);
     $ph['introtext'] = $ph['introtext'] == '' ? '(<i>[%not_set%]</i>)' : entities($ph['introtext']);
     $ph['alias'] = $ph['alias'] == '' ? '(<i>[%not_set%]</i>)' : entities($ph['alias']);
+    $ph['edit_date'] = EvolutionCMS()->toDateFormat(EvolutionCMS()->timestamp($ph['editedon']));
+    $ph['doctype'] = $ph['type'] == 'reference' ? '[%weblink%]' : '[%resource%]';
+    $ph['hidemenu'] = $ph['hidemenu'] == 1 ? '[%no%]' : '[%yes%]';
+    $ph['cacheable'] = $ph['cacheable'] == 1 ? '[%yes%]' : '[%no%]';
 
-    $ph['edit_date'] = $modx->toDateFormat($modx->timestamp($ph['editedon']));
-
-    $output[] = $modx->parseText($tpl, $ph);
+    $output[] = EvolutionCMS()->parseText($tpl, $ph);
 }
 
-$modx->setConfig('enable_filter', $enable_filter);
+EvolutionCMS()->setConfig('enable_filter', $enable_filter);
 return implode("\n", $output);

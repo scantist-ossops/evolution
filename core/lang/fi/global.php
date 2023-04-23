@@ -16,7 +16,7 @@
 $modx_lang_attribute = 'fi'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = 'MODX on <a href="http://modx.com/" target="_blank">PHP-sovelluskehys ja sisällönhallintajärjestelmä</a>, jonka lisenssinä on avoimen lähdekoodin <a href="../assets/docs/license.txt">GNU GPL</a>.';
+$_lang["about_msg"] = 'MODX on <a href="https://evo.im/" target="_blank">PHP-sovelluskehys ja sisällönhallintajärjestelmä</a>, jonka lisenssinä on avoimen lähdekoodin <a href="../assets/docs/license.txt">GNU GPL</a>.';
 $_lang["about_title"] = 'Tietoa MODX:stä';
 $_lang["access_permission_denied"] = 'Ei käyttöoikeuksia tähän sivuun.';
 $_lang["access_permission_parent_denied"] = 'Ei käyttöoikeuksia luoda sivua tähän!';
@@ -182,7 +182,7 @@ $_lang["create_resource_title"] = 'Uusi sivu';
 $_lang["create_weblink_here"] = 'Uusi hyperlinkki tähän';
 $_lang["createdon"] = 'Luonti päivämäärä';
 $_lang["credits"] = 'Kunniamaininnat';
-$_lang["credits_shouts_msg"] = '<p>MODX:n kehittäjät ja ylläpitäjät: <a href="http://modx.com/" target="_blank">modx.com</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>MODX:n kehittäjät ja ylläpitäjät: <a href="https://evo.im/" target="_blank">modx.com</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Muokkaa sivuissa käytettäviä sisältötyyppejä.';
 $_lang["custom_contenttype_title"] = 'Sisältötyypit:';
 $_lang["database_charset"] = 'Tietokannan merkistö';
@@ -604,7 +604,7 @@ $_lang["password_method"] = 'Salasanan tiedonanto';
 $_lang["password_method_email"] = 'Lähetä uusi salasana sähköpostilla.';
 $_lang["password_method_screen"] = 'Näytä uusi salasana ruudulla.';
 $_lang["password_msg"] = 'Uusi salasana käyttäjälle <strong>:username</strong> on <strong>:password</strong><br>';
-$_lang["php_version_check"] = 'MODX on yhteensopiva PHP versio 5.6.0 tai paremman kanssa. Ole hyvä ja päivitä PHP asennuksesi!';
+$_lang["php_version_check"] = 'MODX on yhteensopiva PHP versio 7.4 tai paremman kanssa. Ole hyvä ja päivitä PHP asennuksesi!';
 $_lang["plugin"] = 'Liitännäinen';
 $_lang["plugin_code"] = 'Lähdekoodi (php)';
 $_lang["plugin_config"] = 'Liitännäisen asetukset';
@@ -784,10 +784,10 @@ $_lang["role_view_logs"] = 'Näytä järjestelmän lokit';
 $_lang["role_view_unpublished"] = 'Näytä julkaisemattomat / piilotetut sivut';
 $_lang["role_web_access_persmissions"] = 'Web-käyttöoikeudet';
 $_lang["role_web_user_management"] = 'Web-käyttäjän hallinta';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Anna MODX-uutisten osoite (RSS-syöte).';
 $_lang["rss_url_news_title"] = 'RSS / Uutiset';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Anna MODX-tietoturvatiedotteiden osoite (RSS-syöte).';
 $_lang["rss_url_security_title"] = 'RSS / Tietoturvatiedotteet';
 $_lang["run_module"] = 'Suorita moduuli';
@@ -1217,5 +1217,7 @@ $_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
 $_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
 $_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
 $_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

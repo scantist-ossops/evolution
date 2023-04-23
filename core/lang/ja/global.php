@@ -19,7 +19,7 @@
 $modx_lang_attribute = 'ja'; // Manager HTML/XML Language Attribute see http://en.wikipedia.org/wiki/ISO_639-1
 $modx_manager_charset = 'UTF-8';
 
-$_lang["about_msg"] = '<p>Evolution CMSは <a href="http://evo.im/" target="_blank">PHP アプリケーション フレームワーク・コンテンツ管理システム</a>です。GPL に基づいて使用が許諾されます。</p>';
+$_lang["about_msg"] = '<p>Evolution CMSは <a href="https://evo.im/" target="_blank">PHP アプリケーション フレームワーク・コンテンツ管理システム</a>です。GPL に基づいて使用が許諾されます。</p>';
 $_lang["about_title"] = 'Evolution について';
 $_lang["access_permission_denied"] = 'このリソースにアクセスする権限がありません。';
 $_lang["access_permission_parent_denied"] = 'ここにリソースを作成する権限がありません。';
@@ -201,7 +201,7 @@ $_lang["create_weblink_here"] = 'ウェブリンクを作成';
 $_lang["createdon"] = '作成日時';
 $_lang["create_new"] = '新しく作成';
 $_lang["credits"] = '著作権表示/謝辞';
-$_lang["credits_shouts_msg"] = '<p>EVOは<a href="http://evo.im/" target="_blank">evo.im</a>で管理とメンテナンスがされています。</p>';
+$_lang["credits_shouts_msg"] = '<p>EVOは<a href="https://evo.im/" target="_blank">evo.im</a>で管理とメンテナンスがされています。</p>';
 $_lang["custom_contenttype_message"] = 'リソースが使用するコンテントタイプに独自のタイプを追加できます。新しいタイプを追加するにはテキストボックスに入力して「追加」ボタンをクリックします。';
 $_lang["custom_contenttype_title"] = 'カスタムコンテントタイプ';
 $_lang["database_charset"] = 'データベース文字コード';
@@ -670,7 +670,7 @@ $_lang["password_method"] = 'どのようにパスワードを通知しますか
 $_lang["password_method_email"] = '対象ユーザにメールで通知する';
 $_lang["password_method_screen"] = '生成したパスワードを次の画面で表示する';
 $_lang["password_msg"] = '<strong>:username</strong>のパスワードは<strong>:password</strong>です。';
-$_lang["php_version_check"] = 'EvolutionはPHPバージョン5.6.0またはそれ以上で動作します。インストールされているPHPをアップグレードしてください。';
+$_lang["php_version_check"] = 'EvolutionはPHPバージョン7.4またはそれ以上で動作します。インストールされているPHPをアップグレードしてください。';
 $_lang["plugin"] = 'プラグイン';
 $_lang["plugins"] = 'プラグイン';
 $_lang["plugin_code"] = 'プラグイン コード (php)';
@@ -865,10 +865,10 @@ $_lang["role_view_logs"] = '管理操作ログの閲覧';
 $_lang["role_view_unpublished"] = '未公開のリソースの閲覧';
 $_lang["role_web_access_persmissions"] = 'ウェブアクセス許可';
 $_lang["role_web_user_management"] = 'ウェブユーザー管理';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = '管理画面トップの「EVO News」のフィードURL';
 $_lang["rss_url_news_title"] = 'RSS ニュースフィード';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = '管理画面トップの「セキュリティ情報」のフィードURL';
 $_lang["rss_url_security_title"] = 'RSS セキュリティ情報フィード';
 $_lang["run_module"] = 'モジュールの実行';
@@ -1502,5 +1502,7 @@ $_lang["role_no_tv"] = 'このロールにはテンプレート変数がまだ�
 $_lang["role_notassigned_tv"] = '割り当て可能なテンプレート変数です。';
 $_lang["role_tv_msg"] = '以下のテンプレート変数にこのロールが割り当てられました。';
 $_lang["tmplvar_roles_access_msg"] = 'このテンプレート変数へアクセス/処理を許可されているロールを選択';
+
+$_lang["setting_from_file"] = '<strong class="text-danger">Parameter value is defined in core/custom/confic/cms/settings</strong>';
 
 return $_lang;

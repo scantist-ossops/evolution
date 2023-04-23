@@ -197,7 +197,7 @@ $_lang["create_weblink_here"] = 'Дочірнє веб-посилання';
 $_lang["createdon"] = 'Дата створення';
 $_lang["create_new"] = 'Створити';
 $_lang["credits"] = 'EVO використовує';
-$_lang["credits_shouts_msg"] = '<p>EVO підтримується на сайті<a href="http://evo.im/" target="_blank">evo.im</a>.</p>';
+$_lang["credits_shouts_msg"] = '<p>EVO підтримується на сайті<a href="https://evo.im/" target="_blank">evo.im</a>.</p>';
 $_lang["custom_contenttype_message"] = 'Тут ви можете додати типи вмісту (Content-Type) для сайту. Для цього введіть тип вмісту і натисніть \'Добавити\'.';
 $_lang["custom_contenttype_title"] = 'Типи вмісту (Content-Type):';
 $_lang["database_charset"] = 'Кодування бази даних';
@@ -648,7 +648,7 @@ $_lang["password_method"] = 'Спосіб повідомлення про нов
 $_lang["password_method_email"] = 'Надіслати новий пароль по e-mail.';
 $_lang["password_method_screen"] = 'Показати новий пароль на екрані.';
 $_lang["password_msg"] = 'Для користувача <b>:username</b> заданий новий пароль - <b>:password</b><br>';
-$_lang["php_version_check"] = 'Система EVO працює з PHP версії 5.6.0 або вище. Будь ласка, поновіть PHP';
+$_lang["php_version_check"] = 'Система EVO працює з PHP версії 7.4 або вище. Будь ласка, поновіть PHP';
 $_lang["plugin"] = 'Плагін';
 $_lang["plugins"] = 'Плагіни';
 $_lang["plugin_code"] = 'Код плагіна (php)';
@@ -838,10 +838,10 @@ $_lang["role_view_logs"] = 'Перегляд системного протоко
 $_lang["role_view_unpublished"] = 'Перегляд неопублікованих ресурсів';
 $_lang["role_web_access_persmissions"] = 'Права веб-доступа';
 $_lang["role_web_user_management"] = 'Керування веб-користувачами';
-$_lang["rss_url_news_default"] = 'http://feeds.feedburner.com/evocms-release-news';
+$_lang["rss_url_news_default"] = 'https://feeds.feedburner.com/evocms-release-news';
 $_lang["rss_url_news_message"] = 'Введіть адресу (URL) RSS-смужки новин EVO.';
 $_lang["rss_url_news_title"] = 'Смужка RSS новин';
-$_lang["rss_url_security_default"] = 'http://feeds.feedburner.com/evocms-security-news';
+$_lang["rss_url_security_default"] = 'https://feeds.feedburner.com/evocms-security-news';
 $_lang["rss_url_security_message"] = 'Введіть адресу (URL) RSS-стрічки безпеки EVO.';
 $_lang["rss_url_security_title"] = 'Смужка RSS безпеки';
 $_lang["run_module"] = 'Запуск модуля';
@@ -1445,9 +1445,16 @@ $_lang['manager_menu_position_left'] = 'зліва';
 $_lang['invalid_event_response'] = 'Подія %s повернула невірний результат';
 $_lang['chunk_processor'] = 'Клас обробки чанків';
 
-$_lang["role_no_tv"] = 'No Variables have been assigned to this Role yet.';
-$_lang["role_notassigned_tv"] = 'These Variables are available for assigning.';
-$_lang["role_tv_msg"] = 'The Variables assigned to this Role are listed below.';
-$_lang["tmplvar_roles_access_msg"] = 'Select the Roles that are allowed to access/process this Template Variable';
+$_lang["role_no_tv"] = 'Цій ролі ще не призначено жодної змінної.';
+$_lang["role_notassigned_tv"] = 'Ці змінні доступні для призначення.';
+$_lang["role_tv_msg"] = 'Змінні, призначені цій ролі, перераховані нижче.';
+$_lang["tmplvar_roles_access_msg"] = 'Виберіть ролі, яким дозволено доступ до цієї змінної шаблону та її обробка';
+
+$_lang["site_indexing_title"] = 'Індексація сайту';
+$_lang['site_indexing_message'] = 'Керування метатегом robots для індексації сайту пошуковими роботами.';
+$_lang["ignore"] = 'Не враховувати';
+$_lang["indexing_is_allowed"] = 'Індексацію дозволено';
+$_lang["indexing_is_prohibited"] = 'Індексацію заборонено';
+$_lang["setting_from_file"] = '<strong class="text-danger">Значение параметра задано в core/custom/config/cms/settings</strong>';
 
 return $_lang;

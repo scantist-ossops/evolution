@@ -93,7 +93,7 @@ class DatabaseTransactionsManager
             return $current->addCallback($callback);
         }
 
-        $callback();
+        call_user_func($callback);
     }
 
     /**

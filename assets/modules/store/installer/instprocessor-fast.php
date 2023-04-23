@@ -15,7 +15,7 @@ require_once($modulePath . "/lang/en.inc.php");
 if (!isset($modx_branch)) $modx_branch = '';
 if (!isset($modx_version)) $modx_version = '';
 if (!isset($modx_release_date)) $modx_release_date = '';
-if (!isset($installPath)) $installPath = '';
+if (!isset($installPath)) $installPath = MODX_BASE_PATH . 'assets/cache/store/install/install';
 // start session
 //session_start();
 $_SESSION['test'] = 1;
@@ -26,7 +26,7 @@ $moduleRelease = $modx_release_date;
 $moduleSQLBaseFile = "setup.sql";
 $moduleSQLDataFile = "setup.data.sql";
 
-if (is_file($installPath . '/' . $moduleSQLBaseFile)) {
+if (!empty($installPath) && is_file($installPath . '/' . $moduleSQLBaseFile)) {
     $moduleSQLDataFile = $moduleSQLBaseFile;
 }
 
@@ -35,7 +35,7 @@ $moduleChunks = array(); // chunks - array : name, description, type - 0:file or
 $moduleTemplates = array(); // templates - array : name, description, type - 0:file or 1:content, file or content
 $moduleSnippets = array(); // snippets - array : name, description, type - 0:file or 1:content, file or content,properties
 $modulePlugins = array(); // plugins - array : name, description, type - 0:file or 1:content, file or content,properties, events,guid
-$moduleModules = array(); // modules - array : name, description, type - 0:file or 1:content, file or content,properties, guid
+$moduleModules = array(); // modules - array : name, description, type - 0:file or 1:content, file or content, properties, guid, icon
 $moduleTemplates = array(); // templates - array : name, description, type - 0:file or 1:content, file or content,properties
 $moduleTVs = array(); // template variables - array : name, description, type - 0:file or 1:content, file or content,properties
 
@@ -279,25 +279,26 @@ if (count($moduleModules) > 0) {
         $guid = $moduleModule[4];
         $shared = $moduleModule[5];
         $category = $moduleModule[6];
+        $icon = $moduleModule[8];
         if (!file_exists($filecontent))
             echo "<p>&nbsp;&nbsp;$name: <span class=\"notok\">" . $_lang['unable_install_module'] . " '$filecontent' " . $_lang['not_found'] . ".</span></p>";
         else {
 
             // Create the category if it does not already exist
             $category = getCreateDbCategory($category, $sqlParser);
-
-            $module = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2));
+            $tmp = preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2);
+            $module = end($tmp);
             // remove installer docblock
             $module = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $module, 1);
             $moduleDb = \EvolutionCMS\Models\SiteModule::query()->where('name', $name)->first();
             if (!is_null($moduleDb)) {
                 $properties = propUpdate($properties, $moduleDb->properties);
-                \EvolutionCMS\Models\SiteModule::query()->where('name', $name)->update(['modulecode' => $module, 'description' => $desc, 'properties' => $properties, 'enable_sharedparams' => $shared]);
+                \EvolutionCMS\Models\SiteModule::query()->where('name', $name)->update(['modulecode' => $module, 'description' => $desc, 'properties' => $properties, 'enable_sharedparams' => $shared, 'icon' => $icon]);
 
                 echo "<p>&nbsp;&nbsp;$name: <span class=\"ok\">" . $_lang['upgraded'] . "</span></p>";
             } else {
                 $properties = parseProperties($properties, true);
-                \EvolutionCMS\Models\SiteModule::query()->create(['name' => $name, 'guid' => $guid, 'category' => $category, 'modulecode' => $module, 'description' => $desc, 'properties' => $properties, 'enable_sharedparams' => $shared]);
+                \EvolutionCMS\Models\SiteModule::query()->create(['name' => $name, 'guid' => $guid, 'category' => $category, 'modulecode' => $module, 'description' => $desc, 'properties' => $properties, 'enable_sharedparams' => $shared, 'icon' => $icon]);
                 echo "<p>&nbsp;&nbsp;$name: <span class=\"ok\">" . $_lang['installed'] . "</span></p>";
             }
         }
@@ -337,8 +338,8 @@ if (count($modulePlugins) > 0) {
 
             // Create the category if it does not already exist
             $category = getCreateDbCategory($category, $sqlParser);
-
-            $plugin = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2));
+            $tmp = preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2);
+            $plugin = end($tmp);
             // remove installer docblock
             $plugin = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $plugin, 1);
             $pluginDbRecord = \EvolutionCMS\Models\SitePlugin::where('name', $name)->orderBy('id');
@@ -441,8 +442,8 @@ if (count($moduleSnippets) > 0) {
 
             // Create the category if it does not already exist
             $category = getCreateDbCategory($category, $sqlParser);
-
-            $snippet = end(preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent)));
+            $tmp = preg_split("/(\/\/)?\s*\<\?php/", file_get_contents($filecontent), 2);
+            $snippet = end($tmp);
             // remove installer docblock
             $snippet = preg_replace("/^.*?\/\*\*.*?\*\/\s+/s", '', $snippet, 1);
             $snippetDbRecord = \EvolutionCMS\Models\SiteSnippet::query()->where('name', $name)->first();
@@ -464,7 +465,6 @@ if (count($moduleSnippets) > 0) {
 }
 
 // install data
-
 if (is_file($installPath . '/' . $moduleSQLDataFile)) {
     echo "<p>" . $_lang['installing_demo_site'];
     $sqlParser->process($installPath . '/' . $moduleSQLDataFile);
@@ -499,7 +499,7 @@ function propUpdate($new, $old)
     $newArr = parseProperties($new);
     $oldArr = parseProperties($old);
     foreach ($oldArr as $k => $v) {
-        if (isset($v['0']['options'])) {
+        if (isset($v['0']['options']) && isset($newArr[$k]['0']['options'])) {
             $oldArr[$k]['0']['options'] = $newArr[$k]['0']['options'];
         }
     }

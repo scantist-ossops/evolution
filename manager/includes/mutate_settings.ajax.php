@@ -9,7 +9,7 @@ if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
 $action = preg_replace('/[^A-Za-z0-9_\-\.\/]/', '', $_POST['action']);
 $lang = preg_replace('/[^A-Za-z0-9_\s\+\-\.\/]/', '', $_POST['lang']);
 $key = preg_replace('/[^A-Za-z0-9_\-\.\/]/', '', $_POST['key']);
-$value = preg_replace('/[^A-Za-z0-9_\-\.\/]/', '', $_POST['value']);
+$value = preg_replace('/[^A-Za-z0-9_\-\.\/]/', '', $_POST['value'] ?? '');
 
 
 $str = '';
@@ -46,7 +46,7 @@ switch (true) {
 }
 
 if ($emptyCache) {
-    $modx->clearCache('full');
+    EvolutionCMS()->clearCache('full');
 }
 
 echo $str;
