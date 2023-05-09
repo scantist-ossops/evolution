@@ -242,6 +242,14 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
     {
     }
 
+    public function maintenanceMode()
+    {
+    }
+
+    public function terminating($callback)
+    {
+    }
+
     /**
      * @return self
      * @throws \Exception
@@ -4581,7 +4589,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
                 $dateFormat
             );
             if (empty($mode)) {
-		$formatter = new IntlDateFormatter(
+                $formatter = new IntlDateFormatter(
                     $this->getConfig('manager_language'),
                     IntlDateFormatter::FULL,
                     IntlDateFormatter::FULL,

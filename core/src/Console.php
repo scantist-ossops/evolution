@@ -30,7 +30,7 @@ class Console extends Artisan
     /**
      * @{inheritDoc}
      */
-    protected function getDefaultInputDefinition()
+    protected function getDefaultInputDefinition(): \Symfony\Component\Console\Input\InputDefinition
     {
         return SymfonyApplication::getDefaultInputDefinition();
     }

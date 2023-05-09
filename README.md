@@ -33,7 +33,13 @@ Evolution CMS 3.2 requires **PHP >= 8.0.2**
 
 ## Docker
 
-To run **Evolution CMS** using docker make **docker-compose up -d** command in your terminal. Additional configs and access parameters you can find in **docker-compose.yml** file and **docker** folder 
+Run command ``` php core/artisan salo:install ``` for generating **docker-compose.yml** file.
+
+To run **Evolution CMS** using docker make **docker-compose up -d** command in your terminal. Additional configs and access parameters you can find in **docker-compose.yml** file and **docker** folder
+
+#### For Windows
+
+See documentation for install WSL https://learn.microsoft.com/uk-ua/windows/wsl/install-manual
 
 ## References
 

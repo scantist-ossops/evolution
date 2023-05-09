@@ -43,7 +43,7 @@ trait Path
      *
      * @return string
      */
-    public function langPath()
+    public function langPath($path = '')
     {
         return $this->path('lang');
     }
@@ -85,7 +85,7 @@ trait Path
      *
      * @return string
      */
-    public function storagePath()
+    public function storagePath($path = '')
     {
         return $this->storagePath ?: EVO_STORAGE_PATH;
     }
