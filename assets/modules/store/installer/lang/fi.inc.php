@@ -5,7 +5,7 @@
  * @author        Anssi Rajakallio
  * @package       MODx
  * @version       1.0
- * 
+ *
  * Filename:      /install/lang/finnish/finnish.inc.php
  * Language:      Finnish
  * Encoding:      UTF-8
@@ -108,7 +108,7 @@ $_lang["installing_demo_site"] = 'Asennetaan demo sivustoa: ';
 $_lang["language_code"] = 'fi';	// for html element e.g. <html xml:lang="en" lang="en">
 $_lang["loading"] = 'Ladataan...';
 $_lang["modules"] = 'Moduulit';
-$_lang["modx_footer1"] = '&copy; 2005-2022 <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF). Kaikki oikeudet pidätetään. MODx on lisensoitu GNU GPL lisenssillä.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF). Kaikki oikeudet pidätetään. MODx on lisensoitu GNU GPL lisenssillä.';
 $_lang["modx_footer2"] = 'MODx on ilmainen ohjelmisto. Kehoitamme sinua olemaan luova ja käyttämään MODx järjestelmää siten, miten sinä sen parhaaksi näet. Jos teet muutoksia järjestelmään ja päätät jakaa muokattua MODx järjestelmää eteenpäin, muista pitää muokattu lähdekoodi vapaasti saatavilla!';
 $_lang["modx_install"] = 'MODx &raquo; Asennus';
 $_lang["modx_requires_php"] = ', ja MODx vaatii PHP:stä version 4.2.0 tai uudemman';
@@ -132,7 +132,7 @@ $_lang["running_database_updates"] = 'Suoritetaan tietokannan päivityksiä: ';
 $_lang["sample_web_site"] = 'Demo sivusto';
 $_lang["sample_web_site_note"] = 'Ota huomioon, että tämä <b style=\"color:#CC0000\">ylikirjoittaa</b> olemassaolevat sivut ja resurssit.';
 $_lang["session_problem"] = 'Palvelinistuntojen hallinnassa havaittu ongelmia. Ole hyvä ja ota yhteyttä palvelun ylläpitäjään ongelman korjaamiseksi.';
-$_lang["session_problem_try_again"] = 'Yritä uudelleen?'; 
+$_lang["session_problem_try_again"] = 'Yritä uudelleen?';
 $_lang["setup_cannot_continue"] = 'Valitettavasti asennusta ei voi jatkaa ylläolevista syistä ';
 $_lang["setup_couldnt_install"] = 'MODx asennus ei voinut asentaa/muokata joitain tietokannan tauluja.';
 $_lang["setup_database"] = 'Asennus yrittää luoda tietokantaa:<br />';

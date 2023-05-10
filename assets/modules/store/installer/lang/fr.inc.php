@@ -5,7 +5,7 @@
  * @author Grégory Pakosz (guardian) - Modifié par Coroico et Jean-Christophe Brebion (Fairytree) pour EVO 1.0.3
  * @package MODx
  * @version 1.0.3
- * 
+ *
  * Filename:       /install/lang/francais-utf8/francais-utf8.inc.php
  * Language:       French
  * Encoding:       UTF-8
@@ -108,7 +108,7 @@ $_lang["installing_demo_site"] = 'Installation du site de démonstration: ';
 $_lang["language_code"] = 'fr'; // for html element e.g. <html xml:lang="en" lang="en">
 $_lang["loading"] = 'Chargement...';
 $_lang["modules"] = 'Modules';
-$_lang["modx_footer1"] = '&copy; 2005-2022 le projet de Framework de Gestion de Contenu <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a>. Tous droits réservés. MODx est publié sous la licence GNU GPL.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 le projet de Framework de Gestion de Contenu <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a>. Tous droits réservés. MODx est publié sous la licence GNU GPL.';
 $_lang["modx_footer2"] = 'MODx est un logiciel libre. Nous vous encourageons à être créatifs et à utiliser MODx comme bon il vous semble. Votre seule obligation est de redistribuer sous licence libre votre version modifiée de MODx.';
 $_lang["modx_install"] = 'MODx &raquo; Installation';
 $_lang["modx_requires_php"] = ', alors que MODx nécessite PHP 4.2.0 ou supérieur';
@@ -136,7 +136,7 @@ $_lang["running_database_updates"] = 'Mise à jour de la base de données: ';
 $_lang["sample_web_site"] = 'Exemple de site web';
 $_lang["sample_web_site_note"] = 'Attention, cette opération va <b>écraser</b> les Ressources et Éléments existants.';
 $_lang["session_problem"] = 'Un problème a été détecté avec vos sessions de serveur. Veuillez contacter votre administrateur pour corriger ce problème.';
-$_lang["session_problem_try_again"] = 'Essayer encore?'; 
+$_lang["session_problem_try_again"] = 'Essayer encore?';
 $_lang["setup_cannot_continue"] = 'Impossible de poursuivre l\'installation';
 $_lang["setup_couldnt_install"] = 'Le programme d\'installation n\'a pas pu créer/modifier certaines tables dans la base de données spécifiée.';
 $_lang["setup_database"] = 'Le programme d\'installation va tenter de configurer la base de données:<br />';

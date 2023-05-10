@@ -5,7 +5,7 @@
  * @author MEGU, yamamoto, TxO
  * @package MODx
  * @version 1.0.4J-r1
- * 
+ *
  * Filename:       /install/lang/japanese-utf8/japanese-utf8.inc.php
  * Language:       Japanese
  * Encoding:       utf-8
@@ -108,7 +108,7 @@ $_lang["installing_demo_site"] = 'サンプルサイトのインストール: ';
 $_lang["language_code"] = 'ja';
 $_lang["loading"] = '処理中...';
 $_lang["modules"] = 'モジュール';
-$_lang["modx_footer1"] = '&copy; 2005-2022 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Management Framework (CMF) project. All rights reserved. MODx is licensed under the GNU GPL.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Management Framework (CMF) project. All rights reserved. MODx is licensed under the GNU GPL.';
 $_lang["modx_footer2"] = 'MODx is free software.  We encourage you to be creative and make use of MODx in any way you see fit. Just make sure that if you do make changes and decide to redistribute your modified MODx, that you keep the source code free!';
 $_lang["modx_install"] = 'MODx &raquo; インストール';
 $_lang["modx_requires_php"] = ', PHP5.0.0以上を推奨します(4.3.8以上であれば動作しますがセキュリティ面に問題があります)';
@@ -136,7 +136,7 @@ $_lang["running_database_updates"] = '実行中のデータベースのアップ
 $_lang["sample_web_site"] = 'サンプルサイト';
 $_lang["sample_web_site_note"] = '<span style="font-style:normal;">※このサンプルサイトは内容が古く検証も不十分なので、現状ではMODxの仕組みの理解にはあまり役立ちません。テスト目的のダミーコンテンツなどとして、必要に応じてお試しください。</span>';
 $_lang["session_problem"] = 'サーバー接続に問題が発生しました。問題修正のために、サーバー管理者へ相談してください。';
-$_lang["session_problem_try_again"] = '再試行しますか？'; 
+$_lang["session_problem_try_again"] = '再試行しますか？';
 $_lang["setup_cannot_continue"] = '上記理由のため、セットアップを継続できません。';
 $_lang["setup_couldnt_install"] = '選択されたテーブルをインストール/変更できませんでした。';
 $_lang["setup_database"] = 'セットアップ結果<br />';

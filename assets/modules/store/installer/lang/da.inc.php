@@ -6,7 +6,7 @@
  * @package MODx Evolution 1.0.5
  * @date 27/12/10 18.02
  * @version 1.0.4
- * 
+ *
  * Filename:       /install/lang/danish.inc.php
  * Language:       Danish
  * Encoding:       UTF-8
@@ -109,7 +109,7 @@ $_lang["installing_demo_site"] = 'Installerer demo website: ';
 $_lang["language_code"] = 'da'; // for html element e.g. <html xml:lang="en" lang="en">
 $_lang["loading"] = 'Indlæser...';
 $_lang["modules"] = 'Moduler';
-$_lang["modx_footer1"] = '&copy; 2005-2022 <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF) projektet. Alle rettigheder forbeholdes. MODx er licenseret af GNU GPL.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF) projektet. Alle rettigheder forbeholdes. MODx er licenseret af GNU GPL.';
 $_lang["modx_footer2"] = 'MODx er gratis software. Vi opfordrer dig til at være kreativ og at du bruger MODx som det passer dig. Men vær opmærksom på at hvis du ændrer i MODx og vælger at offenliggøre ændringerne skal kildekoden være tilgængelige og gratis for alle!';
 $_lang["modx_install"] = 'MODx &raquo; Installation';
 $_lang["modx_requires_php"] = ', og MODx kræver PHP 4.2.0 eller nyere';
@@ -137,7 +137,7 @@ $_lang["running_database_updates"] = 'Gennemfører opdatering af databasen: ';
 $_lang["sample_web_site"] = 'Demo website';
 $_lang["sample_web_site_note"] = 'Vær opmærksom på at dette vil <b>overskrive</b> eksisterende dokumenter og ressourcer.';
 $_lang["session_problem"] = 'Der er fundet et problem med håndteringen af serverens sessions. Kontakt serverens administrator, for at få rettet fejlen.';
-$_lang["session_problem_try_again"] = 'Vil du prøve igen?'; 
+$_lang["session_problem_try_again"] = 'Vil du prøve igen?';
 $_lang["setup_cannot_continue"] = 'Desværre kan installationen ikke fortsætte på grund af ovenstående ';
 $_lang["setup_couldnt_install"] = 'Installationsprogrammet til MODx kunne ikke oprette/modificere nogle af tabellerne i den valgte database.';
 $_lang["setup_database"] = 'Installationsprogrammet vil nu prøve at oprette databasen samt indholdet i databasen:<br />';

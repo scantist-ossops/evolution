@@ -5,7 +5,7 @@
  * @author davaeron
  * @package MODX
  * @version 1.0.1
- * 
+ *
  * Filename:       /install/lang/russian-utf8.inc.php
  * Language:       Russian
  * Encoding:       UTF-8
@@ -111,7 +111,7 @@ $_lang["installing_demo_site"] = 'Установка контента: ';
 $_lang["language_code"] = 'ru';
 $_lang["loading"] = 'Загружается...';
 $_lang["modules"] = 'Модули';
-$_lang["MODX_footer1"] = '&copy; 2005-2022 <a href="http://www.modx.com/" target="_blank" style="color: green; text-decoration:underline">MODX</a> Content Mangement Framework (CMF) project. Все права защищены. MODX лицензирован GNU GPL.';
+$_lang["MODX_footer1"] = '&copy; 2005-2023 <a href="http://www.modx.com/" target="_blank" style="color: green; text-decoration:underline">MODX</a> Content Mangement Framework (CMF) project. Все права защищены. MODX лицензирован GNU GPL.';
 $_lang["MODX_footer2"] = 'MODX &mdash; свободное программное обеспечение. Мы поощряем вас быть творческими и использовать MODX как вы считаете целесообразным. Если вы внесете изменения и решите распространять ваш измененный вариант MODX, то должны сохранять и распространять исходный код бесплатно.';
 $_lang["MODX_install"] = 'MODX &raquo; Установка';
 $_lang["MODX_requires_php"] = ', а MODX необходим PHP 4.2.0 или более поздний';
@@ -139,7 +139,7 @@ $_lang["running_database_updates"] = 'Обновление базы данных
 $_lang["sample_web_site"] = 'Демо контент';
 $_lang["sample_web_site_note"] = 'Осторожно! Установка этого параметра <b>перепишет</b> существующие ресурсы и элементы.';
 $_lang["session_problem"] = 'Была обнаружена проблема в сессии сервера. Свяжитесь, пожалуйста, с администратором сервера для ее устранения.';
-$_lang["session_problem_try_again"] = 'Повторить?'; 
+$_lang["session_problem_try_again"] = 'Повторить?';
 $_lang["setup_cannot_continue"] = 'К сожалению, установка не может быть продолжена из-за ';
 $_lang["setup_couldnt_install"] = 'Программа установки MODX не смогла установить/изменить некоторые таблицы базы данных.';
 $_lang["setup_database"] = 'Программа установки сейчас попробует установить базу данных:<br />';

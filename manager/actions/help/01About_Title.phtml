@@ -4,11 +4,9 @@ if( ! defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
 }
 $logo= '<img src="media/style/default/images/misc/login-logo.png" height="54" width="358" border="0">';
 $downloadLinks = array(
-	0=>array('title'=>$_lang["information"],'link'=>'https://evocms.ru/'),
-	1=>array('title'=>$_lang["download"],'link'=>'https://github.com/evocms-community/evolution/releases'),
-	2=>array('title'=>$_lang["extras"],'link'=>array(
-		'https://github.com/extras-evolution'
-	)),
+	0=>array('title'=>$_lang["information"],'link'=>'https://evo.im/'),
+	1=>array('title'=>$_lang["download"],'link'=>'https://github.com/evolution-cms/evolution/releases'),
+	2=>array('title'=>$_lang["extras"],'link'=>array('https://github.com/extras-evolution')),
 );
 
 $translationLinks = array(
@@ -24,9 +22,5 @@ echo createList($_lang['help_translating_title'], $translationLinks);
 ?>
 
 <div class="sectionHeader"><?php echo $_lang['about_title']; ?></div><div class="sectionBody">
-<?php echo $_lang['about_msg']; ?><?php echo $_lang['credits_shouts_msg']; ?>
+<?php echo $_lang['about_msg']; ?> <?php echo $_lang['credits_shouts_msg']; ?>
 </div>
-
-
-
-

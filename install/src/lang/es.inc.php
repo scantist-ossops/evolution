@@ -116,7 +116,7 @@ $_lang["installing_demo_site"] = 'Instalando el sitio de demostración: ';
 $_lang["language_code"] = 'es';
 $_lang["loading"] = 'Cargando...';
 $_lang["modules"] = 'Módulos';
-$_lang["modx_footer1"] = '&copy; 2005-2022 del proyecto de <a href="https://evo.im/" target="_blank" style="color: green; text-decoration:underline">Evo</a> Content Management Framework (CMF). Todos los derechos reservados. Evo tiene licencia GPL de GNU.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 del proyecto de <a href="https://evo.im/" target="_blank" style="color: green; text-decoration:underline">Evo</a> Content Management Framework (CMF). Todos los derechos reservados. Evo tiene licencia GPL de GNU.';
 $_lang["modx_footer2"] = 'Evo es software gratuito.  Te invitamos a ser creativo y usarlo de cualquier manera que se te antoje. Sólo asegura que si haces cambios y decides distribuir una versión modificada de Evo que el código fuente siga siendo gratis.';
 $_lang["modx_install"] = 'Evo &raquo; Instalar';
 $_lang["modx_requires_php"] = ', y Evo requiere de PHP versión [+min_version+] o mayor';
@@ -178,7 +178,7 @@ $_lang["strict_mode"] = ' !El modo sql_mode estricto del servidor MySQL está ha
 $_lang["strict_mode_error"] = 'Algunas características de Evo pueden no trabajar apropiadamente a no se de que el modo STRICT_TRANS_TABLES sql_mode esté habilitado.  Puedes configurar el modo de MySQL al editar el archivo my.cnf o contactar al administrador de tu servidor.';
 $_lang["summary_setup_check"] = 'El configurador ha revisado varios elementos para ver si todo está listo para comenzar la configuración.';
 $_lang["system_configuration"] = 'Configuración de sistema';
-$_lang["system_configuration_validate_referer_description"] = 'Es recomendable configurar la <strong>Validación de Cabeceras HTTP_REFERER</strong> para proteger su sitio contra ataques CSRF, pero en algunos servidores esta opción puede ser inaccesible.'; 
+$_lang["system_configuration_validate_referer_description"] = 'Es recomendable configurar la <strong>Validación de Cabeceras HTTP_REFERER</strong> para proteger su sitio contra ataques CSRF, pero en algunos servidores esta opción puede ser inaccesible.';
 $_lang["table_prefix_already_inuse"] = ' - ¡Este prefijo ya se está usando en esta base de datos!';
 $_lang["table_prefix_already_inuse_note"] = 'El configurador no puede instalar en la base de datos seleccionada, ya contiene tablas con el prefijo que especificaste.  Por favor escoge un nuevo prefijo para tablas y corre el configurador otra vez.';
 $_lang["table_prefix_not_exist"] = ' - ¡Este prefijo no existe en esta base de datos!';

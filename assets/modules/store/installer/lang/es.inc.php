@@ -108,7 +108,7 @@ $_lang["installing_demo_site"] = 'Instalando el sitio de demostración: ';
 $_lang["language_code"] = 'es'; // for html element e.g. <html xml:lang="es" lang="es">
 $_lang["loading"] = 'Cargando...';
 $_lang["modules"] = 'Módulos';
-$_lang["modx_footer1"] = '&copy; 2005-2022 del proyecto de <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a>. Todos los derechos reservados. MODx tiene licencia GPL de GNU.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 del proyecto de <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a>. Todos los derechos reservados. MODx tiene licencia GPL de GNU.';
 $_lang["modx_footer2"] = 'MODx es software gratuito.  Te invitamos a ser creativo y usarlo de cualquier manera que se te antoje. Sólo asegura que si haces cambios y decides distribuir una versión modificada de MODx que el código fuente siga siendo gratis.';
 $_lang["modx_install"] = 'MODx &raquo; Instalar';
 $_lang["modx_requires_php"] = ', y MODx requiere de PHP versión 4.2.0 o mayor';
@@ -132,7 +132,7 @@ $_lang["running_database_updates"] = 'Actualizando la base de datos: ';
 $_lang["sample_web_site"] = 'Sitio de Muestra';
 $_lang["sample_web_site_note"] = 'Favor de notar que esto va a <b style="color:#CC0000">sobreescribir</b> los documentos y recursos existentes.';
 $_lang["session_problem"] = 'Un problema fue detectado con tus sesiones de servidor.  Por favor consulta con tu admin de servidor para corregir este problema.';
-$_lang["session_problem_try_again"] = '¿Intentar nuevamente?'; 
+$_lang["session_problem_try_again"] = '¿Intentar nuevamente?';
 $_lang["setup_cannot_continue"] = 'Desafortunadamente, el configurador no puede continuar en este momento, debido a lo anterior ';
 $_lang["setup_couldnt_install"] = 'El configurador de MODx no pudo instalar/alterar algunas tablas dentro de la base de datos seleccionada.';
 $_lang["setup_database"] = 'El configurador intentará ahora configurar la base de datos:<br />';

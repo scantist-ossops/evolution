@@ -113,7 +113,7 @@ $_lang["installing_demo_site"] = 'Installerar demo-webbplats: ';
 $_lang["language_code"] = 'sv'; // for html element e.g. <html xml:lang="sv" lang="sv">
 $_lang["loading"] = 'Laddar...';
 $_lang["modules"] = 'Moduler';
-$_lang["modx_footer1"] = '&copy; 2005-2022 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF) project. Med ensamrätt. MODx är licensierad under GNU GPL.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF) project. Med ensamrätt. MODx är licensierad under GNU GPL.';
 $_lang["modx_footer2"] = 'MODx är fri programvara. Vi uppmuntrar dig att vara kreativ och använda MODx på vilket sätt du vill. Vara bara noga med att bevara källkoden fri om du gör ändringar och sedan väljer att omdistribuera din modifierade version av MODx.';
 $_lang["modx_install"] = 'MODx &raquo; Installation';
 $_lang["modx_requires_php"] = ', och MODx kräver PHP 4.2.0 eller senare.';
@@ -141,7 +141,7 @@ $_lang["running_database_updates"] = 'Kör uppdateringar för databasen: ';
 $_lang["sample_web_site"] = 'Demo-webbplats';
 $_lang["sample_web_site_note"] = 'Observera att detta kommer att <b>skriva över</b> existerande dokument och resurser.';
 $_lang["session_problem"] = 'Ett problem med dina serversessioner upptäcktes. Kontakta din serveradministratör för att rätta till problemet.';
-$_lang["session_problem_try_again"] = 'Försök igen?'; 
+$_lang["session_problem_try_again"] = 'Försök igen?';
 $_lang["setup_cannot_continue"] = 'Installationsprogrammet kan tyvärr inte fortsätta på grund av ovanstående ';
 $_lang["setup_couldnt_install"] = 'MODx installationsprogram kunde inte lägga till/ändra några tabeller i den valda databasen.';
 $_lang["setup_database"] = 'Installationsprogrammet kommer nu att försöka konfigurera databasen:<br />';

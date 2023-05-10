@@ -5,7 +5,7 @@
  * @author Luigif
  * @package MODx
  * @version 1.0
- * 
+ *
  * Filename:       /install/lang/italian/italian.inc.php
  * Language:       Italian
  * Encoding:       iso-8859-1
@@ -108,7 +108,7 @@ $_lang["installing_demo_site"] = 'Installazione del sito demo: ';
 $_lang["language_code"] = 'en';	// for html element e.g. <html xml:lang="en" lang="en">
 $_lang["loading"] = 'Sto caricando...';
 $_lang["modules"] = 'Moduli';
-$_lang["modx_footer1"] = '&copy; 2005-2022 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF) project. All rights reserved. MODx is licensed under the GNU GPL.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Mangement Framework (CMF) project. All rights reserved. MODx is licensed under the GNU GPL.';
 $_lang["modx_footer2"] = 'MODx is software libero. Vi incoraggiamo ad essere creativi e usare MODx come vi pare. Se fate delle modifiche al codice e decidete di ridistribuire il vostro MODx modificato, vi chiediamo di distribuire gratuitamente il codice sorgente!';
 $_lang["modx_install"] = 'MODx &raquo; Installazione';
 $_lang["modx_requires_php"] = ', e MODx richiede PHP 4.2.0 o successivo';
@@ -136,7 +136,7 @@ $_lang["running_database_updates"] = 'Esecuzione degli aggiornamenti del databas
 $_lang["sample_web_site"] = 'Sito Web di Esempio';
 $_lang["sample_web_site_note"] = 'Vi preghiamo di notare che questo <b>canceller&agrave;</b> i documenti e le risorse esistenti.';
 $_lang["session_problem"] = 'E\' stato riscontrato un problema cone le sessioni del vostro server. Contattare un amministratore di sistema per risolvere il problema.';
-$_lang["session_problem_try_again"] = 'Riprovare?'; 
+$_lang["session_problem_try_again"] = 'Riprovare?';
 $_lang["setup_cannot_continue"] = 'Sfortunatamente il programma di Installazione non pu&ograve; continuare, perch&egrave; ';
 $_lang["setup_couldnt_install"] = 'MODx non ha potuto installare/modificare alcune tabelle del database selezionato.';
 $_lang["setup_database"] = 'MODx tenter&agrave; ora di configurare il database:<br />';

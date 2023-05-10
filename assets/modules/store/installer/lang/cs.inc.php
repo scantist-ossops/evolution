@@ -6,7 +6,7 @@
  * @package MODx
  * @version 1.5
  * @updated 2010-12-11
- * 
+ *
  * Filename:       /install/lang/czech.inc.php
  * Language:       Czech
  * Encoding:       utf-8
@@ -110,7 +110,7 @@ $_lang["installing_demo_site"] = 'Instalovat ukázkový portál: ';
 $_lang["language_code"] = 'cs';	// for html element e.g. <html xml:lang="en" lang="en">
 $_lang["loading"] = 'Načítám...';
 $_lang["modules"] = 'Moduly';
-$_lang["modx_footer1"] = '&copy; 2005-2022 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Management Framework (CMF) projekt. Všechna práva vyhrazena. MODx je licencován pod GNU GPL.';
+$_lang["modx_footer1"] = '&copy; 2005-2023 the <a href="http://www.modxcms.com/" target="_blank" style="color: green; text-decoration:underline">MODx</a> Content Management Framework (CMF) projekt. Všechna práva vyhrazena. MODx je licencován pod GNU GPL.';
 $_lang["modx_footer2"] = 'MODx je free software. Doporučujeme Vám být kreativní a používat MODx jak jen uznáte za vhodné. Pouze se ujistěte, že pokud uděláte nějaké změny a budete chtít upravený MODx distribuovat dál, musí být zdrojové kódy volně přístupné!!';
 $_lang["modx_install"] = 'MODx &raquo; Instalace';
 $_lang["modx_requires_php"] = ', a MODx vyžaduje PHP 4.2.0 nebo novější';
@@ -138,7 +138,7 @@ $_lang["running_database_updates"] = 'Probíhající aktualizace databáze: ';
 $_lang["sample_web_site"] = 'Ukázkový portál';
 $_lang["sample_web_site_note"] = 'Berte na vědomí, že tato možnost <b>přepíše</b> existující dokumenty a zdroje.';
 $_lang["session_problem"] = 'Byl detekován problém se session na Vašem serveru. Proberte tento problém se svým administrátorem serveru.';
-$_lang["session_problem_try_again"] = 'Zkusit znovu?'; 
+$_lang["session_problem_try_again"] = 'Zkusit znovu?';
 $_lang["setup_cannot_continue"] = 'Bohužel, instalátor nemůže pokračovat vzhledem k výše uvedeným ';
 $_lang["setup_couldnt_install"] = 'MODx instalátor nemůže instalovat/změnit některé tabulky ve zvolené databázi.';
 $_lang["setup_database"] = 'Instalátor se nyní pokusí nastavit databázi:<br />';
