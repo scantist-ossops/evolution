@@ -7,6 +7,7 @@ use Illuminate\Console\Scheduling\ScheduleClearCacheCommand;
 use Illuminate\Console\Scheduling\ScheduleFinishCommand;
 use Illuminate\Console\Scheduling\ScheduleTestCommand;
 use Illuminate\Console\Scheduling\ScheduleWorkCommand;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Console\Migrations\MigrateCommand;
@@ -92,9 +93,15 @@ class ArtisanServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerCommands(array_merge(
+        $hereCommands = array_merge(
             $this->commands, $this->devCommands
-        ));
+        );
+
+        if (IN_INSTALL_MODE) {
+            unset($hereCommands['Migrate']);
+        }
+
+        $this->registerCommands($hereCommands);
         $this->app->singleton('Console', function ($app) {
             return new Console($app, $app['events'], '0.1');
         });
@@ -159,7 +166,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerMigrateCommand()
     {
         $this->app->singleton('command.migrate', function ($app) {
-            return new MigrateCommand($app['migrator']);
+            return new MigrateCommand($app['migrator'], $app[Dispatcher::class]);
         });
     }
 
