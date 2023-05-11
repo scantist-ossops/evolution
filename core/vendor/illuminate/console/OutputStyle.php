@@ -39,6 +39,8 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function write(string|iterable $messages, bool $newline = false, int $options = 0)
     {
@@ -49,6 +51,8 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function writeln(string|iterable $messages, int $type = self::OUTPUT_NORMAL)
     {
@@ -59,6 +63,8 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function newLine(int $count = 1)
     {
@@ -84,7 +90,7 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
      *
      * @return bool
      */
-    public function isQuiet()
+    public function isQuiet(): bool
     {
         return $this->output->isQuiet();
     }
@@ -94,7 +100,7 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
      *
      * @return bool
      */
-    public function isVerbose()
+    public function isVerbose(): bool
     {
         return $this->output->isVerbose();
     }
@@ -104,7 +110,7 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
      *
      * @return bool
      */
-    public function isVeryVerbose()
+    public function isVeryVerbose(): bool
     {
         return $this->output->isVeryVerbose();
     }
@@ -114,7 +120,7 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
      *
      * @return bool
      */
-    public function isDebug()
+    public function isDebug(): bool
     {
         return $this->output->isDebug();
     }

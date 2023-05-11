@@ -71,7 +71,7 @@ class Factory implements FactoryContract
      *
      * @var bool
      */
-    protected $excludeUnvalidatedArrayKeys;
+    protected $excludeUnvalidatedArrayKeys = true;
 
     /**
      * The Validator resolver instance.
@@ -99,13 +99,13 @@ class Factory implements FactoryContract
      * @param  array  $data
      * @param  array  $rules
      * @param  array  $messages
-     * @param  array  $customAttributes
+     * @param  array  $attributes
      * @return \Illuminate\Validation\Validator
      */
-    public function make(array $data, array $rules, array $messages = [], array $customAttributes = [])
+    public function make(array $data, array $rules, array $messages = [], array $attributes = [])
     {
         $validator = $this->resolve(
-            $data, $rules, $messages, $customAttributes
+            $data, $rules, $messages, $attributes
         );
 
         // The presence verifier is responsible for checking the unique and exists data
@@ -135,14 +135,14 @@ class Factory implements FactoryContract
      * @param  array  $data
      * @param  array  $rules
      * @param  array  $messages
-     * @param  array  $customAttributes
+     * @param  array  $attributes
      * @return array
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function validate(array $data, array $rules, array $messages = [], array $customAttributes = [])
+    public function validate(array $data, array $rules, array $messages = [], array $attributes = [])
     {
-        return $this->make($data, $rules, $messages, $customAttributes)->validate();
+        return $this->make($data, $rules, $messages, $attributes)->validate();
     }
 
     /**
@@ -151,16 +151,16 @@ class Factory implements FactoryContract
      * @param  array  $data
      * @param  array  $rules
      * @param  array  $messages
-     * @param  array  $customAttributes
+     * @param  array  $attributes
      * @return \Illuminate\Validation\Validator
      */
-    protected function resolve(array $data, array $rules, array $messages, array $customAttributes)
+    protected function resolve(array $data, array $rules, array $messages, array $attributes)
     {
         if (is_null($this->resolver)) {
-            return new Validator($this->translator, $data, $rules, $messages, $customAttributes);
+            return new Validator($this->translator, $data, $rules, $messages, $attributes);
         }
 
-        return call_user_func($this->resolver, $this->translator, $data, $rules, $messages, $customAttributes);
+        return call_user_func($this->resolver, $this->translator, $data, $rules, $messages, $attributes);
     }
 
     /**
@@ -249,7 +249,17 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Indicate that unvalidated array keys should be excluded, even if the parent array was validated.
+     * Indicate that unvalidated array keys should be included in validated data when the parent array is validated.
+     *
+     * @return void
+     */
+    public function includeUnvalidatedArrayKeys()
+    {
+        $this->excludeUnvalidatedArrayKeys = false;
+    }
+
+    /**
+     * Indicate that unvalidated array keys should be excluded from the validated data, even if the parent array was validated.
      *
      * @return void
      */

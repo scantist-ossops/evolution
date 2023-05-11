@@ -13,7 +13,7 @@ namespace Symfony\Component\ErrorHandler\Error;
 
 class FatalError extends \Error
 {
-    private $error;
+    private array $error;
 
     /**
      * @param array $error An array as returned by error_get_last()
