@@ -238,18 +238,6 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
         $routes->refreshActionLookups();
     }
 
-    final public function __clone()
-    {
-    }
-
-    public function maintenanceMode()
-    {
-    }
-
-    public function terminating($callback)
-    {
-    }
-
     /**
      * @return self
      * @throws \Exception
@@ -6564,4 +6552,16 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
 
         return false;
     }
+
+    final public function __clone()
+    {}
+
+    public function maintenanceMode()
+    {}
+
+    public function terminating($callback)
+    {}
+
+    public function hasDebugModeEnabled()
+    {}
 }

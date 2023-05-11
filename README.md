@@ -29,7 +29,7 @@ Most significant, though, is **Evolution CMS's** ability to empower you to quick
 
 ## Install
 You can use the single click installer: [Evolution CMS Installer](https://github.com/evolution-cms/installer)
-Evolution CMS 3.2 requires **PHP >= 8.0.2**
+Evolution CMS 3.2 requires **PHP >= 8.1**
 
 ## Docker
 
