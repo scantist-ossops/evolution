@@ -1,20 +1,17 @@
-<?php
-
-namespace EvolutionCMS\Installer\Install;
+<?php namespace EvolutionCMS\Installer\Install;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserPermissionsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-
         $insertArray = [
             ['id' => 1, 'name' => 'General', 'lang_key' => 'page_data_general'],
             ['id' => 2, 'name' => 'Content Management', 'lang_key' => 'role_content_management'],
@@ -31,10 +28,8 @@ class UserPermissionsTableSeeder extends Seeder
             ['id' => 13, 'name' => 'Events Log Management', 'lang_key' => 'role_eventlog_management'],
             ['id' => 14, 'name' => 'Config Management', 'lang_key' => 'role_config_management'],
         ];
-        \DB::table('permissions_groups')->insert($insertArray);
-
-
-        \DB::table('migrations_install')->insert([
+        DB::table('permissions_groups')->insert($insertArray);
+        DB::table('migrations_install')->insert([
             'migration' => '2018_06_29_182342_create_permissions_table', 'batch' => 1
         ]);
         $insertArray = [
@@ -77,7 +72,7 @@ class UserPermissionsTableSeeder extends Seeder
             ],
 
         ];
-        \DB::table('permissions')->insert($insertArray);
+        DB::table('permissions')->insert($insertArray);
         $insertArray = [
             [
                 'name'     => 'View a Resource\'s data', 'key' => 'view_document', 'lang_key' => 'role_view_docdata',
@@ -121,7 +116,7 @@ class UserPermissionsTableSeeder extends Seeder
             ],
 
         ];
-        \DB::table('permissions')->insert($insertArray);
+        DB::table('permissions')->insert($insertArray);
         $insertArray = [
             [
                 'name'     => 'Use the file manager (full root access)', 'key' => 'file_manager',
@@ -185,8 +180,7 @@ class UserPermissionsTableSeeder extends Seeder
 
 
         ];
-        \DB::table('permissions')->insert($insertArray);
-
+        DB::table('permissions')->insert($insertArray);
         $insertArray = [
             [
                 'name'     => 'Create new Snippets', 'key' => 'new_snippet', 'lang_key' => 'role_create_snippet',
@@ -277,8 +271,7 @@ class UserPermissionsTableSeeder extends Seeder
             ],
 
         ];
-        \DB::table('permissions')->insert($insertArray);
-
+        DB::table('permissions')->insert($insertArray);
         $insertArray = [
             [
                 'name'     => 'Create new roles', 'key' => 'new_role', 'lang_key' => 'role_new_role', 'disabled' => 0,
@@ -328,8 +321,6 @@ class UserPermissionsTableSeeder extends Seeder
             ],
 
         ];
-        \DB::table('permissions')->insert($insertArray);
-
-
+        DB::table('permissions')->insert($insertArray);
     }
 }

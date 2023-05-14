@@ -1,24 +1,19 @@
-<?php
-
-namespace EvolutionCMS\Installer\Install;
+<?php namespace EvolutionCMS\Installer\Install;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SystemEventnamesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-
-
-        \DB::table('system_eventnames')->delete();
-
-        \DB::table('system_eventnames')->insert([
+        DB::table('system_eventnames')->delete();
+        DB::table('system_eventnames')->insert([
             0   =>
                 [
                     'name'      => 'OnDocPublished',

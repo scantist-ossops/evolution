@@ -1,24 +1,19 @@
-<?php
-
-namespace EvolutionCMS\Installer\Install;
+<?php namespace EvolutionCMS\Installer\Install;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SiteTemplatesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-
-
-        \DB::table('site_templates')->delete();
-
-        \DB::table('site_templates')->insert([
+        DB::table('site_templates')->delete();
+        DB::table('site_templates')->insert([
             0 =>
                 [
                     'templatename'  => 'Minimal Template',
@@ -35,7 +30,5 @@ class SiteTemplatesTableSeeder extends Seeder
                     'editedon'      => 0,
                 ],
         ]);
-
-
     }
 }

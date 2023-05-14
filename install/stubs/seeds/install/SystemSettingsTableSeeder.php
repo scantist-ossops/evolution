@@ -1,23 +1,19 @@
-<?php
-
-namespace EvolutionCMS\Installer\Install;
+<?php namespace EvolutionCMS\Installer\Install;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SystemSettingsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-
-        \DB::table('system_settings')->delete();
-
-        \DB::table('system_settings')->insert([
+        DB::table('system_settings')->delete();
+        DB::table('system_settings')->insert([
             [
                 'setting_name' => 'settings_version',
                 'setting_value' => '',

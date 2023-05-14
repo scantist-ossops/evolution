@@ -1,8 +1,7 @@
-<?php
-
-namespace EvolutionCMS\Installer\Install;
+<?php namespace EvolutionCMS\Installer\Install;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SiteContentTableSeeder extends Seeder
 {
@@ -12,11 +11,9 @@ class SiteContentTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-
-
-        \DB::table('site_content')->delete();
+        DB::table('site_content')->delete();
 
         $resource = \EvolutionCMS\Models\SiteContent::create(
             [
@@ -60,9 +57,7 @@ class SiteContentTableSeeder extends Seeder
                 'content_dispo'   => 0,
                 'hidemenu'        => 0,
                 'alias_visible'   => 1,
-
             ]);
         $resource->save();
-
     }
 }

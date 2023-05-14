@@ -1,24 +1,19 @@
-<?php
-
-namespace EvolutionCMS\Installer\Install;
+<?php namespace EvolutionCMS\Installer\Install;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserRolesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-
-
-        \DB::table('user_roles')->delete();
-
-        \DB::table('user_roles')->insert([
+        DB::table('user_roles')->delete();
+        DB::table('user_roles')->insert([
             0 =>
                 [
                     'name'        => 'Administrator',
@@ -35,8 +30,6 @@ class UserRolesTableSeeder extends Seeder
                     'description' => 'Editor with expanded permissions including manage users, update Elements and site settings',
                 ]
         ]);
-
-
         $insertArray = [
             ['permission' => 'frames', 'role_id' => 1],
             ['permission' => 'home', 'role_id' => 1],
@@ -105,7 +98,7 @@ class UserRolesTableSeeder extends Seeder
             ['permission' => 'remove_locks', 'role_id' => 1],
             ['permission' => 'display_locks', 'role_id' => 1],
         ];
-        \DB::table('role_permissions')->insert($insertArray);
+        DB::table('role_permissions')->insert($insertArray);
         $insertArray = [
             ['permission' => 'frames', 'role_id' => 2],
             ['permission' => 'home', 'role_id' => 2],
@@ -138,8 +131,7 @@ class UserRolesTableSeeder extends Seeder
             ['permission' => 'access_permissions', 'role_id' => 2],
             ['permission' => 'manage_document_permissions', 'role_id' => 2],
         ];
-        \DB::table('role_permissions')->insert($insertArray);
-
+        DB::table('role_permissions')->insert($insertArray);
         $insertArray = [
             ['permission' => 'frames', 'role_id' => 3],
             ['permission' => 'home', 'role_id' => 3],
@@ -186,6 +178,6 @@ class UserRolesTableSeeder extends Seeder
             ['permission' => 'access_permissions', 'role_id' => 3],
             ['permission' => 'manage_document_permissions', 'role_id' => 3]
         ];
-        \DB::table('role_permissions')->insert($insertArray);
+        DB::table('role_permissions')->insert($insertArray);
     }
 }
