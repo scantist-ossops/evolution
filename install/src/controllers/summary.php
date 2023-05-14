@@ -40,9 +40,8 @@ echo '<h3>' . $_lang['summary_setup_check'] . '</h3>';
 
 $errors = 0;
 
-
 // check PHP version
-define('PHP_MIN_VERSION', '7.4.0');
+define('PHP_MIN_VERSION', '8.1.0');
 $phpMinVersion = PHP_MIN_VERSION; // Maybe not necessary. For backward compatibility
 echo '<p>' . $_lang['checking_php_version'];
 // -1 if left is less, 0 if equal, +1 if left is higher
@@ -53,7 +52,6 @@ if (version_compare(phpversion(), PHP_MIN_VERSION) < 0) {
 } else {
     echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
-
 
 // check if iconv is available
 echo '<p>' . $_lang['checking_iconv'];
@@ -73,18 +71,6 @@ if ($_SESSION['test'] != 1) {
     echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
 
-
-// check directories
-// cache exists?
-//echo '<p>' . $_lang['checking_if_cache_exist'];
-//if (!file_exists("../assets/cache") || !file_exists("../assets/cache/rss")) {
-//    echo '<span class="notok">' . $_lang['failed'] . '</span></p>';
-//    $errors++;
-//} else {
-//    echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
-//}
-
-
 // cache writable?
 echo '<p>' . $_lang['checking_if_cache_writable'];
 if (!is_writable("../assets/cache")) {
@@ -93,7 +79,6 @@ if (!is_writable("../assets/cache")) {
 } else {
     echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
-
 
 // cache files writable?
 echo '<p>' . $_lang['checking_if_cache_file_writable'];
@@ -107,16 +92,6 @@ if (!is_writable($tmp)) {
 } else {
     echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
-
-
-//echo '<p>'.$_lang['checking_if_cache_file2_writable'];
-//if ( ! is_writable("../assets/cache/sitePublishing.idx.php")) {
-//    $errors++;
-//    echo '<span class="notok">'.$_lang['failed'].'</span></p>';
-//} else {
-//    echo '<span class="ok">'.$_lang['ok'].'</span></p>';
-//}
-
 
 // File Browser directories exists?
 echo '<p>' . $_lang['checking_if_images_exist'];
@@ -132,7 +107,6 @@ switch (true) {
         echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
 
-
 // File Browser directories writable?
 echo '<p>' . $_lang['checking_if_images_writable'];
 switch (true) {
@@ -147,7 +121,6 @@ switch (true) {
         echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
 
-
 // export exists?
 echo '<p>' . $_lang['checking_if_export_exists'];
 if (!file_exists("../assets/export")) {
@@ -157,7 +130,6 @@ if (!file_exists("../assets/export")) {
     echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
 
-
 // export writable?
 echo '<p>' . $_lang['checking_if_export_writable'];
 if (!is_writable("../assets/export")) {
@@ -166,7 +138,6 @@ if (!is_writable("../assets/export")) {
 } else {
     echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 }
-
 
 // config.inc.php writable?
 echo '<p>' . $_lang['checking_if_config_exist_and_writable'];
@@ -217,11 +188,9 @@ try {
     echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
 
 } catch (PDOException $e) {
-
     $errors++;
     echo '<span class="notok">' . $_lang['database_connection_failed'] . '</span><p />' . $_lang['database_connection_failed_note'] . $e->getMessage() . '</p>';
     echo '<span class="notok">' . $_lang['database_use_failed'] . '</span><p />' . $_lang['database_use_failed_note'] . '</p>';
-
 }
 
 // check the database collation if not specified in the configuration
@@ -258,7 +227,6 @@ if ($dbh->errorCode() == 0 && $installMode == 0) {
         }
     } catch (\PDOException $exception) {
         echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
-
     }
 } elseif ($dbh->errorCode() == 0 && $installMode == 2) {
     echo '<p>' . $_lang['checking_table_prefix'] . $table_prefix . '`: ';
@@ -273,54 +241,6 @@ if ($dbh->errorCode() == 0 && $installMode == 0) {
     }
 }
 
-// check mysql version
-//if (!is_null($dbh)) {
-//
-//    $serverVersion = $dbh->getAttribute(PDO::ATTR_SERVER_VERSION);
-//    switch ($database_type) {
-//        case 'pgsql':
-//            echo '<p>' . $_lang['checking_pgsql_version'];
-//            if (version_compare($serverVersion, '10.0', '<')) {
-//                echo '<span class="notok">' . $_lang['warning'] . '</span></b>&nbsp;&nbsp;<strong>' . $_lang['pgsql_version_is'] . $serverVersion . '</strong></p>';
-//            } else {
-//                echo '<span class="ok">' . $_lang['ok'] . '</span>&nbsp;&nbsp;<strong>' . $_lang['pgsql_version_is'] . $serverVersion . '</strong></p>';
-//            }
-//            break;
-//        case 'mysql':
-//            echo '<p>' . $_lang['checking_mysql_version'];
-//            if (version_compare($serverVersion, '5.7.6', '<')) {
-//                echo '<span class="notok">' . $_lang['warning'] . '</span></b>&nbsp;&nbsp;<strong>' . $_lang['mysql_version_is'] . $serverVersion . '</strong><br> <span class="notok">' . $_lang['mysql_old_version'] . '</span></p>';
-//            } else {
-//                echo '<span class="ok">' . $_lang['ok'] . '</span>&nbsp;&nbsp;<strong>' . $_lang['mysql_version_is'] . $serverVersion . '</strong></p>';
-//            }
-//            break;
-//    }
-//}
-
-// check for strict mode
-//if ($conn) {
-//    echo '<p>'. $_lang['checking_mysql_strict_mode'];
-//    $mysqlmode = mysqli_query($conn, "SELECT @@global.sql_mode");
-//    if (mysqli_num_rows($mysqlmode) > 0){
-//        $modes = mysqli_fetch_array($mysqlmode, MYSQLI_NUM);
-//        //$modes = array("STRICT_TRANS_TABLES"); // for testing
-//        // print_r($modes);
-//        foreach ($modes as $mode) {
-//            if (stristr($mode, "STRICT_TRANS_TABLES") !== false || stristr($mode, "STRICT_ALL_TABLES") !== false) {
-//                echo '<span class="notok">' . $_lang['warning'] . '</span></b> <strong>&nbsp;&nbsp;' . $_lang['strict_mode'] . '</strong></p>';
-//                echo '<p><span class="notok">' . $_lang['strict_mode_error'] . '</span></p>';
-//            } else {
-//                echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
-//            }
-//        }
-//    } else {
-//        echo '<span class="ok">' . $_lang['ok'] . '</span></p>';
-//    }
-//}
-// Version and strict mode check end
-
-// andrazk 20070416 - add install flag and disable manager login
-// assets/cache writable?
 if (is_writable("../assets/cache")) {
     if (file_exists('../assets/cache/installProc.inc.php')) {
         @chmod('../assets/cache/installProc.inc.php', 0755);
@@ -371,9 +291,7 @@ $agreeToggle = $errors > 0 ? '' : ' onclick="if(document.getElementById(\'chkagr
         <input type="hidden" value="<?php echo $_POST['cmsadminemail'] ?>" name="cmsadminemail"/>
         <input type="hidden" value="<?php echo $_POST['cmspassword'] ?>" name="cmspassword"/>
         <input type="hidden" value="<?php echo $_POST['cmspasswordconfirm'] ?>" name="cmspasswordconfirm"/>
-
         <input type="hidden" value="1" name="options_selected"/>
-
         <input type="hidden" value="<?php echo $_POST['installdata'] ?? '' ?>" name="installdata"/>
         <?php
         $templates = isset ($_POST['template']) ? $_POST['template'] : array();

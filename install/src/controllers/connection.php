@@ -12,7 +12,7 @@ if ($installMode === 0) {
 } else {
     $database_name = '';
 
-    if (! is_file(EVO_CORE_PATH . 'config/database/connections/default.php')) {
+    if (!is_file(EVO_CORE_PATH . 'config/database/connections/default.php')) {
         $upgradeable = 0;
     } else {
         // Include the file so we can test its validity
@@ -68,10 +68,8 @@ if ($upgradeable && (!isset($database_connection_method) || empty($database_conn
 
 $ph['database_name'] = isset($_POST['database_name']) ? $_POST['database_name'] : $database_name;
 $ph['tableprefix'] = isset($_POST['tableprefix']) ? $_POST['tableprefix'] : $table_prefix;
-$ph['selected_set_character_set'] =
-    isset($database_connection_method) && $database_connection_method === 'SET CHARACTER SET' ? 'selected' : '';
-$ph['selected_set_names'] =
-    isset($database_connection_method) && $database_connection_method === 'SET NAMES' ? 'selected' : '';
+$ph['selected_set_character_set'] = isset($database_connection_method) && $database_connection_method === 'SET CHARACTER SET' ? 'selected' : '';
+$ph['selected_set_names'] = isset($database_connection_method) && $database_connection_method === 'SET NAMES' ? 'selected' : '';
 $ph['show#connection_method'] = (($installMode == 0) || ($installMode == 2)) ? 'block' : 'none';
 $ph['database_collation'] = isset($_POST['database_collation']) ? $_POST['database_collation'] : $database_collation;
 $ph['show#AUH'] = ($installMode == 0) ? 'block' : 'none';

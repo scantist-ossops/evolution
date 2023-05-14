@@ -29,7 +29,7 @@ global $moduleDependencies;
 global $errors;
 
 // set timout limit
-@ set_time_limit(120); // used @ to prevent warning when using safe mode?
+@set_time_limit(300); // used @ to prevent warning when using safe mode?
 
 $installMode = (int)$_POST['installmode'];
 $installData = (int)!empty($_POST['installdata']);
@@ -73,15 +73,16 @@ $base_path = $pth . (substr($pth, -1) !== '/' ? '/' : '');
 
 // connect to the database
 $host = explode(':', $database_server, 2);
+
 global $conn;
 try {
     $dbh = new PDO($_POST['database_type'] . ':host=' . $_POST['databasehost'] . ';dbname=' . $_POST['database_name'], $database_user, $database_password);
 
     include dirname(__DIR__) . '/processor/result.php';
 
-    if($installMode == 1){
+    if ($installMode == 1) {
         $installLevel = 3;
-    }else {
+    } else {
         $installLevel = 1;
     }
     // select database
@@ -90,7 +91,6 @@ try {
     error_reporting(E_ALL);
 
     if ($installLevel === 1) {
-
         // write the config.inc.php file if new installation
         $confph = array();
         $confph['database_server'] = $database_server;
@@ -128,15 +128,15 @@ try {
 
         @chmod($filename, 0777);
 
-        if (@ !$handle = fopen($filename, 'w')) {
+        if (@!$handle = fopen($filename, 'w')) {
             $configFileFailed = true;
         }
 
         // write $somecontent to our opened file.
-        if (@ fwrite($handle, $configString) === false) {
+        if (@fwrite($handle, $configString) === false) {
             $configFileFailed = true;
         }
-        @ fclose($handle);
+        @fclose($handle);
 
         // try to chmod the config file go-rwx (for suexeced php)
         @chmod($filename, 0404);
@@ -162,10 +162,7 @@ try {
         }
     }
 
-
-
     if ($installLevel === 3) {
-
         $delete_file = dirname(__DIR__, 2) . '/stubs/file_for_delete.txt';
         if (file_exists($delete_file)) {
             $files = explode("\n", file_get_contents($delete_file));
@@ -184,15 +181,15 @@ try {
         define('IN_MANAGER_MODE', true);
         define('IN_INSTALL_MODE', true);
         define('MODX_BASE_PATH', dirname(dirname(dirname(__DIR__))) . '/');
-
         define('MODX_SITE_URL', $_SERVER['HTTP_HOST'] . '/');
-        if(file_exists(MODX_BASE_PATH.'core/storage/bootstrap/services.php')){
+
+        if (file_exists(MODX_BASE_PATH.'core/storage/bootstrap/services.php')) {
             unlink(MODX_BASE_PATH.'core/storage/bootstrap/services.php');
         }
 
         include(MODX_BASE_PATH . '/index.php');
-        if ($installMode != 0 && $database_type == 'pgsql') {
 
+        if ($installMode != 0 && $database_type == 'pgsql') {
             $result = \DB::table('migrations_install')->select('id')->orderBy('id', 'DESC')->first();
             if (!is_null($result)) {
                 $new_id = $result->id;
@@ -202,7 +199,7 @@ try {
             }
         }
 
-        Console::call('migrate', ['--path' => '../install/stubs/migrations', '--force' => true]);
+        Console::call('migrate', ['--path' => MODX_BASE_PATH . 'install/stubs/migrations', '--realpath' => true, '--force' => true]);
 
         if ($installMode == 0) {
             seed('install');
@@ -226,9 +223,7 @@ try {
             seed('update');
         }
 
-
         $installLevel = 4;
-
     }
 
     if ($installLevel === 4) {
@@ -378,8 +373,9 @@ try {
                     \EvolutionCMS\Models\SiteTmplvarTemplate::where('tmplvarid', $templateVariable->getKey());
                     foreach ($assignments as $assignment) {
                         $template = \EvolutionCMS\Models\SiteTemplate::where('templatename', $assignment)->first();
-                        if (!is_null($template))
+                        if (!is_null($template)) {
                             \EvolutionCMS\Models\SiteTmplvarTemplate::query()->create(['tmplvarid' => $templateVariable->getKey(), 'templateid' => $template->getKey()]);
+                        }
                     }
                 }
             }
@@ -820,11 +816,9 @@ try {
                 // set extra guid for plugins and snippets
                 $dependencyRecord = \DB('site_' . $dependency['table'])->where($dependency['column'], $dependency['name'])->first();
 
-
                 if (!is_null($dependencyRecord)) {
                     $dependencyRecord->moduleguid = (int)$moduleGuid;
                     $dependencyRecord->save();
-
                 }
             }
         }
@@ -839,7 +833,6 @@ try {
             unlink(MODX_BASE_PATH.'assets/cache/installProc.inc.php');
         }
         file_put_contents(EVO_CORE_PATH . '.install', time());
-
     }
 
 } catch (PDOException $e) {
@@ -850,7 +843,6 @@ try {
 }
 include_once dirname(__DIR__) . '/template/actions/install.php';
 
-function table_prefix($table_name = '')
-{
+function table_prefix($table_name = '') {
     return $_POST['tableprefix'] . $table_name;
 }

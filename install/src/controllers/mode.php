@@ -11,7 +11,6 @@ if (is_file(EVO_CORE_PATH . 'config/database/connections/default.php')) { // Inc
         } catch (PDOException $e) {
             $upgradeable = 1;
         }
-
     } else {
         $upgradeable = 2;
     }
