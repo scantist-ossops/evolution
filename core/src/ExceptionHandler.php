@@ -17,9 +17,15 @@ use EvolutionCMS\Providers\TracyServiceProvider;
 class ExceptionHandler
 {
     /**
+     * The container instance.
+     *
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * Create a new exception handler instance.
      *
-     * @param Container $container
      * @return void
      */
     public function __construct(Container $container)
@@ -31,7 +37,7 @@ class ExceptionHandler
         }
     }
 
-    protected function registerHandlers()
+    protected function registerHandlers(): void
     {
         register_shutdown_function([$this, 'handleShutdown']);
         set_exception_handler([$this, 'handleException']);
@@ -44,7 +50,7 @@ class ExceptionHandler
      * @return void
      * @deprecated
      */
-    public function handleShutdown()
+    public function handleShutdown(): void
     {
         $error = error_get_last();
         if ($error !== null && $this->isFatal($error['type'])) {
@@ -59,7 +65,7 @@ class ExceptionHandler
      * @param int|null $traceOffset
      * @return FatalErrorException
      */
-    protected function fatalExceptionFromError(array $error, $traceOffset = null)
+    protected function fatalExceptionFromError(array $error, $traceOffset = null): FatalErrorException
     {
         return new FatalErrorException(
             $error['message'], $error['type'], $error
@@ -72,7 +78,7 @@ class ExceptionHandler
      * @param int $type
      * @return bool
      */
-    protected function isFatal($type)
+    protected function isFatal($type): bool
     {
         return in_array($type, [E_COMPILE_ERROR, E_CORE_ERROR, E_ERROR, E_PARSE]);
     }

@@ -23,6 +23,12 @@
       "email": "dmi3yy@gmail.com",
       "homepage": "https://dmi3yy.com",
       "role": "Developer"
+    },
+    {
+      "name": "Serhii Korneliuk",
+      "email": "info@seigerit.com",
+      "homepage": "https://seigerit.com",
+      "role": "Developer"
     }
   ],
   "require": {
@@ -35,7 +41,7 @@
     "ext-mbstring": "*",
     "lib-iconv": "*",
     "lib-libxml": "*",
-    "doctrine/dbal": "~2.3",
+    "doctrine/dbal": "3.*",
     "phpoption/phpoption": "*",
     "vlucas/phpdotenv": "^5.2",
     "guzzlehttp/guzzle": "^7.0.1",

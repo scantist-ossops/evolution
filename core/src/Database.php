@@ -1,9 +1,6 @@
 <?php namespace EvolutionCMS;
 
-
 use Exception;
-
-
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Connection;
@@ -31,7 +28,6 @@ class Database extends Manager
 
     public function __construct(Container $container = null)
     {
-
         parent::__construct($container);
         $this->prepareNativeConfig();
     }
@@ -93,7 +89,6 @@ class Database extends Manager
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -106,7 +101,6 @@ class Database extends Manager
             $rsArray[$returnIndex] = $row;
             $iterator++;
         }
-
         return $rsArray;
     }
 
@@ -149,7 +143,6 @@ class Database extends Manager
             $sql,
             [
                 \PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL,
-
             ]
         );
 
