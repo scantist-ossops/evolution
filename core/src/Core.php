@@ -3897,8 +3897,9 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
         // modify field names to use sc. table reference
         if ($sort != '') {
             $sort = array_filter(array_map('trim', explode(',', $sort)));
-            foreach ($sort as $item)
+            foreach ($sort as $item) {
                 $documentChildren = $documentChildren->orderBy($item, $dir);
+            }
         }
 
         if ($checkAccess) {
@@ -4782,7 +4783,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
      */
     public function getDocumentChildrenTVarOutput($parentid = 0, $tvidnames = array(), $published = 1, $sortBy = 'menuindex', $sortDir = 'ASC', $where = '', $resultKey = 'id', $checkAccess = true)
     {
-        $docs = $this->getDocumentChildren($parentid, $published, 0, 'id', $where, $sortBy, $sortDir, '', $checkAccess);
+        $docs = $this->getDocumentChildren($parentid, $published, 0, 'site_content.id', $where, $sortBy, $sortDir, '', $checkAccess);
 
         if (!$docs) {
             return false;
