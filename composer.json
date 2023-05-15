@@ -16,6 +16,12 @@
       "email": "dmi3yy@gmail.com",
       "homepage": "https://dmi3yy.com",
       "role": "Developer"
+    },
+    {
+      "name": "Serhii Korneliuk",
+      "email": "info@seigerit.com",
+      "homepage": "https://seigerit.com",
+      "role": "Developer"
     }
   ],
   "support": {
@@ -29,7 +35,7 @@
     "vendor-dir": "vendor"
   },
   "require": {
-    "php": ">=8.1",
+    "php": "^8.1",
     "ext-pdo": "*",
     "ext-json": "*"
   },

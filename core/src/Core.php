@@ -6564,4 +6564,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
 
     public function hasDebugModeEnabled()
     {}
+
+    public function getFallbackLocale()
+    {}
 }
