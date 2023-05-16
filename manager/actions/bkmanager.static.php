@@ -26,7 +26,6 @@ $mode = isset($_POST['mode']) ? $_POST['mode'] : '';
 $driver = EvolutionCMS()->getDatabase()->getConfig('driver');
 
 if ($mode == 'restore1') {
-
     if (isset($_POST['textarea']) && !empty($_POST['textarea'])) {
         $source = trim($_POST['textarea']);
         $_SESSION['textarea'] = $source . "\n";
@@ -59,14 +58,10 @@ if ($mode == 'restore1') {
 } elseif ($mode == 'restore2') {
     $path = EvolutionCMS()->getConfig('snapshot_path') . $_POST['filename'];
     if (file_exists($path)) {
-
         switch ($driver) {
             case 'pgsql':
-
                 $dump_request = 'PGPASSWORD="'.EvolutionCMS()->getDatabase()->getConfig('password').'" psql --host '.EvolutionCMS()->getDatabase()->getConfig('host').' --username ' . EvolutionCMS()->getDatabase()->getConfig('username') . ' --dbname ' . $dbase . ' < '.$path;
                 exec($dump_request, $data, $data_second);
-
-
                 break;
             default :
                 import_sql_from_file($path);
@@ -106,7 +101,6 @@ if ($mode == 'restore1') {
 
             exec($dump_request, $data, $data_second);
             dumpSql($tempfile_path);
-
             break;
         default:
             $dumper = new EvolutionCMS\Support\MysqlDumper($dbase);
@@ -121,7 +115,6 @@ if ($mode == 'restore1') {
             }
             break;
     }
-
 // MySQLdumper class can be found below
 } elseif ($mode == 'snapshot') {
     if (!is_dir(rtrim(EvolutionCMS()->getConfig('snapshot_path'), '/'))) {
@@ -187,7 +180,6 @@ if ($mode == 'restore1') {
             break;
     }
 
-
     if ($dumpfinished) {
         $_SESSION['result_msg'] = 'snapshot_ok';
         header("Location: index.php?a=93");
@@ -217,7 +209,6 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
 }
 
 ?>
-
     <script language="javascript">
         var actions = {
             cancel: function () {
@@ -319,11 +310,11 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
                                 switch (EvolutionCMS()->getDatabase()->getConfig()['driver']) {
                                     case 'pgsql':
                                         $sql = "SELECT *, tablename as Name
-                 FROM pg_catalog.pg_tables WHERE 
+                 FROM pg_catalog.pg_tables WHERE
             schemaname != 'information_schema' AND tablename LIKE '%" . $prefix . "%'";
 
                                         $array = EvolutionCMS()->getDatabase()->makeArray(
-                                            EvolutionCMS()->getDatabase()->query($sql)
+                                                EvolutionCMS()->getDatabase()->query($sql)
                                         );
                                         break;
 
@@ -331,7 +322,7 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
                                         $sql = 'SHOW TABLE STATUS FROM `' . EvolutionCMS()->getDatabase()->getConfig('database') . '` LIKE "' . $prefix . '%"';
 
                                         $array = EvolutionCMS()->getDatabase()->makeArray(
-                                            EvolutionCMS()->getDatabase()->query($sql)
+                                                EvolutionCMS()->getDatabase()->query($sql)
                                         );
                                         break;
                                     default:
@@ -358,8 +349,8 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
 
                                     // Enable record deletion for certain tables (TRUNCATE TABLE) if they're not already empty
                                     $truncateable = array(
-                                        EvolutionCMS()->getDatabase()->getConfig('prefix') . 'event_log',
-                                        EvolutionCMS()->getDatabase()->getConfig('prefix') . 'manager_log',
+                                            EvolutionCMS()->getDatabase()->getConfig('prefix') . 'event_log',
+                                            EvolutionCMS()->getDatabase()->getConfig('prefix') . 'manager_log',
                                     );
                                     if (EvolutionCMS()->hasPermission('settings') && in_array($db_status['Name'], $truncateable) && $db_status['Rows'] > 0) {
                                         echo '<td class="text-xs-right"><a class="text-danger" href="index.php?a=54&mode=93&u=' . $db_status['Name'] . '" title="' . $_lang['truncate_table'] . '">' . nicesize($db_status['Data_length'] + $db_status['Data_free']) . '</a>' . '</td>' . "\n";
@@ -453,14 +444,11 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
                         }
                     }
 
-                    function checked($cond)
-                    {
+                    function checked($cond) {
                         if ($cond) {
                             return ' checked';
                         }
-                    }
-
-                    ?>
+                    } ?>
                     <p>
                         <label><input type="radio" name="sel"
                                       onclick="showhide('file');" <?= checked(!isset($_SESSION['console_mode']) || $_SESSION['console_mode'] !== 'text') ?> /> <?= $_lang["bkmgr_run_sql_file_label"] ?>
@@ -522,13 +510,13 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
                     $files = glob($pattern, GLOB_NOCHECK);
                     $total = ($files[0] !== $pattern) ? count($files) : 0;
                     $detailFields = array(
-                        'Evolution CMS Version',
-                        'Host',
-                        'Generation Time',
-                        'Server version',
-                        'PHP Version',
-                        'Database',
-                        'Description'
+                            'Evolution CMS Version',
+                            'Host',
+                            'Generation Time',
+                            'Server version',
+                            'PHP Version',
+                            'Database',
+                            'Description'
                     );
                     if (is_array($files) && 0 < $total) {
                         ?>
@@ -562,9 +550,9 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
                                                 $fileLabel = '# ' . $label;
                                                 if (strpos($line, $fileLabel) !== false) {
                                                     $details[$label] = htmlentities(trim(str_replace(array(
-                                                        $fileLabel,
-                                                        ':',
-                                                        '`'
+                                                            $fileLabel,
+                                                            ':',
+                                                            '`'
                                                     ), '', $line)), ENT_QUOTES, ManagerTheme::getCharset());
                                                 }
                                             }
@@ -572,19 +560,19 @@ if (isset($_SESSION['result_msg']) && $_SESSION['result_msg'] != '') {
                                         };
                                         fclose($file);
 
-                                        $tooltip = "Generation Time: " . $details["Generation Time"] . "\n";
-                                        $tooltip .= "Server version: " . $details["Server version"] . "\n";
-                                        $tooltip .= "PHP Version: " . $details["PHP Version"] . "\n";
-                                        $tooltip .= "Host: " . $details["Host"] . "\n";
+                                        $tooltip = "Generation Time: " . ($details["Generation Time"] ?? 'Undefined') . "\n<br>";
+                                        $tooltip .= "Server version: " . ($details["Server version"] ?? 'Undefined') . "\n<br>";
+                                        $tooltip .= "PHP Version: " . ($details["PHP Version"] ?? 'Undefined') . "\n<br>";
+                                        $tooltip .= "Host: " . ($details["Host"] ?? 'Undefined') . "\n";
                                         ?>
                                         <tr>
                                             <td><?= $filename ?></td>
                                             <td><i class="<?= $_style['icon_question_circle'] ?>"
                                                    data-tooltip="<?= $tooltip ?>"></i></td>
                                             <td><?= $filesize ?></td>
-                                            <td><?= $details['Description'] ?></td>
-                                            <td><?= $details['Evolution CMS Version'] ?></td>
-                                            <td><?= $details['Database'] ?></td>
+                                            <td><?= ($details['Description'] ?? 'Undefined') ?></td>
+                                            <td><?= ($details['Evolution CMS Version'] ?? 'Undefined') ?></td>
+                                            <td><?= ($details['Database'] ?? 'Undefined') ?></td>
                                             <td><a href="javascript:;" onclick="confirmRevert('<?= $filename ?>');"
                                                    title="<?= $tooltip ?>"><?= $_lang["bkmgr_restore_submit"] ?></a>
                                             </td>
