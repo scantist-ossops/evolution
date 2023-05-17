@@ -220,7 +220,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
     public function initialize()
     {
 
-        if ($this->isLoggedIn()) {
+        if ($this->isLoggedIn('mgr')) {
             ini_set('display_errors', 1);
         }
         // events
@@ -556,13 +556,18 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
     /**
      * Check for manager or webuser login session since v1.2
      *
-     * @param string $context
+     * @param string $context 'mgr' or 'web'
      * @return bool
      */
-    public function isLoggedIn($context = 'mgr')
+    public function isLoggedIn(string $context = ''): bool
     {
-        $_ = 'mgrValidated';
+        if (empty($context)) {
+            $mgr = 'mgrValidated';
+            $web = 'webValidated';
+            return is_cli() || (isset($_SESSION[$mgr]) && !empty($_SESSION[$mgr])) || (isset($_SESSION[$web]) && !empty($_SESSION[$web]));
+        }
 
+        $_ = $context.'Validated';
         return is_cli() || (isset($_SESSION[$_]) && !empty($_SESSION[$_]));
     }
 
@@ -597,7 +602,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
             return true;
         }
 
-        if ($this->isLoggedin()) {
+        if ($this->isLoggedin('mgr')) {
             return true;
         }  // site online
         // site offline but launched via the manager
@@ -2874,7 +2879,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
     {
         // we now know the method and identifier, let's check the cache
 
-        if ($this->getConfig('enable_cache') == 2 && $this->isLoggedIn()) {
+        if ($this->getConfig('enable_cache') == 2 && $this->isLoggedIn('mgr')) {
             $this->setConfig('enable_cache', 0);
         }
 
