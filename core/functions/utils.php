@@ -1,9 +1,14 @@
 <?php
 
 if (!function_exists('evo_guest')) {
+    /**
+     * Show content if User isn't authenticated
+     * @param $content
+     * @return mixed|string
+     */
     function evo_guest($content)
     {
-        if(!EvolutionCMS()->getLoginUserID()){
+        if (evo()->getLoginUserID()) {
             $content = '';
         }
         return $content;
@@ -11,12 +16,42 @@ if (!function_exists('evo_guest')) {
 }
 
 if (!function_exists('evo_auth')) {
+    /**
+     * Show content if User is authenticated
+     * @param $content
+     * @return mixed|string
+     */
     function evo_auth($content)
     {
-        if (!EvolutionCMS()->getLoginUserID()) {
+        if (!evo()->getLoginUserID()) {
             $content = '';
         }
         return $content;
+    }
+}
+
+if (!function_exists('evo_role')) {
+    /**
+     * Show content if User is Role or authenticated is role is empty
+     * @param string $role
+     * @return bool
+     */
+    function evo_role(string $role = ''): bool
+    {
+        $out = false;
+        if (!empty($role)) {
+            $pms = get_by_key($_SESSION, 'webPermissions', [], 'is_array') ?: get_by_key($_SESSION, 'mgrPermissions', [], 'is_array');
+            if (count($pms) && isset($pms['name']) && $role == $pms['name']) {
+                $out = true;
+            }
+        } else {
+            $pms = get_by_key($_SESSION, 'webValidated', false, 'is_int') ?: get_by_key($_SESSION, 'mgrValidated', false, 'is_int');
+            if ($pms) {
+                $out = true;
+            }
+        }
+
+        return $out;
     }
 }
 
@@ -38,7 +73,7 @@ if (!function_exists('var_debug')) {
 if (!function_exists('evo_parser')) {
     function evo_parser($content)
     {
-        $core = evolutionCMS();
+        $core = evo();
         $minParserPasses = $core->minParserPasses;
         $maxParserPasses = $core->maxParserPasses;
 
