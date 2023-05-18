@@ -52,6 +52,11 @@ class BladeDirective
         return "<?php if(evo_role($role)): ?>";
     }
 
+    public static function evoElseRole($role = ''): string
+    {
+        return "<?php elseif(evo_role($role)): ?>";
+    }
+
     public static function evoEndRole(): string
     {
         return '<?php endif; ?>';

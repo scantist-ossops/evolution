@@ -15,6 +15,7 @@ return [
         'makeUrl' => [EvolutionCMS\Support\BladeDirective::class, 'makeUrl'],
         'csrf' => [EvolutionCMS\Support\BladeDirective::class, 'csrf'],
         'evoRole' => [EvolutionCMS\Support\BladeDirective::class, 'evoRole'],
+        'evoElseRole' => [EvolutionCMS\Support\BladeDirective::class, 'evoElseRole'],
         'evoEndRole' => [EvolutionCMS\Support\BladeDirective::class, 'evoEndRole'],
     ]
 ];
