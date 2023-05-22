@@ -327,6 +327,7 @@ class SystemSettings extends AbstractController implements ManagerTheme\PageCont
     protected function parameterActionButtons(): array
     {
         return [
+            'select' => 1,
             'save' => 1,
             'cancel' => 1
         ];

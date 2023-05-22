@@ -127,5 +127,11 @@ if (isset($data) && count($data) > 0) {
     // empty cache
     $modx->clearCache('full');
 }
-$header = "Location: index.php?a=7&r=10";
+
+// redirect/stay options
+if ($data['stay'] != '') {
+    $header = "Location: index.php?a=17&stay=" . $data['stay'];
+} else {
+    $header = "Location: index.php?a=7&r=10";
+}
 header($header);
