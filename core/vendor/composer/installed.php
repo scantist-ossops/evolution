@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'evolutioncms/core',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => '3.2.x-dev',
+        'version' => '3.2.9999999.9999999-dev',
+        'reference' => '5c99f20b254601efcaad03012f5d5b91611ab42d',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -182,9 +182,9 @@
             'dev_requirement' => false,
         ),
         'evolutioncms/core' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => '3.2.x-dev',
+            'version' => '3.2.9999999.9999999-dev',
+            'reference' => '5c99f20b254601efcaad03012f5d5b91611ab42d',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
