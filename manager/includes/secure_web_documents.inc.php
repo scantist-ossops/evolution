@@ -12,22 +12,34 @@ if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
  *
  * @param string $docid
  */
-function secureWebDocument($docid = '')
+function secureWebDocument($docid = '', $context = 1)
 {
-    $modx = evolutionCMS();
-
-    $modx->db->update('privateweb = 0', $modx->getFullTableName("site_content"),
-        ($docid > 0 ? "id='$docid'" : "privateweb = 1"));
-    $rs = $modx->db->select(
-        'DISTINCT sc.id',
-        $modx->getFullTableName("site_content") . " sc
-			LEFT JOIN " . $modx->getFullTableName("document_groups") . " dg ON dg.document = sc.id
-			LEFT JOIN " . $modx->getFullTableName("webgroup_access") . " wga ON wga.documentgroup = dg.document_group",
-        ($docid > 0 ? " sc.id='{$docid}' AND " : "") . "wga.id>0"
-    );
-    $ids = $modx->db->getColumn("id", $rs);
-    if (count($ids) > 0) {
-        $modx->db->update('privateweb = 1', $modx->getFullTableName("site_content"),
-            "id IN (" . implode(", ", $ids) . ")");
+    $context = $context == 0 ? 0 : 1;
+    $privateField = $context ? 'privateweb' : 'privatemgr';
+    if (is_numeric($docid) && $docid > 0) {
+        \EvolutionCMS\Models\SiteContent::withTrashed()->find($docid)->update([$privateField => 0]);
+    } else {
+        \EvolutionCMS\Models\SiteContent::withTrashed()->where($privateField, 1)->update([$privateField => 0]);
     }
+
+    $documentIds = \EvolutionCMS\Models\SiteContent::withTrashed()->select('site_content.id')->distinct()
+        ->leftJoin('document_groups', 'site_content.id', '=', 'document_groups.document')
+        ->leftJoin('membergroup_access', function(Illuminate\Database\Query\JoinClause $join) use ($context) {
+            $join->on('document_groups.document_group', '=', 'membergroup_access.documentgroup')
+                ->where('membergroup_access.context', '=', $context);
+        })->where('membergroup_access.id', '>', 0);
+    if (is_numeric($docid) && $docid > 0) {
+        $documentIds = $documentIds->where('site_content.id', $docid);
+    }
+
+    $ids = $documentIds->get()->pluck('id');
+
+    if (count($ids) > 0) {
+        \EvolutionCMS\Models\SiteContent::withTrashed()->whereIn('id', $ids)->update([$privateField => 1]);
+    }
+}
+
+function secureMgrDocument($docid = '', $context = 0)
+{
+    secureWebDocument($docid, $context);
 }

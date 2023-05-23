@@ -1,6 +1,6 @@
 <?php
-//@ini_set("display_errors","0");
-//error_reporting(0);
+@ini_set("display_errors","0");
+error_reporting(0);
 
 if( ! defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true || ! $modx->hasPermission('exec_module')) {
     die('<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the EVO Content Manager instead of accessing this file directly.');
@@ -12,12 +12,16 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 
 switch($action){
 case 'saveuser':
-	$_SESSION['STORE_USER'] = $modx->db->escape($_POST['res']);
+	$_SESSION['STORE_USER'] = $_POST['res'];
 	break;
 
 case 'exituser':
 	$_SESSION['STORE_USER'] = '';
 	break;
+case 'install2_step':
+    $_GET['action'] = 'install';
+    require 'installer/index.php';
+    break;
 
 case 'install':
 case 'install_file':
@@ -32,7 +36,7 @@ case 'install_file':
 		if ($file!='%url%' && $file!='' && $file!=' '){
 			$url = $file;
 		} else {
-			$url = "http://extras.evo.im/get.php?get=file&cid=".$id;
+			$url = "https://extras.evo.im/get.php?get=file&cid=" .$id;
 		}
 
 		if (!$Store->downloadFile($url ,MODX_BASE_PATH."assets/cache/store/temp.zip")){
@@ -52,6 +56,7 @@ case 'install_file':
 	$zip = new ZipArchive;
 	$res = $zip->open(MODX_BASE_PATH."assets/cache/store/temp.zip");
 	if ($res === TRUE) {
+
 		// echo 'Archive open';
 		$zip->extractTo(MODX_BASE_PATH."assets/cache/store/tmp_install");
 		$zip->close();
@@ -60,6 +65,7 @@ case 'install_file':
 			while (false !== ($name = readdir($handle))) if ($name != "." && $name != "..") $dir = $name;
 			closedir($handle);
 		}
+
 		$name = strtolower($name);
 		$Store->copyFolder('../assets/cache/store/tmp_install/'.$dir, '../assets/cache/store/install');
 		$Store->removeFolder('../assets/cache/store/tmp_install/install/');
@@ -68,18 +74,71 @@ case 'install_file':
 		$Store->removeFolder('../install/');
 		$Store->removeFolder('../assets/cache/store/tmp_install/');
 
+        $arr_dependencies = [];
+        if (isset($_GET['dependencies']) && $_GET['dependencies'] != '') {
+            $arr_dependencies = explode(',', $_GET['dependencies']);
+            $result = \EvolutionCMS\Models\SiteSnippet::query()->whereIn('name', $arr_dependencies)->pluck('name');
+            foreach ($result as $value) {
+                $key = array_search($value, $arr_dependencies);
+                if ($key !== false) {
+                    unset($arr_dependencies[$key]);
+                }
+            }
+            if(count($arr_dependencies) > 0){
+                $result = \EvolutionCMS\Models\SitePlugin::query()->whereIn('name', $arr_dependencies)->pluck('name');
+                foreach ($result as $value) {
+                    $key = array_search($value, $arr_dependencies);
+                    if ($key !== false) {
+                        unset($arr_dependencies[$key]);
+                    }
+                }
+            }
+            if(count($arr_dependencies) > 0){
+                $result = \EvolutionCMS\Models\SiteModule::query()->whereIn('name', $arr_dependencies)->pluck('name');
+                foreach ($result as $value) {
+                    $key = array_search($value, $arr_dependencies);
+                    if ($key !== false) {
+                        unset($arr_dependencies[$key]);
+                    }
+                }
+            }
+
+        }
+        $strError = '';
+        if(count($arr_dependencies) > 0){
+            $strError =  '<!DOCTYPE html>
+<html><head><title>Install</title>
+<meta http-equiv="Content-Type" content="text/html; charset="utf-8" />
+<link rel="stylesheet" href="'.MODX_SITE_URL.'assets/modules/store/installer/style.css" type="text/css" media="screen" /></head>
+<body><div id="contentarea"><div class="container_12"><br>';
 
 
-		if ($_GET['method']!= 'fast'){
-			header("Location: ".$modx->config['site_url']."assets/modules/store/installer/index.php?action=options");
-			die();
-		} else {
-			chdir('../assets/modules/store/installer/');
-			ob_start();
-			require "instprocessor-fast.php";
-			$content = ob_get_contents();
-			ob_end_clean();
-		}
+            $strError .= '<h2>Error installation</h2><br><br><p>Before install '.$_GET['name'].'<br> Please install this packages: <br>'.implode('<br>', $arr_dependencies).'</p>';
+
+            $strError .= "</div><!-- // content --></div><!-- // contentarea --><br /></body></html>";
+        }
+        if ($_GET['method'] != 'fast') {
+
+            if($strError != ''){
+                echo $strError;
+                exit();
+            }
+            $_GET['action'] = 'options';
+            require 'installer/index.php';
+            die();
+        } else {
+            if($strError != ''){
+                $data = ['result'=> 'error', 'data'=>$strError];
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                exit();
+            }
+            chdir('../assets/modules/store/installer/');
+            ob_start();
+            require "instprocessor-fast.php";
+            $content = ob_get_contents();
+            ob_end_clean();
+        }
 	} else {
 
 	}
@@ -96,14 +155,24 @@ case 'install_file':
 default:
 	//prepare list of snippets
 	$types = array('snippets','plugins','modules');
+    $snippets = \EvolutionCMS\Models\SiteSnippet::query()->get();
+    foreach ($snippets as $snippet){
+        $PACK[$value][$snippet->name]= $Store->get_version($snippet->description) ;
+    }
+    $PACK['snippets_writable']  = is_writable(MODX_BASE_PATH.'assets/snippets');
 
-	foreach($types as $value){
-		$result=$modx->db->query('SELECT name,description FROM '.$modx->db->config['table_prefix'].'site_'.$value);
-		while($row = $modx->db->GetRow($result)) {
-			$PACK[$value][$row['name']]= $Store->get_version($row['description']) ;
-		}
-		$PACK[$value.'_writable']  = is_writable(MODX_BASE_PATH.'assets/'.$value);
-	}
+    $plugins = \EvolutionCMS\Models\SitePlugin::query()->get();
+    foreach ($plugins as $plugin){
+        $PACK[$value][$plugin->name]= $Store->get_version($plugin->description) ;
+    }
+    $PACK['plugins_writable']  = is_writable(MODX_BASE_PATH.'assets/plugins');
+
+    $modules = \EvolutionCMS\Models\SiteModule::query()->get();
+    foreach ($modules as $module){
+        $PACK[$value][$module->name]= $Store->get_version($module->description) ;
+    }
+    $PACK['modules_writable']  = is_writable(MODX_BASE_PATH.'assets/modules');
+
 
 	$Store->lang['user_email'] = $_SESSION['mgrEmail'];
 	$Store->lang['hash'] = isset($_SESSION['STORE_USER']) ? stripslashes( $_SESSION['STORE_USER'] ) : '';
@@ -125,12 +194,12 @@ class Store{
 	public $language;
 
 	function __construct(){
-		global $modx;
+		$modx = EvolutionCMS();
 		$lang = $modx->config['manager_language'];
-		if (file_exists( dirname(__FILE__) .  '/lang/'.$lang.'.php')){
-			include_once(dirname(__FILE__) .  '/lang/'.$lang.'.php');
+		if (file_exists( __DIR__ .  '/lang/'.$lang.'.php')){
+			include_once(__DIR__ .  '/lang/'.$lang.'.php');
 		} else {
-			include_once(dirname(__FILE__) .  '/lang/english.php');
+			include_once(__DIR__ .  '/lang/en.php');
 		}
 		$this->lang = $_Lang;
 		$this->language = substr($lang,0,2);
@@ -144,14 +213,14 @@ class Store{
 		return isset($match[1]) ? $match[1] : '';
 	}
 
-	static function parse($tpl,$field){
-        global $modx;
-		foreach($field as $key=>$value)  $tpl = str_replace('[+'.$key.'+]',$value,$tpl);
-       $evtOut = $modx->invokeEvent('OnManagerMainFrameHeaderHTMLBlock');
-       $onManagerMainFrameHeaderHTMLBlock = is_array($evtOut) ? implode("\n", $evtOut) : '';
-       $tpl = str_replace('[+onManagerMainFrameHeaderHTMLBlock+]',$onManagerMainFrameHeaderHTMLBlock,$tpl);
-		return $tpl;
-	}
+    static function parse($tpl, $fields){
+        $modx = EvolutionCMS();
+        $tpl = $modx->parseText($tpl, $fields);
+        $evtOut = $modx->invokeEvent('OnManagerMainFrameHeaderHTMLBlock');
+        $onManagerMainFrameHeaderHTMLBlock = is_array($evtOut) ? implode("\n", $evtOut) : '';
+        $tpl = str_replace('[+onManagerMainFrameHeaderHTMLBlock+]',$onManagerMainFrameHeaderHTMLBlock,$tpl);
+        return $tpl;
+    }
 	function tpl($file){
 		$lang = $this->lang;
 		ob_start();

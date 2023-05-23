@@ -1,6 +1,6 @@
 
 
-<form name="install" id="install_form" action="?action=install" method="post">
+<form name="install" id="install_form" action="/manager/?id=<?php echo (int) $_GET['id']; ?>&a=112&action=install2_step" method="post">
   <div>
     <input type="hidden" value="1" name="options_selected" />
   </div>
@@ -130,12 +130,12 @@ if ($limit > 0) {
 ?>
     </div>
     <p class="buttonlinks">
-        <!-- тут кнопку отменить разве что поставить<a href="javascript:document.getElementById('install_form').action='index.php?action=<?php echo (($installMode == 1) ? 'mode' : 'connection'); ?>';document.getElementById('install_form').submit();" class="prev" title="<?php echo $_lang['btnback_value']?>"><span><?php echo $_lang['btnback_value']?></span></a>-->
+        <!-- тут кнопку отменить разве что поставить<a href="javascript:document.getElementById('install_form').action='index.php?action=<?php echo ((isset($installMode) && $installMode == 1) ? 'mode' : 'connection'); ?>';document.getElementById('install_form').submit();" class="prev" title="<?php echo $_lang['btnback_value']?>"><span><?php echo $_lang['btnback_value']?></span></a>-->
         <a href="javascript:document.getElementById('install_form').submit();" title="<?php echo $_lang['install']?>"><span><?php echo $_lang['install']?></span></a>
     </p>
 
 </form>
-<script type="text/javascript" src="<?php echo $modx->config['site_url'];?>assets/modules/store/installer/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="<?php echo MODX_SITE_URL;?>assets/modules/store/installer/jquery-1.4.4.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
 

@@ -1,26 +1,60 @@
 <?php
+global $id, $newid;
+global $use_udperms;
 if( ! defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
     die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the EVO Content Manager instead of accessing this file directly.");
 }
 if (!$modx->hasPermission('save_module')) {
     $modx->webAlertAndQuit($_lang["error_no_privileges"]);
+}else {
+    $use_udperms = 1;
+}
+
+if (isset($_GET['disabled'])) {
+    $disabled = $_GET['disabled'] == 1 ? 1 : 0;
+    $id = (int)($_REQUEST['id'] ?? 0);
+    // Set the item name for logger
+    try {
+        $module = EvolutionCMS\Models\SiteModule::findOrFail($id);
+        // invoke OnBeforeChunkFormSave event
+        $modx->invokeEvent("OnBeforeModFormSave", array(
+            "mode" => "upd",
+            "id" => $id
+        ));
+        $_SESSION['itemname'] = $module->name;
+        $module->update(['disabled' => $disabled]);
+        // invoke OnChunkFormSave event
+        $modx->invokeEvent("OnModFormSave", array(
+            "mode" => "upd",
+            "id" => $id
+        ));
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        $modx->webAlertAndQuit($_lang["error_no_id"]);
+    }
+    // empty cache
+    $modx->clearCache('full');
+
+    // finished emptying cache - redirect
+    $header="Location: index.php?a=76&tab=5&r=2";
+    header($header);
+    exit;
 }
 
 $id = (int)$_POST['id'];
-$name = $modx->db->escape(trim($_POST['name']));
-$description = $modx->db->escape($_POST['description']);
-$resourcefile = $modx->db->escape($_POST['resourcefile']);
-$enable_resource = $_POST['enable_resource'] == 'on' ? 1 : 0;
-$icon = $modx->db->escape($_POST['icon']);
+$name = trim($_POST['name']);
+$description = $_POST['description'];
+$resourcefile = $_POST['resourcefile'];
+$enable_resource = (isset($_POST['enable_resource']) && $_POST['enable_resource'] == 'on') ? 1 : 0;
+$icon = $_POST['icon'];
 //$category = (int)$_POST['category'];
-$disabled = $_POST['disabled'] == 'on' ? 1 : 0;
-$wrap = $_POST['wrap'] == 'on' ? 1 : 0;
-$locked = $_POST['locked'] == 'on' ? 1 : 0;
-$modulecode = $modx->db->escape($_POST['post']);
-$properties = $modx->db->escape($_POST['properties']);
-$enable_sharedparams = $_POST['enable_sharedparams'] == 'on' ? 1 : 0;
-$guid = $modx->db->escape($_POST['guid']);
-$parse_docblock = $_POST['parse_docblock'] == "1" ? '1' : '0';
+$disabled = (isset($_POST['disabled']) && $_POST['disabled'] == 'on') == 'on' ? 1 : 0;
+$wrap = (isset($_POST['wrap']) && $_POST['wrap'] == 'on') == 'on' ? 1 : 0;
+$locked = (isset($_POST['locked']) && $_POST['locked'] == 'on') == 'on' ? 1 : 0;
+$modulecode = $_POST['post'] ?? '';
+$properties = $_POST['properties'] ?? '';
+$enable_sharedparams = (isset($_POST['enable_sharedparams']) && $_POST['enable_sharedparams'] == 'on') == 'on' ? 1 : 0;
+$guid = $_POST['guid'];
+$parse_docblock = (isset($_POST['parse_docblock']) && $_POST['parse_docblock'] == 'on') == "1" ? '1' : '0';
 $currentdate = time() + $modx->config['server_offset_time'];
 
 //Kyle Jaebker - added category support
@@ -67,15 +101,14 @@ switch ($_POST['mode']) {
             ));
 
         // disallow duplicate names for new modules
-        $rs = $modx->db->select('count(id)', $modx->getFullTableName('site_modules'), "name='{$name}'");
-        $count = $modx->db->getValue($rs);
+        $count = \EvolutionCMS\Models\SiteModule::query()->where('name', $name)->count();
         if ($count > 0) {
-            $modx->manager->saveFormValues(107);
+            $modx->getManagerApi()->saveFormValues(107);
             $modx->webAlertAndQuit(sprintf($_lang['duplicate_name_found_module'], $name), "index.php?a=107");
         }
 
         // save the new module
-        $newid = $modx->db->insert(array(
+        $newid = \EvolutionCMS\Models\SiteModule::query()->insertGetId(array(
             'name' => $name,
             'description' => $description,
             'disabled' => $disabled,
@@ -91,7 +124,7 @@ switch ($_POST['mode']) {
             'properties' => $properties,
             'createdon' => $currentdate,
             'editedon' => $currentdate
-        ), $modx->getFullTableName('site_modules'));
+        ));
 
         // save user group access permissions
         saveUserGroupAccessPermissons();
@@ -114,7 +147,7 @@ switch ($_POST['mode']) {
             $header = "Location: index.php?a=" . $a . "&r=2&stay=" . $_POST['stay'];
             header($header);
         } else {
-            $header = "Location: index.php?a=106&r=2";
+            $header = "Location: index.php?a=76&tab=5&r=2";
             header($header);
         }
         break;
@@ -126,14 +159,15 @@ switch ($_POST['mode']) {
             ));
 
         // disallow duplicate names for new modules
-        $rs = $modx->db->select('count(id)', $modx->getFullTableName('site_modules'), "name='{$name}' AND id!='{$id}'");
-        if ($modx->db->getValue($rs) > 0) {
-            $modx->manager->saveFormValues(108);
+        $count = \EvolutionCMS\Models\SiteModule::query()->where('name', $name)->where('id', '!=', $id)->count();
+
+        if ($count > 0) {
+            $modx->getManagerApi()->saveFormValues(108);
             $modx->webAlertAndQuit(sprintf($_lang['duplicate_name_found_module'], $name), "index.php?a=108&id={$id}");
         }
 
         // save the edited module
-        $modx->db->update(array(
+        \EvolutionCMS\Models\SiteModule::find($id)->update(array(
             'name' => $name,
             'description' => $description,
             'icon' => $icon,
@@ -148,7 +182,7 @@ switch ($_POST['mode']) {
             'modulecode' => $modulecode,
             'properties' => $properties,
             'editedon' => $currentdate
-        ), $modx->getFullTableName('site_modules'), "id='{$id}'");
+        ));
 
         // save user group access permissions
         saveUserGroupAccessPermissons();
@@ -172,39 +206,10 @@ switch ($_POST['mode']) {
             header($header);
         } else {
             $modx->unlockElement(6, $id);
-            $header = "Location: index.php?a=106&r=2";
+            $header = "Location: index.php?a=76&tab=5&r=2";
             header($header);
         }
         break;
     default:
         $modx->webAlertAndQuit("No operation set in request.");
-}
-
-/**
- * saves module user group access
- */
-function saveUserGroupAccessPermissons()
-{
-    $modx = evolutionCMS();
-    global $id, $newid;
-    global $use_udperms;
-
-    if ($newid) {
-        $id = $newid;
-    }
-    $usrgroups = $_POST['usrgroups'];
-
-    // check for permission update access
-    if ($use_udperms == 1) {
-        // delete old permissions on the module
-        $modx->db->delete($modx->getFullTableName("site_module_access"), "module='{$id}'");
-        if (is_array($usrgroups)) {
-            foreach ($usrgroups as $value) {
-                $modx->db->insert(array(
-                    'module' => $id,
-                    'usergroup' => stripslashes($value),
-                ), $modx->getFullTableName('site_module_access'));
-            }
-        }
-    }
 }

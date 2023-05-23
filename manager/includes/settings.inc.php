@@ -5,13 +5,10 @@ if (!defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
 
 // get the settings from the database.
 $settings = array();
-if ($modx && count($modx->config) > 0) {
-    $settings = $modx->config;
+if ($modx && count(EvolutionCMS()->config) > 0) {
+    $settings = EvolutionCMS()->config;
 } else {
-    $rs = $modx->db->select('setting_name, setting_value', $modx->getFullTableName('system_settings'));
-    while ($row = $modx->db->getRow($rs)) {
-        $settings[$row['setting_name']] = $row['setting_value'];
-    }
+    $settings = \EvolutionCMS\Models\SystemSetting::all()->pluck('setting_value', 'setting_name');
 }
 
 extract($settings, EXTR_OVERWRITE);

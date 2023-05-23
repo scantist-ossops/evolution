@@ -43,13 +43,16 @@
 !/assets/site/index.html
 !/assets/site/.htaccess
 
+# Core
+/core/.install
+
 # Manager
 /manager/includes/config.inc.php
-/manager/includes/config_mutator.php
+/manager/media/style/default/css/styles.min.css
 
 # Composer
 /composer.phar
-/vendor/*
+
 !/vendor/.htaccess
 !/vendor/index.html
 
@@ -62,6 +65,9 @@ _ide_helper.php
 /node_modules
 npm-debug.log
 
+
+#docker
+/docker/nginx/logs/*
 # System
 ftpsync.settings
 Thumbs.db
@@ -73,3 +79,6 @@ Desktop.ini
 
 # except do not ignore .gitignore
 !.gitignore
+
+# dev
+.vscode/

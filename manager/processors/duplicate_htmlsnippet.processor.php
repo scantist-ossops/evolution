@@ -2,35 +2,29 @@
 if( ! defined('IN_MANAGER_MODE') || IN_MANAGER_MODE !== true) {
     die("<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the EVO Content Manager instead of accessing this file directly.");
 }
-if(!$modx->hasPermission('new_chunk')) {
-	$modx->webAlertAndQuit($_lang["error_no_privileges"]);
+if(!EvolutionCMS()->hasPermission('new_chunk')) {
+	EvolutionCMS()->webAlertAndQuit($_lang["error_no_privileges"]);
 }
 
 $id = isset($_GET['id'])? (int)$_GET['id'] : 0;
 if($id==0) {
-	$modx->webAlertAndQuit($_lang["error_no_id"]);
+	EvolutionCMS()->webAlertAndQuit($_lang["error_no_id"]);
 }
 
 // count duplicates
-$name = $modx->db->getValue($modx->db->select('name', $modx->getFullTableName('site_htmlsnippets'), "id='{$id}'"));
-$count = $modx->db->getRecordCount($modx->db->select('name', $modx->getFullTableName('site_htmlsnippets'), "name LIKE '{$name} {$_lang['duplicated_el_suffix']}%'"));
+$htmlsnippet = EvolutionCMS\Models\SiteHtmlsnippet::findOrFail($id);
+$name = $htmlsnippet->name;
+$count = EvolutionCMS\Models\SiteHtmlsnippet::where('name', 'like', $name.' '.$_lang['duplicated_el_suffix'].'%')->count();
 if($count>=1) $count = ' '.($count+1);
 else $count = '';
 
 // duplicate htmlsnippet
-$newid = $modx->db->insert(
-	array(
-		'name'=>'',
-		'description'=>'',
-		'snippet'=>'',
-		'category'=>'',
-		), $modx->getFullTableName('site_htmlsnippets'), // Insert into
-	"CONCAT(name, ' {$_lang['duplicated_el_suffix']}{$count}') AS name, description, snippet, category", $modx->getFullTableName('site_htmlsnippets'), "id='{$id}'"); // Copy from
+$newHtmlsnippet = $htmlsnippet->replicate();
+$newHtmlsnippet->name = $htmlsnippet->name.' '.$_lang['duplicated_el_suffix'].$count;
+$newHtmlsnippet->push();
 
-// Set the item name for logger
-$name = $modx->db->getValue($modx->db->select('name', $modx->getFullTableName('site_htmlsnippets'), "id='{$newid}'"));
-$_SESSION['itemname'] = $name;
+$_SESSION['itemname'] = $newHtmlsnippet->name;
 
 // finish duplicating - redirect to new chunk
-$header="Location: index.php?r=2&a=78&id=$newid";
+$header="Location: index.php?r=2&a=78&id=".$newHtmlsnippet->getKey();
 header($header);

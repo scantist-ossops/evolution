@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>EVO Content Manager</title>
-	<meta http-equiv="content-type" content="text/html; charset=[+modx_charset+]" />
+	<title>[(site_name)] (Evolution CMS Content Manager)</title>
+	<meta http-equiv="content-type" content="text/html; charset=[(modx_charset)]" />
+	<link rel="icon" type="image/ico" href="[+favicon+]">
 	<meta name="robots" content="noindex, nofollow" />
 	<style type="text/css">
 		/* Neutralize styles, fonts and viewport:
@@ -61,11 +62,11 @@
 		<div class="sectionBody">
 			<h1>[(site_name)]</h1>
 
-			<div class="loginMessage">[+manager_lockout_message+]</div>
+			<div class="loginMessage">[%manager_lockout_message%]</div>
 
 			<fieldset class="buttonset">
-				<input type="button" class="login" id="submitButton" value="[+home+]" onclick="return gotoHome();" />&nbsp;
-				<input type="button" class="login" id="submitButton" value="[+logout+]" onclick="return doLogout();" />
+				<input type="button" class="login" id="submitButton" value="[%home%]" onclick="return gotoHome();" />&nbsp;
+				<input type="button" class="login" id="submitButton" value="[%logout%]" onclick="return doLogout();" />
 			</fieldset>
 		</div>
 
@@ -77,7 +78,7 @@
 
 <!-- convert this to a language include -->
 <p class="loginLicense">
-	<strong>MODX</strong>&trade; is licensed under the GPL license. &copy; 2005-2018 <a href="http://modx.com/" target="_blank">MODX</a>.
+	<strong>MODX</strong>&trade; is licensed under the GPL license. &copy; 2005-2023 <a href="https://evo.im/" target="_blank">MODX</a>.
 </p>
 
 </body>
