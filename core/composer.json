@@ -32,7 +32,7 @@
     }
   ],
   "require": {
-    "php": "^8.1",
+    "php": ">=8.1",
     "ext-SimpleXML": "*",
     "ext-dom": "*",
     "ext-iconv": "*",
