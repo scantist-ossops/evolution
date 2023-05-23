@@ -444,7 +444,7 @@ if (substr($webstart_path, 0, 1) == '/') {
                 @ini_set("upload_max_filesize", $upload_maxsize ?? 0); // modified by raymond
                 ?>
 
-                <form name="upload" method="post" action="index.php" enctype="multipart/form-data">
+                <form name="upload" enctype="multipart/form-data" action="index.php" method="post">
                     <input type="hidden" name="MAX_FILE_SIZE" value="<?= isset($upload_maxsize) ? $upload_maxsize : 3145728 ?>">
                     <input type="hidden" name="a" value="31">
                     <input type="hidden" name="path" value="<?= $startpath ?>">
@@ -483,7 +483,7 @@ if (get_by_key($_REQUEST, 'mode') == "edit" || get_by_key($_REQUEST, 'mode') == 
             EvolutionCMS()->webAlertAndQuit("Error opening file for reading.");
         }
         ?>
-        <form name="editFile" method="post" action="index.php">
+        <form action="index.php" method="post" name="editFile">
             <input type="hidden" name="a" value="31" />
             <input type="hidden" name="mode" value="save" />
             <input type="hidden" name="path" value="<?= $_REQUEST['path'] ?>" />
