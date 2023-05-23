@@ -11,11 +11,11 @@ $newToken = makeToken();
 // settings
 $theme_image_path = MODX_MANAGER_URL . 'media/style/' . EvolutionCMS()->getConfig('manager_theme') . '/images/';
 $excludes = array(
-    '.',
-    '..',
-    '.svn',
-    '.git',
-    '.idea'
+        '.',
+        '..',
+        '.svn',
+        '.git',
+        '.idea'
 );
 $alias_suffix = (!empty($friendly_url_suffix)) ? ',' . ltrim($friendly_url_suffix, '.') : '';
 $editablefiles = explode(',', 'txt,php,tpl,less,sass,scss,shtml,html,htm,xml,js,css,pageCache,htaccess,json,ini' . $alias_suffix);
@@ -100,106 +100,93 @@ if (substr($webstart_path, 0, 1) == '/') {
     $webstart_path = '..' . $webstart_path;
 } else {
     $webstart_path = '../' . $webstart_path;
-}
-
-?>
+} ?>
     <script type="text/javascript">
-
         var current_path = '<?= $startpath;?>';
-
-        function viewfile (url)
-        {
+        function viewfile(url) {
             var el = document.getElementById('imageviewer');
             el.innerHTML = '<img src="' + url + '" />';
             el.style.display = 'block'
         }
 
-        function setColor (o, state)
-        {
-            if (!o){return;
-}
-            if (state && o.style){o.style.backgroundColor = '#eeeeee';
-}else if (o.style){o.style.backgroundColor = 'transparent';
-}
+        function setColor(o, state) {
+            if (!o){return;}
+            if (state && o.style) {
+                o.style.backgroundColor = '#eeeeee';
+            } else if (o.style) {
+                o.style.backgroundColor = 'transparent';
+            }
         }
 
-        function confirmDelete ()
-        {
+        function confirmDelete() {
             return confirm("<?= $_lang['confirm_delete_file'] ?>");
         }
 
-        function confirmDeleteFolder (status)
-        {
-            if (status !== 'file_exists')return confirm("<?= $_lang['confirm_delete_dir'] ?>");else return confirm("<?= $_lang['confirm_delete_dir_recursive'] ?>");
+        function confirmDeleteFolder(status) {
+            if (status !== 'file_exists') {
+                return confirm("<?= $_lang['confirm_delete_dir'] ?>");
+            } else {
+                return confirm("<?= $_lang['confirm_delete_dir_recursive'] ?>");
+            }
         }
 
-        function confirmUnzip ()
-        {
+        function confirmUnzip() {
             return confirm("<?= $_lang['confirm_unzip_file'] ?>");
         }
 
-        function unzipFile (file)
-        {
+        function unzipFile(file) {
             if (confirmUnzip()) {
                 window.location.href = "index.php?a=31&mode=unzip&path=" + current_path + '/&file=' + file + "&token=<?= $newToken;?>";
                 return false;
             }
         }
 
-        function getFolderName (a)
-        {
+        function getFolderName(a) {
             var f = window.prompt("<?= $_lang['files_dynamic_new_file_name'] ?>", '');
             if (f) a.href += encodeURI(f);
             return !!(f);
         }
 
-        function getFileName (a)
-        {
+        function getFileName(a) {
             var f = window.prompt("<?= $_lang['files_dynamic_new_file_name'] ?>", '');
             if (f) a.href += encodeURI(f);
             return !!(f);
         }
 
-        function deleteFolder (folder, status)
-        {
+        function deleteFolder(folder, status) {
             if (confirmDeleteFolder(status)) {
                 window.location.href = "index.php?a=31&mode=deletefolder&path=" + current_path + "&folderpath=" + current_path + '/' + folder + "&token=<?= $newToken;?>";
                 return false;
             }
         }
 
-        function deleteFile (file)
-        {
+        function deleteFile(file) {
             if (confirmDelete()) {
                 window.location.href = "index.php?a=31&mode=delete&path=" + current_path + '/' + file + "&token=<?= $newToken;?>";
                 return false;
             }
         }
 
-        function duplicateFile (file)
-        {
+        function duplicateFile(file) {
             var newFilename = prompt("<?= $_lang["files_dynamic_new_file_name"] ?>", file);
             if (newFilename !== null && newFilename !== file) {
                 window.location.href = "index.php?a=31&mode=duplicate&path=" + current_path + '/' + file + "&newFilename=" + newFilename + "&token=<?= $newToken;?>";
             }
         }
 
-        function renameFolder (dir)
-        {
+        function renameFolder(dir) {
             var newDirname = prompt("<?= $_lang["files_dynamic_new_folder_name"] ?>", dir);
             if (newDirname !== null && newDirname !== dir) {
                 window.location.href = "index.php?a=31&mode=renameFolder&path=" + current_path + '&dirname=' + dir + "&newDirname=" + newDirname + "&token=<?= $newToken;?>";
             }
         }
 
-        function renameFile (file)
-        {
+        function renameFile(file) {
             var newFilename = prompt("<?= $_lang["files_dynamic_new_file_name"] ?>", file);
             if (newFilename !== null && newFilename !== file) {
                 window.location.href = "index.php?a=31&mode=renameFile&path=" + current_path + '/' + file + "&newFilename=" + newFilename + "&token=<?= $newToken;?>";
             }
         }
-
     </script>
 
     <h1>
@@ -294,12 +281,9 @@ if (substr($webstart_path, 0, 1) == '/') {
                 $topic_path = implode('/', $pieces);
             }
 
-            echo $topic_path;
-
-            ?>
+            echo $topic_path; ?>
         </div>
-        <?php
-        // check to see user isn't trying to move below the document_root
+        <?php // check to see user isn't trying to move below the document_root
         if (substr(strtolower(str_replace('//', '/', $startpath . "/")), 0, $len) != strtolower(str_replace('//', '/', $filemanager_path . '/'))) {
             EvolutionCMS()->webAlertAndQuit($_lang["files_access_denied"]);
         }
@@ -313,7 +297,6 @@ if (substr($webstart_path, 0, 1) == '/') {
             }
         }
         // End Unzip - Raymond
-
 
         // New Folder & Delete Folder option - Raymond
         if (is_writable($startpath)) {
@@ -383,10 +366,10 @@ if (substr($webstart_path, 0, 1) == '/') {
                 $old_umask = umask(0);
                 $dirname = $_REQUEST['path'] . '/' . $_REQUEST['dirname'];
                 $newDirname = str_replace(array(
-                    '..\\',
-                    '../',
-                    '\\',
-                    '/'
+                        '..\\',
+                        '../',
+                        '\\',
+                        '/'
                 ), '', $_REQUEST['newDirname']);
 
                 if (preg_match('@(\\\\|\/|\:|\;|\,|\*|\?|\"|\<|\>|\||\?)@', $newDirname) !== 0) {
@@ -402,10 +385,10 @@ if (substr($webstart_path, 0, 1) == '/') {
                 $path = dirname($_REQUEST['path']);
                 $filename = $_REQUEST['path'];
                 $newFilename = str_replace(array(
-                    '..\\',
-                    '../',
-                    '\\',
-                    '/'
+                        '..\\',
+                        '../',
+                        '\\',
+                        '/'
                 ), '', $_REQUEST['newFilename']);
 
                 if (!checkExtension($newFilename)) {
@@ -422,20 +405,18 @@ if (substr($webstart_path, 0, 1) == '/') {
         }
         // End New Folder - Raymond
 
-
         if (strlen(MODX_BASE_PATH) < strlen($filemanager_path)) {
             $len--;
-        }
-
-        ?>
+        } ?>
+        <script type="text/javascript" src="media/script/tablesort.js"></script>
         <div class="table-responsive">
             <table id="FilesTable" class="table data">
                 <thead>
                 <tr>
-                    <th><?= $_lang['files_filename'] ?></th>
-                    <th style="width: 1%;"><?= $_lang['files_modified'] ?></th>
-                    <th style="width: 1%;"><?= $_lang['files_filesize'] ?></th>
-                    <th style="width: 1%;" class="text-nowrap"><?= $_lang['files_fileoptions'] ?></th>
+                    <th class="sortable"><?= $_lang['files_filename'] ?></th>
+                    <th class="sortable" style="width: 1%;"><?= $_lang['files_modified'] ?></th>
+                    <th class="sortable" style="width: 1%;"><?= $_lang['files_filesize'] ?></th>
+                    <th class="sortable" style="width: 1%;" class="text-nowrap"><?= $_lang['files_fileoptions'] ?></th>
                 </tr>
                 </thead>
                 <?php
@@ -534,16 +515,15 @@ if (get_by_key($_REQUEST, 'mode') == "edit" || get_by_key($_REQUEST, 'mode') == 
             $contentType = 'htmlmixed';
     };
     $evtOut = EvolutionCMS()->invokeEvent('OnRichTextEditorInit', array(
-        'editor' => 'Codemirror',
-        'elements' => array(
-            'content',
-        ),
-        'contentType' => $contentType,
-        'readOnly' => $_REQUEST['mode'] == 'edit' ? false : true
+            'editor' => 'Codemirror',
+            'elements' => array(
+                    'content',
+            ),
+            'contentType' => $contentType,
+            'readOnly' => $_REQUEST['mode'] == 'edit' ? false : true
     ));
     if (is_array($evtOut)) {
         echo implode('', $evtOut);
     }
-
 }
 
