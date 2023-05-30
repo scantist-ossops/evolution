@@ -1,12 +1,11 @@
 <?php namespace EvolutionCMS\Console;
 
-use EvolutionCMS\Facades\Console;
 use Composer\Console\Application;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 
 /**
- * @see: https://github.com/laravel-zero/foundation/blob/5.6/src/Illuminate/Foundation/Console/ClearCompiledCommand.php
+ * @see: https://github.com/laravel-zero/foundation/blob/9.x/src/Illuminate/Foundation/Console/ClearCompiledCommand.php
  */
 class SiteUpdateCommand extends Command
 {
@@ -72,12 +71,9 @@ class SiteUpdateCommand extends Command
 
         $info = json_decode($info, true);
         foreach ($info as $key => $val) {
-
             $arrayVersion = explode('.', $val['name']);
             if ($currentMajorVersion == array_shift($arrayVersion)) {
-
                 $git['version'] = $val['name'];
-
                 if (strpos($val['name'], 'alpha')) {
                     $git['alpha'] = $val['name'];
                     continue;
@@ -101,12 +97,12 @@ class SiteUpdateCommand extends Command
         }
         if ($git['version'] != '') {
             $url = 'https://github.com/evolution-cms/evolution/archive/' . $git['version'] . '.zip';
-            echo "Start download EvolutionCMS\n";
+            $this->line('<fg=green>Start download Evolution CMS</>');
             $url = file_get_contents($url);
             $file = MODX_BASE_PATH . 'new_version.zip';
 
             file_put_contents($file, $url);
-            echo "Start unpacking EvolutionCMS\n";
+            $this->line('<fg=green>Start unpacking Evolution CMS</>');
 
             $temp_dir = MODX_BASE_PATH . '_temp' . md5(time());
             //run unzip and install
@@ -127,6 +123,36 @@ class SiteUpdateCommand extends Command
             SELF::moveFiles($temp_dir . '/' . $dir, MODX_BASE_PATH);
             SELF::rmdirs($temp_dir);
 
+            $ch = curl_init();
+            $url = 'https://api.github.com/repos/' . $updateRepository . '/releases';
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_REFERER, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("User-Agent: updateNotify widget"));
+            $releases = curl_exec($ch);
+            curl_close($ch);
+
+            $factoryName = $currentVersion['full_appname'];
+            if (substr($releases, 0, 1) == "[") {
+                $releases = json_decode($releases, true);
+                foreach ($releases as $release) {
+                    if ($git['version'] == $release["tag_name"]) {
+                        $factoryDate = date("M j, Y", strtotime($release["published_at"]));
+                        $factoryName = $release["name"] . ' (' . $factoryDate . ')';
+                        $factoryVersion = '<?php return [' . "\n";
+                        $factoryVersion .= "\t" . '"version" => "' . $release["tag_name"] . '", // Current version number' . "\n";
+                        $factoryVersion .= "\t" . '"release_date" => "' . $factoryDate . '", // Date of release' . "\n";
+                        $factoryVersion .= "\t" . '"branch" => "Evolution CMS", // Codebase name' . "\n";
+                        $factoryVersion .= "\t" . '"full_appname" => "' . $factoryName . '", // Date of release' . "\n";
+                        $factoryVersion .= '];';
+                        file_put_contents(EVO_CORE_PATH . "factory/version.php", $factoryVersion);
+                        break;
+                    }
+                }
+            }
+
             $delete_file = MODX_BASE_PATH . 'install/stubs/file_for_delete.txt';
             if (file_exists($delete_file)) {
                 $files = explode("\n", file_get_contents($delete_file));
@@ -146,13 +172,15 @@ class SiteUpdateCommand extends Command
             $application = new Application();
             $application->setAutoExit(false);
             $application->run($input);
-            echo "Run Migrations\n";
+            $this->line('<fg=green>Run Migrations</>');
 
             exec('php  ../install/cli-install.php --typeInstall=2 --removeInstall=y');
-            echo "Remove Install Directory\n";
+            $this->line('<fg=green>Remove Install Directory</>');
+
             self::rmdirs(MODX_BASE_PATH . 'install');
+            $this->line('<fg=yellow;bg=blue>Now You use ' . $factoryName . '</>');
         } else {
-            echo 'You use almost current version';
+            $this->line('<fg=yellow;bg=blue>You use almost current version</>');
         }
     }
 

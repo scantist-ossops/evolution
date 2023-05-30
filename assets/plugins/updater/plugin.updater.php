@@ -4,11 +4,9 @@
 — auto backup system files
 — rollback option for updater
 */
-
 if (!defined('MODX_BASE_PATH')) {
     die('What are you doing? Get out of here!');
 }
-
 if (empty($_SESSION['mgrInternalKey'])) {
     return;
 }
@@ -201,22 +199,20 @@ if ($role != 1 && $wdgVisibility == 'AdminOnly') {
                     }
                 }
             }
-            if(isset($git['version']))
+            if (isset($git['version'])) {
                 $_SESSION['updateversion'] = $git['version'];
-            else
+            } else {
                 $git['version'] = $currentVersion['version'];
-
+            }
             if (version_compare($git['version'], $currentVersion['version'], '>') && $git['version'] != '') {
                 // get manager role
                 $role = $_SESSION['mgrRole'];
                 if (file_exists(MODX_BASE_PATH.'core/custom/composer.json') OR ($role != 1) AND ($showButton == 'AdminOnly') OR ($showButton == 'hide') OR ($errors > 0)) {
-
                     if (file_exists(MODX_BASE_PATH.'core/custom/composer.json')) {
                         $updateButton = '<div class="alert alert-danger" role="alert">'.$_lang['artisan_update'].'</div>';
-                    }else{
+                    } else {
                         $updateButton = '';
                     }
-
                 } else {
                     $updateButton = '<a target="_parent" onclick="return confirm(\'' . $_lang['are_you_sure_update'] . '\')" href="' . MODX_SITE_URL . $_SESSION['updatelink'] . '" class="btn btn-sm btn-danger">' . $_lang['updateButton_txt'] . ' ' . $git['version'] . '</a><br><br>';
                 }
@@ -249,12 +245,9 @@ if ($role != 1 && $wdgVisibility == 'AdminOnly') {
                 $currentVersion = $modx->getVersionData();
                 $commit = isset($_GET['sha']) ? $_GET['sha'] : '';
                 if ($_SESSION['updateversion'] != $currentVersion['version'] || (isset($commit) && $type == 'commits')) {
-
                     file_put_contents(MODX_BASE_PATH . 'update.php', '<?php
-function downloadFile(
-    $url,
-    $path
-) {
+function downloadFile($url, $path)
+{
     $newfname = $path;
     $file = null;
     $newf = null;
@@ -286,11 +279,9 @@ function downloadFile(
     if ($file) {
         fclose($file);
     }
-
     if ($newf) {
         fclose($newf);
     }
-
     return true;
 }
 
@@ -300,7 +291,6 @@ function removeFolder($path)
     if (!is_dir($dir)) {
         return;
     }
-
     $it = new RecursiveDirectoryIterator($dir);
     $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
     foreach ($files as $file) {
@@ -316,31 +306,25 @@ function removeFolder($path)
     rmdir($dir);
 }
 
-function copyFolder(
-    $src,
-    $dest
-) {
+function copyFolder($src, $dest)
+{
     $path = realpath($src);
     $dest = realpath($dest);
     $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
     foreach ($objects as $name => $object) {
-
         $startsAt = substr(dirname($name), strlen($path));
         mmkDir($dest . $startsAt);
         if ($object->isDir()) {
             mmkDir($dest . substr($name, strlen($path)));
         }
-
         if (is_writable($dest . $startsAt) and $object->isFile()) {
             copy((string)$name, $dest . $startsAt . DIRECTORY_SEPARATOR . basename($name));
         }
     }
 }
 
-function mmkDir(
-    $folder,
-    $perm = 0777
-) {
+function mmkDir($folder, $perm = 0777)
+{
     if (!is_dir($folder)) {
         mkdir($folder, $perm);
     }
@@ -371,7 +355,6 @@ unlink(__DIR__ . "/temp/" . $dir . "/sample-robots.txt");
 unlink(__DIR__ . "/temp/" . $dir . "/composer.json");
 
 if (is_file(__DIR__ . "/assets/cache/siteManager.php")) {
-
     unlink(__DIR__ . "/temp/" . $dir . "/assets/cache/siteManager.php");
     include_once(__DIR__ . "/assets/cache/siteManager.php");
     if (!defined("MGR_DIR")) {
@@ -382,11 +365,36 @@ if (is_file(__DIR__ . "/assets/cache/siteManager.php")) {
         copyFolder(__DIR__ . "/temp/" . $dir . "/manager", __DIR__ . "/temp/" . $dir . "/" . MGR_DIR);
         removeFolder(__DIR__ . "/temp/" . $dir . "/manager");
     }
-    // echo __DIR__."/temp/".$dir."/".MGR_DIR;
 }
 copyFolder(__DIR__ . "/temp/" . $dir, __DIR__ . "/");
 removeFolder(__DIR__ . "/temp");
 unlink(__DIR__ . "/evo.zip");
+$ch = curl_init();
+$url = "https://api.github.com/repos/' . $version . '/releases";
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HEADER, false);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_REFERER, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array("User-Agent: updateNotify widget"));
+$releases = curl_exec($ch);
+curl_close($ch);
+if (substr($releases, 0, 1) == "[") {
+    $releases = json_decode($releases, true);
+    foreach ($releases as $release) {
+        if ($_GET["version"] == $release["tag_name"]) {
+            $factoryDate = date("M j, Y", strtotime($release["published_at"]));
+            $factoryVersion = \'<?php return [\'."\n";
+            $factoryVersion .= "\t".\'"version" => "\'.$release["tag_name"].\'", // Current version number\'."\n";
+            $factoryVersion .= "\t".\'"release_date" => "\'.$factoryDate.\'", // Date of release\'."\n";
+            $factoryVersion .= "\t".\'"branch" => "Evolution CMS", // Codebase name\'."\n";
+            $factoryVersion .= "\t".\'"full_appname" => "\'.$release["name"].\' (\'.$factoryDate.\')", // Date of release\'."\n";
+            $factoryVersion .= \'];\';
+            file_put_contents(__DIR__ . "/core/factory/version.php", $factoryVersion);
+            break;
+        }
+    }
+}
 unlink(__DIR__ . "/update.php");
 header("Location: ' . constant('MODX_SITE_URL') . 'install/index.php?action=mode");');
                     if ($result === false) {
