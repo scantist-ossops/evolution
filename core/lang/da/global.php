@@ -353,6 +353,8 @@ $_lang["go"] = 'Gennemfør';
 $_lang["group_access_permissions"] = 'Bruger gruppe adgang';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Hjælp';
+$_lang["help_donate_msg"] = 'Køb kaffe til Evolution CMS-udviklerne. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> Bliv fan af Evolution CMS i dag! ❤️ Ko-fi lader dig støtte de skabere, du elsker, uden donationsgebyrer.';
+$_lang["help_donate_title"] = 'Til udvikling af Evolution CMS';
 $_lang["help_msg"] = '<p>Du kan få fri og frivillig support <a href="http://forums.modx.com" target="_blank">hvis du besøger MODX\'s Fora</a>. Der er også en større samling af <a href="http://rtfm.modx.com/evolution/1.0" target="_blank">dokumentation og guider til MODX</a> som beskriver stort set alle facetter af MODX.</p><p>Desuden planlægger vi at tilbyde kommerciel service og support til MODX. Kontakt os på <a href="mailto:hello@modx.com?subject=MODX Commercial Support Inquiry">e-mail, hvis dette har din interesse (Skriv venligst på engelsk)</a>.</p>';
 $_lang["help_title"] = 'Hjælp';
 $_lang["hide_tree"] = 'Skjul website træet';
@@ -887,7 +889,7 @@ $_lang["sunday"] = 'Søndag';
 $_lang["sys_alert"] = 'System advarsel';
 $_lang["sysinfo_activity_message"] = 'Denne liste viser hvilke ressourcer der fornyligt er blevet redigeret af brugerne.';
 $_lang["sysinfo_userid"] = 'Bruger';
-$_lang["system_email_signup"] = 'Hej [+uid+], 
+$_lang["system_email_signup"] = 'Hej [+uid+],
 
 Her er oplysningerne om log ind i [+sname+]s CMS:
 

@@ -352,6 +352,8 @@ $_lang["go"] = 'Hledej';
 $_lang["group_access_permissions"] = 'Přístupová práva skupiny uživatelů';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Pomoc';
+$_lang["help_donate_msg"] = 'Nakupte kávu pro vývojáře Evolution CMS. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> Staňte se fanoušky Evolution CMS ještě dnes! ❤️ Ko-fi vám umožní podpořit tvůrce, které máte rádi, bez jakýchkoli poplatků za dary.';
+$_lang["help_donate_title"] = 'Pro vývoj Evolution CMS';
 $_lang["help_msg"] = 'Jestliže potřebujete pomoc při používaní systému MODX, uděláte nejlépe, když navštívíte <a href="http://www.modxcms.cz/" target="_blank">české MODX fórum</a>. Najdete tam: návody, dokumentaci používání a nastavení MODX. Jestliže pošlete svoji otázku na fórum, budeme se snažit odpovědět, co nejdříve.';
 $_lang["help_title"] = 'Pomoc';
 $_lang["hide_tree"] = 'Skrýt';

@@ -1,6 +1,28 @@
 This file shows the changes in recent releases of Evolution CMS. The most current release is usually the
 development release, and is only shown to give an idea of what's currently in the pipeline.
 
+Evolution CMS 3.2.2 (May 30, 2023)
+[GitHub: a3ebb44] - Fix Version Updater. (Seiger)
+
+Evolution CMS 3.2.1 (May 23, 2023)
+[GitHub: 0442861] - Fix Errors bkmanager. (Seiger )
+[GitHub: ff1d0b7] - Add Check Role and Blade directive. (Seiger)
+[GitHub: 2ccccc4] - Add Redirect after save configuration #91. (Seiger)
+[GitHub: 5c99f20] - Add Sortable Table in Manage Files #169. (Seiger)
+
+Evolution CMS 3.2.0 (May 15, 2023)
+!!! Notice: minimum PHP version 8.1. !!!
+[GitHub: bb9e300] - Up Core to Laravel 10.x components (Seiger)
+[GitHub: 41b368d] - Fix for PHP 8.1 (Seiger)
+[GitHub: ef10cd2] - Add custom Icons for Modules (Seiger)
+[GitHub: 0524a8c] - Delete some deprecated methods (Ser1ous)
+[GitHub: c4ce08e] - Add Schedule (Seiger)
+[GitHub: e69a9bd] - Fixed RSS (elcreator)
+[GitHub: bb54535] - 3.x refactor (yama)
+
+Evolution CMS 3.1.9 (Mar 1, 2022)
+* [GitHub: b366ca68a] - Image of the entrance in accordance with the russian military invasion of Ukraine. (dmi3yy)
+
 Evolution CMS 3.1.9 (Feb 17, 2022)
 * [GitHub: 4daa05017] - Security fix Reflected XSS - RCE in Manager Panel, thanks Positive Technologies (dmi3yy)
 * [GitHub: b4f46da0a] - fix for 3.1.8 (dmi3yy)

@@ -382,6 +382,8 @@ $_lang["group_access_permissions"] = 'ユーザーグループのアクセス';
 $_lang['group_tvs'] = 'テンプレート変数をグループ化';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'ヘルプ';
+$_lang["help_donate_msg"] = 'Evolution CMS 開発者のためにコーヒーを購入してください。 <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> 今すぐ Evolution CMS のファンになりましょう! ❤️ Ko-fi を使用すると、寄付金なしでお気に入りのクリエイターをサポートできます。';
+$_lang["help_donate_title"] = 'Evolution CMS の開発のために';
 $_lang["help_msg"] = '<p><a href="http://forum.modx.jp/" target="_blank">MODX日本公式フォーラム</a>でサポートを得ることができます。 また、逐次執筆が進められている<a href="http://www.evolution-docs.com/documentation/" target="_blank">EVOドキュメントとガイド（英語）</a>があり、EVO のほぼすべてに関して記されています。</p>';
 $_lang["help_title"] = 'サポート';
 $_lang["hide_tree"] = 'リソースツリーを非表示';
@@ -408,7 +410,7 @@ $_lang["update_tree_description"] = '<ul>
                    <li> - ドキュメントツリーをより便利で高速にするクロージャーテーブルのデーターベースのデザインパターンです。 </li>
                      <li> - ツリー内のデータがモデルを通さずに更新された場合、データベース内のドキュメントに誤ったリンクが発生する可能性があります。 </li>
                      <li> - この操作により site_content がモデル（保存、作成）を通して更新されず、リンク（クロージャーテーブル）が更新されない場合の問題が修正されます。 </li>
-                     <li> - この操作は CLI モード（\'php artisan closuretable: rebuild \'）でも実行可能です。</li> 
+                     <li> - この操作は CLI モード（\'php artisan closuretable: rebuild \'）でも実行可能です。</li>
                      </ul>';
 $_lang["update_tree_danger"] = '1000以上のリソースがある場合、CLIモード（\'php artisan closuretable: rebuild command\'）による操作で実行する方が良いです。';
 $_lang["update_tree_time"] = 'ツリーの再構築が終了しました。ドキュメント処理: <b>%s</b><br>インポートに <b>%s</b> 秒かかりました。';
@@ -1357,8 +1359,6 @@ $_lang["dp_startDay"]   = "1";
 $_lang["check_all"] = "すべて選択";
 $_lang["check_none"] = "すべて解除";
 $_lang["check_toggle"] = "選択を入れ替える";
-
-$_lang["version_notices"] = "バージョン通知";
 
 $_lang["em_button_shift"] = " (Shift +マウスクリックで複数のウィンドウを開く)";
 

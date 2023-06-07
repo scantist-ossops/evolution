@@ -331,7 +331,7 @@ $_lang["files_directory_is_empty"] = 'У цій папці немає файлі
 $_lang["files_dirwritable"] = 'Дозволена запис в папку?';
 $_lang["files_editfile"] = 'Редагувати файл';
 $_lang["files_file_type"] = 'Тип файла: ';
-$_lang["files_filename"] = 'Ім*я файла';
+$_lang["files_filename"] = 'Ім\'я файла';
 $_lang["files_fileoptions"] = 'Параметри';
 $_lang["files_files"] = 'Файли';
 $_lang["files_filesize"] = 'Розмір файла';
@@ -380,7 +380,9 @@ $_lang["group_access_permissions"] = 'Доступ груп користувач
 $_lang['group_tvs'] = 'Групувати ТВ параметри';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Допомога';
-$_lang["help_msg"] = '<p>Ви можете отримати безкоштовну Допомогу спільноти EVO <a href="http://modx.im" target="_blank">на форумах EVO</a>. Дивіться також <a href="http://docs.evolution-cms.com" target="_blank">\'Документація і уроки по EVO\'</a>, де докладно описано кожен аспект системи.</p>';
+$_lang["help_donate_msg"] = 'Купуйте каву розробникам Evolution CMS. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> Станьте прихильником Evolution CMS сьогодні! ❤️ Ko-fi дозволяє підтримувати творців, яких ви любите, без жодної комісії за пожертви.';
+$_lang["help_donate_title"] = 'На розвиток Evolution CMS';
+$_lang["help_msg"] = '<p>Ви можете отримати безкоштовну Допомогу спільноти EVO <a href="https://evo.im" target="_blank">на форумах EVO</a>. Дивіться також <a href="https://docs.evo.im" target="_blank">\'Документація і уроки по EVO\'</a>, де докладно описано кожен аспект системи.</p>';
 $_lang["help_title"] = 'Допомога';
 $_lang["hide_tree"] = 'Сховати дерево';
 $_lang["home"] = 'Головна';
@@ -1349,8 +1351,6 @@ $_lang["dp_startDay"]   = "1";
 $_lang["check_all"] = "Включити всі";
 $_lang["check_none"] = "Вимкнути всі";
 $_lang["check_toggle"] = "Переключити";
-
-$_lang["version_notices"] = "Повідомлення про версії";
 
 $_lang["em_button_shift"] = "(Shift + клік, щоб відкрити кілька вікон)";
 

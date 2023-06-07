@@ -352,6 +352,8 @@ $_lang["go"] = 'Iniciar!';
 $_lang["group_access_permissions"] = 'Permissões de acesso do grupo';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Ajuda';
+$_lang["help_donate_msg"] = 'Compre café para os desenvolvedores do Evolution CMS. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> Torne-se um fã do Evolution CMS hoje! ❤️ Ko-fi permite que você apoie os criadores que você ama sem nenhuma taxa de doação.';
+$_lang["help_donate_title"] = 'Para o desenvolvimento do Evolution CMS';
 $_lang["help_msg"] = '<p>Pode obter ajuda gratuitamente junto da <a href="http://forums.modx.com/" target="_blank">comunidade que suporta o MODX</a>. Existe igualmente um conjunto crescente de <a href="http://rtfm.modx.com/evolution/1.0" target="_blank">Documentação e Guias</a> que cobrem muitos aspectos do MODX.</p><p>Contamos igualmente oferecer suporte técnico especializado para o MODX. Por favor <a href="mailto:hello@modx.com?subject=MODX Commercial Support Inquiry">contacte-nos se estiver interessado</a>.</p><p><b>Atenção:</b> actualmente a maior parte da documentação encontra-se apenas disponível em Inglês. Pode contactar alguns falantes de Português que utilizam o MODX <a href=\'http://forums.modx.com/index.php/board,40.0.html\' target=\'_blank\'>na secção sobre Internacionalização do forum MODX</a>.</p>';
 $_lang["help_title"] = 'Ajuda';
 $_lang["hide_tree"] = 'Ocultar árvore';
@@ -886,7 +888,7 @@ $_lang["sunday"] = 'Domingo';
 $_lang["sys_alert"] = 'Alerta do Sistema';
 $_lang["sysinfo_activity_message"] = 'Esta lista mostra quais os documentos que foram recentemente editados pelos seus utilizadores.';
 $_lang["sysinfo_userid"] = 'Utilizador';
-$_lang["system_email_signup"] = 'Olá [+uid+] 
+$_lang["system_email_signup"] = 'Olá [+uid+]
 
 Aqui estão os seus detalhes para aceder ao Gestor de Conteúdos de [+sname+] :
 
@@ -911,7 +913,7 @@ Se não pediu este email, por favor ignore-o.
 
 Cumprimentos,
 O Administrador [+sname+]';
-$_lang["system_email_websignup"] = 'Olá [+uid+] 
+$_lang["system_email_websignup"] = 'Olá [+uid+]
 
 Aqui estão seus detalhes para aceder a [+sname+]:
 

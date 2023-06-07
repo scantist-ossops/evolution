@@ -352,6 +352,8 @@ $_lang["go"] = 'برو';
 $_lang["group_access_permissions"] = 'سطح دسترسی گروه کاربری';
 $_lang["guid"] = 'شناسه ی خاص';
 $_lang["help"] = 'راهنمای استفاده';
+$_lang["help_donate_msg"] = 'برای توسعه دهندگان Evolution CMS قهوه بخرید. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> همین امروز از طرفداران Evolution CMS شوید! ❤️ Ko-fi به شما امکان می‌دهد از سازندگانی که دوست دارید بدون هیچ هزینه‌ای حمایت کنید.';
+$_lang["help_donate_title"] = 'برای توسعه CMS تکامل';
 $_lang["help_msg"] = '<p>شما میتوانید بصورت رایگان  عضو <a href="http://forums.modx.com" target="_blank">انجمنهای رفع اشکال و راهنمایی مادایکس</a> شوید و به کمک سایر دوستان باتجربه در این زمینه پاسخ سوالات خود را در مورد مادایکس بیابید.<br />ضمنا میتوانید حجم بزرگی از <a href="http://rtfm.modx.com/evolution/1.0" target="_blank">راهنمایی ها و نحوه استفاده و پشتیبانی مادایکس </a> را در بخش راهنمایی و پشتیبانی استفاده از مادایکس بیابید</p><p>شما با پرداخت هزینه میتوانید از پشتیبانی و راهنمای اختصاصی و حرفه ای برای وبگاه (سایت) خود بهرهمند شوید برای این منظور لطفا از طریق پست الکترونیک با آدرس زیر تماس حاصل کنید<br />hello@modx.com';
 $_lang["help_title"] = ' راهنما و توضیحات';
 $_lang["hide_tree"] = 'مخفی کردن درختی';
@@ -886,7 +888,7 @@ $_lang["sunday"] = 'یکشنبه';
 $_lang["sys_alert"] = 'اخطار سیستم';
 $_lang["sysinfo_activity_message"] = 'این فهرست نمایانگر پرونده هایی است که اخیرا توسط کاربران شما ویرایش شده است';
 $_lang["sysinfo_userid"] = 'کاربر';
-$_lang["system_email_signup"] = 'با سلام [+uid+] 
+$_lang["system_email_signup"] = 'با سلام [+uid+]
 
 جزییات حساب کاربر شما در [+sname+] :
 
@@ -911,7 +913,7 @@ $_lang["system_email_webreminder"] = 'با سلام [+uid+]
 
 با اترام,
 مدیریت وبگاه';
-$_lang["system_email_websignup"] = 'با سلام [+uid+] 
+$_lang["system_email_websignup"] = 'با سلام [+uid+]
 
 اطلاعات حساب کاربری شما در وبگاه [+sname+]:
 

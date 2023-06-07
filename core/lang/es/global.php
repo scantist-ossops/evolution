@@ -373,6 +373,8 @@ $_lang["group_access_permissions"] = 'Acceso de grupo de usuarios';
 $_lang['group_tvs'] = 'Group TV';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Ayuda';
+$_lang["help_donate_msg"] = 'Comprar café para los desarrolladores de Evolution CMS. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> ¡Hazte fan de Evolution CMS hoy! ❤️ Ko-fi te permite apoyar a los creadores que amas sin ninguna tarifa de donación.';
+$_lang["help_donate_title"] = 'Para el desarrollo de Evolution CMS';
 $_lang["help_msg"] = '<p>Puede obtener soporte gratuito de la comunidad <a href="http://forums.modx.com" target="_blank">visitando los foros de EVO</a>.  También hay un cumulo creciente de <a href="http://evolution-docs.com" target="_blank">Documentación y Guías EVO</a> que tocan virtualmente todos los aspectos de EVO.</p><p>Estamos planeando ofrecer servicios de soporte comercial para EVO. Por favor, <a href="mailto:hello@modx.com?subject=MODX Commercial Support Inquiry">envíenos un mensaje si está interesado</a>.';
 $_lang["help_title"] = 'Ayuda';
 $_lang["hide_tree"] = 'Ocultar árbol';
@@ -961,9 +963,9 @@ $_lang["sys_alert"] = 'Alerta de Sistema';
 $_lang["sysinfo_activity_message"] = 'Esta lista muestra qué documentos han sido editados recientemente por tus usuarios.';
 $_lang["sysinfo_userid"] = 'Usuario';
 $_lang["system"] = 'System';
-$_lang["system_email_signup"] = 'Hola [+uid+] 
+$_lang["system_email_signup"] = 'Hola [+uid+]
 <html>
-Hello [+uid+] 
+Hello [+uid+]
 
 Aquí tienes los detalles de inicio de sesión para el Administrador de Contenido de [+sname+]:
 
@@ -989,7 +991,7 @@ Si no solicitaste este email entonces por favor ignóralo.
 
 Saludos,
 El Administrador';
-$_lang["system_email_websignup"] = 'Hola [+uid+] 
+$_lang["system_email_websignup"] = 'Hola [+uid+]
 
 Aquí tienes los detalles de ingreso para [+sname+]:
 
@@ -1317,8 +1319,6 @@ $_lang["dp_startDay"]   = "1";
 $_lang["check_all"] = "Selecciona Todo";
 $_lang["check_none"] = "No seleccionar nada";
 $_lang["check_toggle"] = "Invertir selección";
-
-$_lang["version_notices"] = "Avisos de la versión";
 
 $_lang["em_button_shift"] = " (Shift-Mouseclick to open multiple windows)";
 

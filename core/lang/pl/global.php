@@ -374,6 +374,8 @@ $_lang["group_access_permissions"] = 'Dostęp grup użytkowników';
 $_lang['group_tvs'] = 'Grupowanie Zmiennych Szablonu';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Pomoc';
+$_lang["help_donate_msg"] = 'Kup kawę dla programistów Evolution CMS. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> Zostań fanem Evolution CMS już dziś! ❤️ Ko-fi pozwala wspierać twórców, których kochasz, bez żadnych opłat.';
+$_lang["help_donate_title"] = 'Dla rozwoju Evolution CMS';
 $_lang["help_msg"] = '<p>Możesz uzyskać darmową pomoc poprzez <a href="http://forums.modx.com/" target="_blank">odwiedzenie Forum EVO</a>. Istnieje również wciąż rozwijana <a href="http://evolution-docs.com" target="_blank">Dokumentacja i Instrukcje dla EVO</a>, dotyczące praktycznie wszystkich aspektów pracy z EVO.</p><p>Planujemy również usługę wsparcia komercyjnego dla EVO. <a href="mailto:dmi3yy@evo.im?subject=EVO Commercial Support Inquiry">Zainteresowanych prosimy o kontakt mailowy</a>.</p>';
 $_lang["help_title"] = 'Pomoc';
 $_lang["hide_tree"] = 'Ukryj drzewo';
@@ -965,7 +967,7 @@ $_lang["sysinfo_userid"] = 'Użytkownik';
 $_lang["system"] = 'System';
 $_lang["system_email_signup"] = '<!doctype html>
 <html>
-Witaj [+uid+] 
+Witaj [+uid+]
 
 Poniżej znajdziesz dane logowania do systemu zarządzania treścią serwisu [+sname+]:
 
@@ -1318,8 +1320,6 @@ $_lang["dp_startDay"]   = "1";
 $_lang["check_all"] = "Wybierz wszystko";
 $_lang["check_none"] = "Żaden";
 $_lang["check_toggle"] = "Odwróć zaznaczenie";
-
-$_lang["version_notices"] = "Uwagi do wydania";
 
 $_lang["em_button_shift"] = "(Shift + kliknięcie otwiera w wielu oknach)";
 

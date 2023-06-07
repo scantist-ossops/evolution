@@ -380,7 +380,9 @@ $_lang["group_access_permissions"] = 'Доступ групп пользоват
 $_lang['group_tvs'] = 'Группировать ТВ параметры';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Помощь';
-$_lang["help_msg"] = '<p>Вы можете получить бесплатную помощь сообщества Evolution CMS <a href="http://modx.im" target="_blank">на форумах Evolution CMS</a>. Смотрите также <a href="http://docs.evolution-cms.com" target="_blank">\'Документация и уроки по Evolution CMS\'</a>, где подробно описан каждый аспект системы.</p>';
+$_lang["help_donate_msg"] = 'Покупайте кофе разработчикам Evolution CMS. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> Станьте поклонником Evolution CMS сегодня! ❤️ Ko-fi позволяет поддерживать создателей, которых вы любите, без комиссии за пожертвования.';
+$_lang["help_donate_title"] = 'На развитие Evolution CMS';
+$_lang["help_msg"] = '<p>Вы можете получить бесплатную помощь сообщества Evolution CMS <a href="https://evo.im" target="_blank">на форумах Evolution CMS</a>. Смотрите также <a href="https://docs.evo.im" target="_blank">\'Документация и уроки по Evolution CMS\'</a>, где подробно описан каждый аспект системы.</p>';
 $_lang["help_title"] = 'Помощь';
 $_lang["hide_tree"] = 'Спрятать дерево';
 $_lang["home"] = 'Главная';
@@ -1349,8 +1351,6 @@ $_lang["dp_startDay"]   = "1";
 $_lang["check_all"] = "Включить все";
 $_lang["check_none"] = "Выключить все";
 $_lang["check_toggle"] = "Переключить";
-
-$_lang["version_notices"] = "Уведомления о версиях";
 
 $_lang["em_button_shift"] = "(Shift + клик, чтобы открыть несколько окон)";
 

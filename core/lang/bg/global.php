@@ -352,6 +352,8 @@ $_lang["go"] = 'Отиди';
 $_lang["group_access_permissions"] = 'Права за достъп на Група Потребители';
 $_lang["guid"] = 'GUID';
 $_lang["help"] = 'Помощ';
+$_lang["help_donate_msg"] = 'Купете кафето за разработчици Evolution CMS. <a href="https://ko-fi.com/evolutioncms" target="_blank">ko-fi.com/evolutioncms ☕</a> Станете фен на Evolution CMS днес! ❤️ Ko-fi ви позволява да подкрепяте творците, които обичате, без никакви такси за дарения.';
+$_lang["help_donate_title"] = 'За разработването на Evolution CMS';
 $_lang["help_msg"] = '<p>Можете да получите безплатна помощ на <a href="http://forums.modx.com" target="_blank">адреса на Форума на MODX</a>. Също така можете да посетите и <a href="http://rtfm.modx.com/evolution/1.0" target="_blank">MODX Документация и Ръководства</a> , където са засегнати почти всички аспекти на MODX.</p><p>Екипът планира да предложи и платена помощ като услуга също. Моля да се информирате за платената помощ на адрес <a href="mailto:modx@vertexworks.com?subject=MODX Commercial Support Inquiry"></a>.';
 $_lang["help_title"] = 'Помощ';
 $_lang["hide_tree"] = 'Скриване на дървото';
@@ -886,7 +888,7 @@ $_lang["sunday"] = 'Неделя';
 $_lang["sys_alert"] = 'Системен сигнал';
 $_lang["sysinfo_activity_message"] = 'Този списък показва кои документи са били редактирани напоследък от потребителите.';
 $_lang["sysinfo_userid"] = 'Потребител';
-$_lang["system_email_signup"] = 'Здравей [+uid+] 
+$_lang["system_email_signup"] = 'Здравей [+uid+]
 
 Въведи потребителско име и парола, за да влезеш в Мениджъра на [+sname+]:
 
@@ -911,7 +913,7 @@ $_lang["system_email_webreminder"] = 'Здравей [+uid+]
 
 С уважение,
 Администратор';
-$_lang["system_email_websignup"] = 'Здравей [+uid+] 
+$_lang["system_email_websignup"] = 'Здравей [+uid+]
 
 Ето детайлите за акаунта ти в [+sname+]:
 
