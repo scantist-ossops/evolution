@@ -1,10 +1,10 @@
 <?php
 
-if (!function_exists('evolutionCMS')) {
+if (!function_exists('evo')) {
     /**
      * @return DocumentParser
      */
-    function evolutionCMS()
+    function evo()
     {
         if (!defined('MODX_CLASS')) {
             if (!class_exists('\DocumentParser')) {
@@ -61,13 +61,13 @@ if (!function_exists('evolutionCMS')) {
     }
 }
 
-if (!function_exists('evo')) {
+if (!function_exists('evolutionCMS')) {
     /**
      * @return DocumentParser
      */
-    function evo()
+    function evolutionCMS()
     {
-        return evolutionCMS();
+        return evo();
     }
 }
 
@@ -132,7 +132,21 @@ if (!function_exists('startCMSSession')) {
             }
         }
 
-        session_start();
+        $sessionname = session_name();
+        // safe session - see https://stackoverflow.com/a/33024310/1066234
+        if (isset($_COOKIE[$sessionname]) && preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $_COOKIE[$sessionname])) {
+            session_start();
+        } elseif (isset($_COOKIE[$sessionname])) {
+            unset($_COOKIE[$sessionname]);
+            session_start();
+        } else {
+            session_start();
+        }
+
+        // no session started, exit
+        if (session_status() === PHP_SESSION_NONE) {
+            exit();
+        }
         $key = "modx.mgr.session.cookie.lifetime";
 
         if (isset($_SESSION[$key]) && is_numeric($_SESSION[$key])) {
