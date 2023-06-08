@@ -3,6 +3,7 @@
 use AgelxNash\Modx\Evo\Database\Exceptions\InvalidFieldException;
 use AgelxNash\Modx\Evo\Database\Exceptions\TableNotDefinedException;
 use AgelxNash\Modx\Evo\Database\Exceptions\UnknownFetchTypeException;
+use Carbon\Carbon;
 use EvolutionCMS\Models\ActiveUser;
 use EvolutionCMS\Models\ActiveUserLock;
 use EvolutionCMS\Models\ActiveUserSession;
@@ -4564,67 +4565,25 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
 
         switch ($this->getConfig('datetime_format')) {
             case 'YYYY/mm/dd':
-                $dateFormat = '%Y/%m/%d';
+                $dateFormat = 'Y/m/d';
                 break;
             case 'dd-mm-YYYY':
-                $dateFormat = '%d-%m-%Y';
+                $dateFormat = 'd-m-Y';
                 break;
             case 'mm/dd/YYYY':
-                $dateFormat = '%m/%d/%Y';
+                $dateFormat = 'm/d/Y';
                 break;
         }
 
-        if (extension_loaded('intl')) {
-            // https://www.php.net/manual/en/class.intldateformatter.php
-            // https://www.php.net/manual/en/datetime.createfromformat.php
-            $dateFormat = str_replace(
-                ['%Y', '%m', '%d', '%I', '%H', '%M', '%S', '%p'],
-                ['Y', 'MM', 'dd', 'h', 'HH', 'mm', 'ss', 'a'],
-                $dateFormat
-            );
-            if (empty($mode)) {
-                $formatter = new IntlDateFormatter(
-                    $this->getConfig('manager_language'),
-                    IntlDateFormatter::FULL,
-                    IntlDateFormatter::FULL,
-                    null,
-                    null,
-                    $dateFormat . " HH:mm:ss"
-                );
-                $strTime = $formatter->format($timestamp);
-            } elseif ($mode === 'dateOnly') {
-                $formatter = new IntlDateFormatter(
-                    $this->getConfig('manager_language'),
-                    IntlDateFormatter::FULL,
-                    IntlDateFormatter::NONE,
-                    null,
-                    null,
-                    $dateFormat
-                );
-                $strTime = $formatter->format($timestamp);
-            } elseif ($mode === 'timeOnly') {
-                $formatter = new IntlDateFormatter(
-                    $this->getConfig('manager_language'),
-                    IntlDateFormatter::NONE,
-                    IntlDateFormatter::MEDIUM,
-                    null,
-                    null,
-                    "HH:mm:ss"
-                );
-                $strTime = $formatter->format($timestamp);
-            } elseif ($mode === 'formatOnly') {
-                $strTime = $dateFormat;
-            }
-        } else {
-            if (empty($mode)) {
-                $strTime = strftime($dateFormat . " %H:%M:%S", $timestamp);
-            } elseif ($mode === 'dateOnly') {
-                $strTime = strftime($dateFormat, $timestamp);
-            } elseif ($mode === 'formatOnly') {
-                $strTime = $dateFormat;
-            } elseif ($mode === 'timeOnly') {
-                $strTime = $dateFormat;
-            }
+        // https://carbon.nesbot.com/
+        if (empty($mode)) {
+            $strTime = Carbon::createFromTimestamp($timestamp, 'UTC')->format($dateFormat . ' H:i:s');
+        } elseif ($mode === 'dateOnly') {
+            $strTime = Carbon::createFromTimestamp($timestamp, 'UTC')->format($dateFormat);
+        } elseif ($mode === 'timeOnly') {
+            $strTime = Carbon::createFromTimestamp($timestamp, 'UTC')->format('H:i:s');
+        } elseif ($mode === 'formatOnly') {
+            $strTime = $dateFormat;
         }
 
         return $strTime;
