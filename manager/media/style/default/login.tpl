@@ -446,6 +446,14 @@
             -webkit-transition-duration: 0.3s;
             transition-duration: 0.3s
         }
+        #mainloader div {
+            font-size: 3.5em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding-top: 275px;
+            padding-left: calc(50% - 45px);
+        }
         #mainloader::before {
             content: "";
             display: block;
@@ -588,7 +596,7 @@
 </div>
 
 <!-- loader -->
-<div id="mainloader"></div>
+<div id="mainloader"><div>EVO</div></div>
 
 <!-- script -->
 <script>

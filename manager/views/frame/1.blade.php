@@ -374,7 +374,7 @@
                 document.getElementsByClassName("tabframes").setAttribute("scrolling", "no");
             }
         </script>
-        <div id="mainloader"></div>
+            <div id="mainloader"><div>EVO</div></div>
     </div>
     <div id="resizer"></div>
     <div id="searchresult"></div>
