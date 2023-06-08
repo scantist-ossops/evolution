@@ -2,7 +2,6 @@
 
 use EvolutionCMS\Facades\Console;
 
-
 $base_path = dirname(__DIR__) . '/';
 define('MODX_API_MODE', true);
 define('MODX_BASE_PATH', $base_path);
@@ -13,7 +12,7 @@ define('MODX_CLI', true);
 require_once 'src/functions.php';
 /**
  * EVO Cli Installer
- * php cli-install.php --typeInstall=1 --databaseType=pgsql --databaseServer=localhost --database=db_name --databaseUser=serious --databasePassword=serious  --tablePrefix=evo_ --cmsAdmin=admin --cmsAdminEmail=serious2008@gmail.com --cmsPassword=123456 --language=ru --removeInstall=y
+ * php cli-install.php --typeInstall=1 --databaseType=pgsql --databaseServer=localhost --database=db_name --databaseUser=serious --databasePassword=serious  --tablePrefix=evo_ --cmsAdmin=admin --cmsAdminEmail=serious2008@gmail.com --cmsPassword=123456 --language=uk --removeInstall=y
  **/
 
 $install = new InstallEvo($argv);
@@ -208,10 +207,10 @@ class InstallEvo
 
     public function checkLanguage()
     {
-        if ($this->language != 'ru' && $this->language != 'en') {
-            $this->language = $this->read_line("Enter you language(ru/en): ");
+        if ($this->language != 'uk' && $this->language != 'en' && $this->language != 'ru') {
+            $this->language = $this->read_line("Enter you language(uk/en/ru): ");
         }
-        if ($this->language != 'ru' && $this->language != 'en') {
+        if ($this->language != 'uk' && $this->language != 'en' && $this->language != 'ru') {
             $this->checkLanguage();
         }
     }
