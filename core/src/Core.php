@@ -3884,6 +3884,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
         }
 
         $documentChildren = SiteContent::query()->withTrashed()->where('site_content.parent', $parentid);
+
         if ($published !== 'all') {
             $documentChildren = $documentChildren->where('site_content.published', $published);
         }
@@ -3898,6 +3899,7 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
         }
         if (!is_array($fields)) {
             $fields = array_filter(array_map('trim', explode(',', $fields)));
+            $fields = array_map(fn($value): string => (strpos($value, '.') === false ? 'site_content.'.$value : $value), $fields);
             $documentChildren = $documentChildren->select($fields);
         }
         // modify field names to use sc. table reference
