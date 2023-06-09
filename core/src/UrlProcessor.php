@@ -166,6 +166,10 @@ class UrlProcessor
             ->get();
 
         foreach ($data as $row) {
+            if (empty($row->alias)) {
+                $row->alias = $row->id;
+            }
+
             if ($useAliasPath && $row->parent > 0) {
                 $parent = $row->parent;
                 $path = $aliases[$parent];
