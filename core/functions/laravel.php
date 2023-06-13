@@ -323,7 +323,11 @@ if (! function_exists('route')) {
     function route($name, $parameters = [], $absolute = true)
     {
         $suffix = count($parameters) ? '' : evo()->getConfig('friendly_url_suffix', '');
-        return app('url')->route($name, $parameters, $absolute).$suffix;
+        $url = app('url')->route($name, $parameters, $absolute).$suffix;
+        if (evo()->getConfig('server_protocol', 'https') == 'https') {
+            $url = str_ireplace('http://', 'https://', $url);
+        }
+        return $url;
     }
 }
 
