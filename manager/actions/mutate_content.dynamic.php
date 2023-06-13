@@ -91,6 +91,7 @@ if(!empty ($id)) {
     $_SESSION['itemname'] = $content['pagetitle'];
 } else {
     $content = array();
+    $content['contentType'] = $_REQUEST['contentType'] ?? $defaultContentType;
 
     if(isset($_REQUEST['newtemplate'])) {
         $content['template'] = $_REQUEST['newtemplate'];
