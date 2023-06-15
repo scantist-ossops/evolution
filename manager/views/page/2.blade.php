@@ -383,7 +383,7 @@
                         </tr>
                         <tr>
                             <td>[%yourinfo_previous_login%]</td>
-                            <td><b>[[$_SESSION[\'mgrLastlogin\']:math(\'%s+[(server_offset_time)]\'):dateFormat]]</b></td>
+                            <td><b>'.evo()->toDateFormat($_SESSION['mgrLastlogin']).'</b></td>
                         </tr>
                         <tr>
                             <td>[%yourinfo_total_logins%]</td>
