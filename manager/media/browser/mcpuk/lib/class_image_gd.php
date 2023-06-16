@@ -1,16 +1,16 @@
 <?php
 
 /** This file is part of KCFinder project
-  *
-  *      @desc GD image driver class
-  *   @package KCFinder
-  *   @version 2.54
-  *    @author Pavel Tzonkov <sunhater@sunhater.com>
-  * @copyright 2010-2014 KCFinder Project
-  *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
-  *   @license http://www.opensource.org/licenses/lgpl-2.1.php LGPLv2
-  *      @link http://kcfinder.sunhater.com
-  */
+ *
+ *      @desc GD image driver class
+ *   @package KCFinder
+ *   @version 2.54
+ *    @author Pavel Tzonkov <sunhater@sunhater.com>
+ * @copyright 2010-2014 KCFinder Project
+ *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
+ *   @license http://www.opensource.org/licenses/lgpl-2.1.php LGPLv2
+ *      @link http://kcfinder.sunhater.com
+ */
 
 class image_gd extends image {
 
@@ -106,7 +106,7 @@ class image_gd extends image {
         $return = (
             (false !== ($img = new image_gd(array($width, $height))))) &&
             (false !== ($img->imageCopyResampled($this->image, $x, $y, 0, 0, $w, $h))
-        );
+            );
 
         if ($return) {
             $this->image = $img->image;
@@ -130,8 +130,8 @@ class image_gd extends image {
 
     public function flipHorizontal() {
         $img = imagecreatetruecolor($this->width, $this->height);
-            imagealphablending($img, false);
-            imagesavealpha($img, true);
+        imagealphablending($img, false);
+        imagesavealpha($img, true);
         if (imagecopyresampled($img, $this->image, 0, 0, ($this->width - 1), 0, $this->width, $this->height, -$this->width, $this->height))
             $this->image = $img;
         else
@@ -141,8 +141,8 @@ class image_gd extends image {
 
     public function flipVertical() {
         $img = imagecreatetruecolor($this->width, $this->height);
-            imagealphablending($img, false);
-            imagesavealpha($img, true);
+        imagealphablending($img, false);
+        imagesavealpha($img, true);
         if (imagecopyresampled($img, $this->image, 0, 0, 0, ($this->height - 1), $this->width, $this->height, $this->width, -$this->height))
             $this->image = $img;
         else
@@ -219,11 +219,12 @@ class image_gd extends image {
         ) {
             $image =
                 ($t == IMAGETYPE_GIF)  ? @imagecreatefromgif($image)  : (
+                ($t == IMAGETYPE_WEBP) ? @imagecreatefromwebp($image) : (
                 ($t == IMAGETYPE_WBMP) ? @imagecreatefromwbmp($image) : (
                 ($t == IMAGETYPE_JPEG) ? @imagecreatefromjpeg($image) : (
                 ($t == IMAGETYPE_PNG)  ? @imagecreatefrompng($image)  : (
                 ($t == IMAGETYPE_XBM)  ? @imagecreatefromxbm($image)  : false
-            ))));
+                )))));
 
             return $image;
 
@@ -246,11 +247,12 @@ class image_gd extends image {
 
         $img =
             ($t == IMAGETYPE_GIF)  ? @imagecreatefromgif($file)  : (
+            ($t == IMAGETYPE_WEBP)  ? @imagecreatefromwebp($file)  : (
             ($t == IMAGETYPE_WBMP) ? @imagecreatefromwbmp($file) : (
             ($t == IMAGETYPE_JPEG) ? @imagecreatefromjpeg($file) : (
             ($t == IMAGETYPE_PNG)  ? @imagecreatefrompng($file)  : (
             ($t == IMAGETYPE_XBM)  ? @imagecreatefromxbm($file)  : false
-        ))));
+            )))));
 
         return ($img !== false);
     }

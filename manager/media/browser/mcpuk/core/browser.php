@@ -952,7 +952,7 @@ class browser extends uploader
             $ext = file::getExtension($file);
             $smallThumb = false;
             $preview = false;
-            if (in_array(strtolower($ext), array('png', 'jpg', 'gif', 'jpeg'))) {
+            if (in_array(strtolower($ext), array('png', 'jpg', 'gif', 'jpeg', 'webp'))) {
                 $size = @getimagesize($file);
                 if (is_array($size) && count($size)) {
                     $preview = true;
@@ -962,9 +962,9 @@ class browser extends uploader
                             $this->makeThumb($file);
                         }
                         $smallThumb =
-                            ($size[0] <= $this->config['thumbWidth']) &&
-                            ($size[1] <= $this->config['thumbHeight']) &&
-                            in_array($size[2], array(IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG));
+                            ($size[0] <= (int)$this->config['thumbWidth']) &&
+                            ($size[1] <= (int)$this->config['thumbHeight']) &&
+                            in_array($size[2], [IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_WEBP, IMAGETYPE_AVIF]);
                     }
                 }
             }
