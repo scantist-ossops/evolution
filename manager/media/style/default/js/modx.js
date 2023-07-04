@@ -82,6 +82,12 @@
                             e.preventDefault();
                         }
                     }
+                    if (!a.classList.contains('dropdown-toggle') && !a.closest('ul').classList.contains('dropdown-menu')) {
+                        mm.querySelectorAll('.nav li.active').forEach(function (el) {
+                            el.classList.remove('active');
+                        });
+                        a.closest('.nav > li').classList.add('active');
+                    }
                 });
                 mm.addEventListener('click', function (e) {
                     let li = e.target.closest('.nav li');
