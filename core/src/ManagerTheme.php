@@ -224,7 +224,6 @@ class ManagerTheme implements ManagerThemeInterface
             include EVO_CORE_PATH . 'lang/' . $lang . '/global.php';
         }
 
-
         foreach ($_lang as $k => $v) {
             if (strpos($v, '[+') !== false) {
                 $_lang[$k] = str_replace(
@@ -275,9 +274,13 @@ class ManagerTheme implements ManagerThemeInterface
         $this->textDir = $textDir === 'rtl' ? 'rtl' : 'ltr';
     }
 
+    public function setLexicon($key, $value = '')
+    {
+        return $this->lexicon[$key] = $value;
+    }
+
     public function getLexicon($key = null, $default = '')
     {
-
         return $key === null ? $this->lexicon : get_by_key($this->lexicon, $key, $default);
     }
 
@@ -477,7 +480,6 @@ class ManagerTheme implements ManagerThemeInterface
         }
 
         return $action;
-        //return isset($_REQUEST['a']) ? (int)$_REQUEST['a'] : 1;
     }
 
     public function isAuthManager()
@@ -485,15 +487,9 @@ class ManagerTheme implements ManagerThemeInterface
         $out = null;
 
         if (isset($_SESSION['mgrValidated']) && $_SESSION['usertype'] !== 'manager') {
-            //      if (isset($_COOKIE[session_name()])) {
-            //          setcookie(session_name(), '', 0, MODX_BASE_URL);
-            //      }
             @session_destroy();
-            // start session
-            //      startCMSSession();
         }
 
-        // andrazk 20070416 - if installer is running, destroy active sessions
         if (is_file(MODX_BASE_PATH . 'assets/cache/installProc.inc.php')) {
             include_once(MODX_BASE_PATH . 'assets/cache/installProc.inc.php');
             if (isset($installStartTime)) {
@@ -506,14 +502,12 @@ class ManagerTheme implements ManagerThemeInterface
                         if (isset($_COOKIE[session_name()])) {
                             session_unset();
                             @session_destroy();
-                            //                  setcookie(session_name(), '', 0, MODX_BASE_URL);
                         }
                     }
                 }
             }
         }
 
-        // andrazk 20070416 - if session started before install and was not destroyed yet
         if (defined('EVO_INSTALL_TIME')) {
             if (isset($_SESSION['mgrValidated'])) {
                 if (isset($_SESSION['modx.session.created.time'])) {
@@ -522,7 +516,6 @@ class ManagerTheme implements ManagerThemeInterface
                             if (isset($_COOKIE[session_name()])) {
                                 session_unset();
                                 @session_destroy();
-                                // setcookie(session_name(), '', 0, MODX_BASE_URL);
                             }
                             header('HTTP/1.0 307 Redirect');
                             header('Location: ' . MODX_MANAGER_URL . 'index.php?installGoingOn=2');
@@ -570,7 +563,6 @@ class ManagerTheme implements ManagerThemeInterface
         $target = $this->getCore()->getConfig($config);
         $target = str_replace('[+base_path+]', MODX_BASE_PATH, $target);
         $target = $this->getCore()->mergeSettingsContent($target);
-
 
         $content = $this->getCore()->getChunk($target);
         if (empty($content)) {
@@ -670,7 +662,6 @@ class ManagerTheme implements ManagerThemeInterface
         $html = is_array($evtOut) ? implode('', $evtOut) : '';
         $plh['OnManagerLoginFormPrerender'] = $html;
 
-        // andrazk 20070416 - notify user of install/update
         if (isset($_GET['installGoingOn'])) {
             switch ((int)$_GET['installGoingOn']) {
                 case 1:
@@ -712,7 +703,6 @@ class ManagerTheme implements ManagerThemeInterface
         $plh['login_form_style_class'] = 'loginbox-' . $this->getCore()->getConfig('login_form_style');
 
         $plh['repair_password'] = $this->repairPassword($plh);
-
 
         return $this->makeTemplate('login', 'manager_login_tpl', $plh, false);
     }
@@ -885,10 +875,8 @@ class ManagerTheme implements ManagerThemeInterface
                 if ($output == '')
                     $output .= $this->sendRepairMail($_GET['email'], $hash, 'hash');
             }
-
         }
         return $output . $this->makeTemplate('repair_button', 'manager_login_tpl', $plh, false);
-
     }
 
     public function sendRepairMail($email, $hash, $mode)
