@@ -6,7 +6,7 @@ return [
     'unauthorized_page' => 1,
     'site_unavailable_page' => '',
     'top_howmany' => 10,
-    'custom_contenttype' => 'application/rss+xml,application/pdf,application/vnd.ms-word,application/vnd.ms-excel,text/html,text/css,text/xml,text/javascript,text/plain,application/json',
+    'custom_contenttype' => 'text/html,application/rss+xml,application/pdf,application/vnd.ms-word,application/vnd.ms-excel,text/css,text/xml,text/javascript,text/plain,application/json',
     'docid_incrmnt_method' => 0,
     'valid_hostnames' => '',
     'enable_filter' => 0,
