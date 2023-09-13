@@ -80,7 +80,7 @@ if (!function_exists('makeHTML')) {
         if ($_SESSION['tree_sortby'] === 'isfolder') {
             $result = $result->orderBy('menuindex', 'ASC')->orderBy('pagetitle', 'ASC');
         }
-           // orderBy('menuindex', 'ASC')->orderBy('pagetitle', 'ASC');
+        // orderBy('menuindex', 'ASC')->orderBy('pagetitle', 'ASC');
 //'privatemgr',\DB::raw('MAX(IF(1='.$mgrRole.' OR privatemgr=0 '.$docgrp_cond.', 1, 0)) AS hasAccess'),
         if (!$showProtected) {
             if (!$docgrp) {
@@ -118,6 +118,7 @@ if (!function_exists('makeHTML')) {
         foreach ($result as $item) {
             $row = $item->toArray();
             $row['roles'] = '';
+            $row['nomove'] = 0;
             $row['hasAccess'] = 0;
             if ($mgrRole == 1 || $row['privatemgr'] == 0) {
                 $row['hasAccess'] = 1;
@@ -241,7 +242,8 @@ if (!function_exists('makeHTML')) {
                 'subMenuState' => '',
                 'level' => $level,
                 'isPrivate' => 0,
-                'roles' => ($row['roles'] ? $row['roles'] : '')
+                'roles' => ($row['roles'] ? $row['roles'] : ''),
+                'nomove' => 0
             );
 
             $ph = $data;
@@ -253,16 +255,20 @@ if (!function_exists('makeHTML')) {
             if (!$row['isfolder']) {
                 $tpl = getTplSingleNode();
                 switch ($row['id']) {
-                    case $modx->getConfig('site_start')            :
+                    case $modx->getConfig('site_start') :
+                        $ph['nomove'] = 1;
                         $icon = '<i class="' . $_style['icon_home'] . '"></i>';
                         break;
-                    case $modx->getConfig('error_page')            :
+                    case $modx->getConfig('error_page') :
+                        $ph['nomove'] = 1;
                         $icon = '<i class="' . $_style['icon_info_triangle'] . '"></i>';
                         break;
                     case $modx->getConfig('site_unavailable_page') :
+                        $ph['nomove'] = 1;
                         $icon = '<i class="' . $_style['icon_clock'] . '"></i>';
                         break;
-                    case $modx->getConfig('unauthorized_page')     :
+                    case $modx->getConfig('unauthorized_page') :
+                        $ph['nomove'] = 1;
                         $icon = '<i class="' . $_style['icon_info'] . '"></i>';
                         break;
                     default:
@@ -658,6 +664,7 @@ if (!function_exists('getTplSingleNode')) {
         data-href="[+url+]"
         data-private="[+isPrivate+]"
         data-roles="[+roles+]"
+        data-nomove="[+nomove+]"
         data-level="[+level+]"
         data-treepageclick="[+tree_page_click+]"
         [+contextmenu+]
@@ -688,6 +695,7 @@ if (!function_exists('getTplFolderNode')) {
         data-href="[+url+]"
         data-private="[+isPrivate+]"
         data-roles="[+roles+]"
+        data-nomove="[+nomove+]"
         data-level="[+level+]"
         data-icon-expanded="[+tree_plusnode+]"
         data-icon-collapsed="[+tree_minusnode+]"
@@ -729,6 +737,7 @@ if (!function_exists('getTplFolderNodeNotChildren')) {
         data-href="[+url+]"
         data-private="[+isPrivate+]"
         data-roles="[+roles+]"
+        data-nomove="[+nomove+]"
         data-level="[+level+]"
         data-icon-expanded="[+tree_plusnode+]"
         data-icon-collapsed="[+tree_minusnode+]"
