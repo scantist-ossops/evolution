@@ -744,7 +744,7 @@
             },
             draggable: function () {
                 if (modx.permission.dragndropdocintree) {
-                    var els = d.querySelectorAll('#treeRoot a:not(.empty)');
+                    var els = d.querySelectorAll('.treeRoot a:not(.empty)');
                     for (var i = 0; i < els.length; i++) {
                         var el = els[i];
                         el.onmousedown = this.onmousedown;
@@ -761,7 +761,7 @@
                     this.parentNode.removeAttribute('draggable');
                     return true;
                 } else {
-                    var roles = this.dataset.roles + (this.parentNode.parentNode.id !== 'treeRoot' ? this.parentNode.parentNode.previousSibling.dataset.roles : '');
+                    var roles = this.dataset.roles + (this.parentNode.parentNode.id !== 'treeRoot0' ? this.parentNode.parentNode.previousSibling.dataset.roles : '');
                     var checked_group = false;
                     if (roles != '') {
                         checked_group = roles.split(',').map(Number).filter(function (role) {
@@ -843,14 +843,14 @@
                 e.preventDefault();
             },
             ondrop: function (e) {
-                var el = d.getElementById('node' + modx.tree.itemToChange),
-                    els = null,
-                    id = modx.tree.itemToChange,
-                    parent = 0,
-                    menuindex = [],
-                    level = 0,
-                    indent = el.firstChild.querySelector('.indent'),
-                    i = 0;
+                let el = d.getElementById('node' + modx.tree.itemToChange);
+                let els = null;
+                let id = modx.tree.itemToChange;
+                let parent = 0;
+                let menuindex = [];
+                let level = 0;
+                let indent = el.firstChild.querySelector('.indent');
+                let i = 0;
                 indent.innerHTML = '';
                 el.removeAttribute('draggable');
                 if (this.parentNode.classList.contains('dragenter')) {
@@ -877,6 +877,9 @@
                 }
                 if (this.parentNode.classList.contains('dragafter')) {
                     parent = /node/.test(this.parentNode.parentNode.parentNode.id) ? parseInt(this.parentNode.parentNode.parentNode.id.substr(4)) : 0;
+                    if (parent == 0) {
+                        parent = /treeRoot/.test(this.parentNode.parentNode.id) ? parseInt(this.parentNode.parentNode.id.substr(8)) : 0;
+                    }
                     level = parseInt(this.dataset.level);
                     for (i = 0; i < level; i++) {
                         indent.innerHTML += '<i></i>';
@@ -890,6 +893,9 @@
                 }
                 if (this.parentNode.classList.contains('dragbefore')) {
                     parent = /node/.test(this.parentNode.parentNode.parentNode.id) ? parseInt(this.parentNode.parentNode.parentNode.id.substr(4)) : 0;
+                    if (parent == 0) {
+                        parent = /treeRoot/.test(this.parentNode.parentNode.id) ? parseInt(this.parentNode.parentNode.id.substr(8)) : 0;
+                    }
                     level = parseInt(this.dataset.level);
                     for (i = 0; i < level; i++) {
                         indent.innerHTML += '<i></i>';
@@ -906,14 +912,19 @@
                 e.preventDefault();
             },
             ondragupdate: function (a, id, parent, menuindex) {
-                var roles = a.dataset.roles + (a.parentNode.parentNode.id !== 'treeRoot' ? a.parentNode.parentNode.previousSibling.dataset.roles : '');
-                var checked_group = false;
+                if (d.querySelector('#node' + id + ' > a').dataset.nomove == 1) {
+                    alert(modx.lang.error_no_privileges);
+                    modx.tree.restoreTree();
+                    return;
+                }
+                let roles = a.dataset.roles + (!a.parentNode.parentNode.classList.contains('treeRoot') ? a.parentNode.parentNode.previousSibling.dataset.roles : '');
+                let checked_group = false;
                 if (roles != '') {
                     checked_group = roles.split(',').map(Number).filter(function (role) {
                         return ~modx.user.groups.indexOf(parseInt(role));
                     }).length;
                 } else {
-                    var checked_group = true;
+                    let checked_group = true;
                 }
                 if (!(roles && modx.user.role !== 1 ? checked_group : true)) {
                     alert(modx.lang.error_no_privileges);
@@ -980,20 +991,20 @@
                 if (e.ctrlKey) return;
                 e.stopPropagation();
                 var el = d.getElementById('node' + id).firstChild;
-                this.rpcNode = el.nextSibling;
+                let rpcNode = el.nextSibling;
                 var toggle = el.querySelector('.toggle'),
                     icon = el.querySelector('.icon');
-                if (this.rpcNode.innerHTML === '') {
+                if (rpcNode.innerHTML === '') {
                     if (toggle) toggle.innerHTML = el.dataset.iconCollapsed;
                     icon.innerHTML = el.dataset.iconFolderOpen;
-                    var rpcNodeText = this.rpcNode.innerHTML,
+                    var rpcNodeText = rpcNode.innerHTML,
                         loadText = modx.lang.loading_doc_tree;
                     modx.openedArray[id] = 1;
                     if (rpcNodeText === '' || rpcNodeText.indexOf(loadText) > 0) {
                         var folderState = this.getFolderState();
                         d.getElementById('treeloader').classList.add('visible');
                         modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', 'a=1&f=nodes&indent=' + el.dataset.indent + '&parent=' + id + '&expandAll=' + el.dataset.expandall + folderState, function (r) {
-                            modx.tree.rpcLoadData(r);
+                            modx.tree.rpcLoadData(r, rpcNode);
                             modx.tree.draggable();
                         });
                     }
@@ -1002,9 +1013,9 @@
                     if (toggle) toggle.innerHTML = el.dataset.iconExpanded;
                     icon.innerHTML = el.dataset.iconFolderClose;
                     delete modx.openedArray[id];
-                    this.rpcNode.style.overflow = 'hidden';
-                    modx.animate(this.rpcNode.firstChild, {
-                        marginTop: -this.rpcNode.offsetHeight
+                    rpcNode.style.overflow = 'hidden';
+                    modx.animate(rpcNode.firstChild, {
+                        marginTop: -rpcNode.offsetHeight
                     }, 64, function () {
                         this.parentNode.innerHTML = '';
                     });
@@ -1012,13 +1023,13 @@
                 }
                 e.preventDefault();
             },
-            rpcLoadData: function (a) {
-                if (this.rpcNode !== null) {
-                    var el;
-                    this.rpcNode.innerHTML = typeof a === 'object' ? a.responseText : a;
-                    this.rpcNode.loaded = true;
-                    if (this.rpcNode.firstChild.tagName === 'DIV') {
-                        if (this.rpcNode.id === 'treeRoot') {
+            rpcLoadData: function (a, rpcNode = null) {
+                if (rpcNode !== null) {
+                    let el;
+                    rpcNode.innerHTML = typeof a === 'object' ? a.responseText : a;
+                    rpcNode.loaded = true;
+                    if (rpcNode.firstChild.tagName === 'DIV') {
+                        if (rpcNode.classList.contains('treeRoot')) {
                             el = d.getElementById('binFull');
                             if (el) {
                                 this.showBin(true);
@@ -1026,9 +1037,9 @@
                                 this.showBin(false);
                             }
                         } else {
-                            this.rpcNode.style.overflow = 'hidden';
-                            this.rpcNode.firstElementChild.style.marginTop = -this.rpcNode.offsetHeight + 'px';
-                            modx.animate(this.rpcNode.firstChild, {
+                            rpcNode.style.overflow = 'hidden';
+                            rpcNode.firstElementChild.style.marginTop = -rpcNode.offsetHeight + 'px';
+                            modx.animate(rpcNode.firstChild, {
                                 marginTop: 0
                             }, 64);
                         }
@@ -1036,7 +1047,7 @@
                     } else {
                         el = d.getElementById('loginfrm');
                         if (el) {
-                            this.rpcNode.parentNode.removeChild(this.rpcNode);
+                            rpcNode.parentNode.removeChild(rpcNode);
                             w.location.href = modx.MODX_MANAGER_URL;
                         }
                     }
@@ -1330,7 +1341,7 @@
                 if (el) this.setSelected(el);
             },
             setSelectedByContext: function (a) {
-                var el = d.querySelector('#treeRoot .selected');
+                var el = d.querySelector('.treeRoot .selected');
                 if (el) el.classList.remove('selected');
                 el = d.querySelector('#node' + a + '>.node');
                 if (el) el.classList.add('selected');
@@ -1347,43 +1358,57 @@
             },
             restoreTree: function () {
                 //console.log('modx.tree.restoreTree()');
-                if (d.getElementById('treeRoot')) {
-                    d.getElementById('treeloader').classList.add('visible');
-                    this.setItemToChange();
-                    this.rpcNode = d.getElementById('treeRoot');
-                    modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', 'a=1&f=nodes&indent=1&parent=' + modx.tree_parent + '&expandAll=2&id=' + this.itemToChange, function (r) {
-                        modx.tree.rpcLoadData(r);
+                let _this = this;
+                d.getElementById('treeloader').classList.add('visible');
+                d.querySelectorAll('.treeRoot').forEach(function (element) {
+                    _this.setItemToChange();
+                    let rpcNode = d.getElementById(element.id);
+                    let parent = element.id.replace('treeRoot', '');
+                    modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', 'a=1&f=nodes&indent=1&parent=' + parent + '&expandAll=2&id=' + _this.itemToChange, function (r) {
+                        modx.tree.rpcLoadData(r, rpcNode);
                         modx.tree.draggable();
                     });
-                }
+                });
             },
             expandTree: function () {
-                this.rpcNode = d.getElementById('treeRoot');
                 d.getElementById('treeloader').classList.add('visible');
-                modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', 'a=1&f=nodes&indent=1&parent=' + modx.tree_parent + '&expandAll=1&id=' + this.itemToChange, function (r) {
-                    modx.tree.rpcLoadData(r);
-                    modx.tree.saveFolderState();
-                    modx.tree.draggable();
+                let _this = this;
+                d.querySelectorAll('.treeRoot').forEach(function (element) {
+                    let rpcNode = d.getElementById(element.id);
+                    let parent = element.id.replace('treeRoot', '');
+                    modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', 'a=1&f=nodes&indent=1&parent=' + parent + '&expandAll=1&id=' + _this.itemToChange, function (r) {
+                        modx.tree.rpcLoadData(r, rpcNode);
+                        modx.tree.saveFolderState();
+                        modx.tree.draggable();
+                    });
                 });
             },
             collapseTree: function () {
-                this.rpcNode = d.getElementById('treeRoot');
                 d.getElementById('treeloader').classList.add('visible');
-                modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', 'a=1&f=nodes&indent=1&parent=' + modx.tree_parent + '&expandAll=0&id=' + this.itemToChange, function (r) {
-                    modx.openedArray = [];
-                    modx.tree.saveFolderState();
-                    modx.tree.rpcLoadData(r);
-                    modx.tree.draggable();
+                let _this = this;
+                d.querySelectorAll('.treeRoot').forEach(function (element) {
+                    let rpcNode = d.getElementById(element.id);
+                    let parent = element.id.replace('treeRoot', '');
+                    modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', 'a=1&f=nodes&indent=1&parent=' + parent + '&expandAll=0&id=' + _this.itemToChange, function (r) {
+                        modx.openedArray = [];
+                        modx.tree.saveFolderState();
+                        modx.tree.rpcLoadData(r, rpcNode);
+                        modx.tree.draggable();
+                    });
                 });
             },
             updateTree: function () {
-                this.rpcNode = d.getElementById('treeRoot');
+                let a = d.sortFrm;
                 d.getElementById('treeloader').classList.add('visible');
-                var a = d.sortFrm;
-                var b = 'a=1&f=nodes&indent=1&parent=' + modx.tree_parent + '&expandAll=2&dt=' + a.dt.value + '&tree_sortby=' + a.sortby.value + '&tree_sortdir=' + a.sortdir.value + '&tree_nodename=' + a.nodename.value + '&id=' + this.itemToChange + '&showonlyfolders=' + a.showonlyfolders.value;
-                modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', b, function (r) {
-                    modx.tree.rpcLoadData(r);
-                    modx.tree.draggable();
+                let _this = this;
+                d.querySelectorAll('.treeRoot').forEach(function (element) {
+                    let rpcNode = d.getElementById(element.id);
+                    let parent = element.id.replace('treeRoot', '');
+                    let b = 'a=1&f=nodes&indent=1&parent=' + parent + '&expandAll=2&dt=' + a.dt.value + '&tree_sortby=' + a.sortby.value + '&tree_sortdir=' + a.sortdir.value + '&tree_nodename=' + a.nodename.value + '&id=' + _this.itemToChange + '&showonlyfolders=' + a.showonlyfolders.value;
+                    modx.post(modx.MODX_MANAGER_URL + 'media/style/' + modx.config.theme + '/ajax.php', b, function (r) {
+                        modx.tree.rpcLoadData(r, rpcNode);
+                        modx.tree.draggable();
+                    });
                 });
             },
             getFolderState: function () {
@@ -2245,19 +2270,19 @@
         dragging: function (a, b) {
             this.dragging.init = function (a, b) {
                 var c = {
-                    resize: !1,
-                    minWidth: 50,
-                    minHeight: 50,
-                    wrap: document,
-                    opacity: '0.65',
-                    classDrag: 'drag',
-                    classResize: 'resize',
-                    handler: '',
-                    onstart: function (e, obj) { },
-                    onstop: function (e, obj) { },
-                    ondrag: function (e, obj) { },
-                    onresize: function (e, obj) { }
-                },
+                        resize: !1,
+                        minWidth: 50,
+                        minHeight: 50,
+                        wrap: document,
+                        opacity: '0.65',
+                        classDrag: 'drag',
+                        classResize: 'resize',
+                        handler: '',
+                        onstart: function (e, obj) { },
+                        onstop: function (e, obj) { },
+                        ondrag: function (e, obj) { },
+                        onresize: function (e, obj) { }
+                    },
                     f = {
                         x: 0,
                         y: 0,
