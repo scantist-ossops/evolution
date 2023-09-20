@@ -2723,7 +2723,6 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
         if (is_cli()) {
             throw new \RuntimeException('Call DocumentParser::executeParser on CLI mode');
         }
-        //error_reporting(0);
 
         $this->_IIS_furl_fix(); // IIS friendly url fix
 
@@ -2753,7 +2752,6 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
         if ($this->documentMethod !== 'alias') {
             $DLTemplate = \DLTemplate::getInstance(EvolutionCMS());
             $DLTemplate->setTemplatePath('views/');
-            //$this->_fixURI();
             // invoke OnWebPageInit event
             $this->invokeEvent("OnWebPageInit");
             // invoke OnLogPageView event
@@ -2767,11 +2765,10 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
             return;
         }
 
-        $this->documentIdentifier = $this->cleanDocumentIdentifier($this->documentIdentifier);
+        $this->documentIdentifier = UrlProcessor::cleanDocumentIdentifier($this->documentIdentifier, $this->documentMethod);
 
         // Check use_alias_path and check if $this->virtualDir is set to anything, then parse the path
         if ($this->getConfig('use_alias_path') == 1) {
-
             $virtualDir = UrlProcessor::getFacadeRoot()->virtualDir;
             $alias = ($virtualDir != '' ? $virtualDir . '/' : '') . $this->documentIdentifier;
             if (isset(UrlProcessor::getFacadeRoot()->documentListing[$alias])) {
@@ -2810,7 +2807,6 @@ class Core extends AbstractLaravel implements Interfaces\CoreInterface
         $DLTemplate = \DLTemplate::getInstance(EvolutionCMS());
         $DLTemplate->setTemplatePath('views/');
 
-        //$this->_fixURI();
         // invoke OnWebPageInit event
         $this->invokeEvent('OnWebPageInit');
         // invoke OnLogPageView event
