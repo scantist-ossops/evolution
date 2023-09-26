@@ -136,7 +136,7 @@ if(!isset($_REQUEST['id'])) {
     }
 }
 
-$content['type'] = get_by_key($content, 'type', $defaultContentType, 'is_scalar');
+$content['type'] = get_by_key($content, 'type', $defaultContentType, 'is_scalar') ?: $defaultContentType;
 
 if(isset ($_POST['which_editor'])) {
     $modx->setConfig('which_editor', get_by_key($_POST, 'which_editor', '', 'is_scalar'));
