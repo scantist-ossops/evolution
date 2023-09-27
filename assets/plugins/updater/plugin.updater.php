@@ -349,6 +349,7 @@ if ($handle = opendir(__DIR__ . "/temp")) {
 removeFolder(__DIR__ . "/temp/" . $dir . "/install/assets/chunks");
 removeFolder(__DIR__ . "/temp/" . $dir . "/install/assets/tvs");
 removeFolder(__DIR__ . "/temp/" . $dir . "/install/assets/templates");
+unlink(__DIR__ . "/temp/" . $dir . "/ng.inx");
 unlink(__DIR__ . "/temp/" . $dir . "/ht.access");
 unlink(__DIR__ . "/temp/" . $dir . "/README.md");
 unlink(__DIR__ . "/temp/" . $dir . "/sample-robots.txt");
